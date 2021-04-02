@@ -11,6 +11,9 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,6 +25,8 @@
 
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
 </head>
 <body>
@@ -33,7 +38,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->
         <ul class="navbar-nav mr-auto"></ul>
@@ -53,9 +57,10 @@
               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 @if(Auth::user()->avatar)
-                      <img src="http://localhost/GameReviews/storage/app/public/{{Auth::user()->avatar}}" alt="">
+                <?php $avatar =  Auth::user()->avatar ?>
+                  <img src='{{asset("storage/$avatar")}}'>
                     @else
-                      <img src="http://localhost/GameReviews/storage/app/public/fotos/indice.png">
+                      <img src='{{asset("storage/fotos/indice.png")}}'>
                     @endif
                     {{ Auth::user()->name }}
                 </a>
@@ -78,14 +83,14 @@
 	</nav>
 
   <div class="pagina">
-    <div class="col-lg-2 col-1 navBg pl-0 pr-0">
-      <nav class="nav navbar-toggleable-sm">
+    <div class="navBglateral">
+      <nav class="navLateral navbar-toggleable-sm">
         <div class="navbar  flex-column mt-md-0  pt-md-0  p-0 w-100" id="navbarWEX">
           <div class="secciones">
-            <a href="" class="nav-link"><i class="bi bi-gear-fill" aria-hidden="true"></i><span>Settings </span></a>
-            <a href="/usuarios" class="nav-link"><i class="bi bi-joystick" aria-hidden="true"></i><span>Juegos</span></a>
-            <a href="" class="nav-link"><i class="bi bi-people-fill" aria-hidden="true"></i><span>Usuarios</span></a>
-            <a href="" class="nav-link"><i class="bi bi-graph-up" aria-hidden="true"></i><span>Stats</span></a>
+            <a href="#" class="nav-link"><i class="bi bi-gear-fill" aria-hidden="true"></i><span>Settings </span></a>
+            <a href="/" class="nav-link"><i class="bi bi-joystick" aria-hidden="true"></i><span>Juegos</span></a>
+            <a href="/usuarios" class="nav-link"><i class="bi bi-people-fill" aria-hidden="true"></i><span>Usuarios</span></a>
+            <a href="#" class="nav-link"><i class="bi bi-graph-up" aria-hidden="true"></i><span>Stats</span></a>
           </div>
         </div>
       </nav>

@@ -2,8 +2,8 @@
 
 @section('content')
     @if(Auth::check())
-        <app :user="{{ Auth::user() }}"></app>
+        <app :current_user="{{ Auth::user()->id }}"></app>
     @else
-        <app :user="false"></app>
+        <app :current_user="false"></app>
     @endif
 @endsection

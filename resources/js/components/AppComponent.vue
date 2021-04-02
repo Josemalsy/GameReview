@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="center-page">
 
-    <router-view :user="user"></router-view>
+    <router-view :current_user="current_user"></router-view>
 
   </div>
 
@@ -9,14 +9,9 @@
 
 <script>
   export default {
-    data(){
-			return {
-          isLoggedIn: false,
-			}
-    },
-    props : ['user'],
+    props : ['current_user'],
     created () {
-      console.log(this.user)
+      // console.log(this.current_user)
     },
 	}
 
@@ -25,14 +20,17 @@
 
 <style scoped>
 
-  div{
+  .center-page{
     display:flex;
     background-color: white;
     height:100%;
+    align-items: center;
+    /* border: 1px solid black; */
+    justify-content: center;
   }
 
   @media (max-width: 600px){
-    div {
+    .center-page {
       justify-content: center;
     }
   }

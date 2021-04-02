@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\Auth\RegisterController;
 
@@ -23,11 +24,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 
 // Route::resource('/', GameController::class);
 
 Route::get('/{any}', [App\Http\Controllers\SpaController::class, 'index'])->where('any', '^(?!api).*$');
 
-Route::get('/usuario',[RegisterController::class,'show']);
+// Route::get('/usuario',[RegisterController::class,'show']);
