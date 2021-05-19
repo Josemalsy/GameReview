@@ -1,4 +1,5 @@
 <template>
+
   <div class="center-page">
 
     <router-view :current_user="current_user"></router-view>

@@ -14,4 +14,5 @@ class Game_User extends Model
 			'user_id',
 			'game_id'
 		];
+
 }

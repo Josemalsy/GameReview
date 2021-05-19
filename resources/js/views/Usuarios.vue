@@ -2,32 +2,40 @@
 <div class="cargando" v-if="loading"> <Loading/> </div>
 
 <div class="contenedor" v-else>
-  <div class="filtros">
-    <div class="busquedas">
-      <label for="busqueda">Buscar usuario: </label>
-      <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
 
-      <label for="ordernarPor">Ordenar por: </label>
-      <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-        <option value="1">Nombre usuario 🡹</option>
-        <option value="2">Nombre usuario 🡻</option>
-        <option value="3">Más antiguo 🡹</option>
-        <option value="4">Más reciente 🡻</option>
-      </select>
-      <button type="button" class="btn btn-success" @click.preventDefault="obtenerDatos">Filtrar</button>
+  <div class="form-row align-items-center filtros">
+    <div class="col-auto">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Buscar usuario </div>
+        </div>
+        <input type="text" placeholder="buscar..." id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-success" @click="obtenerDatos">Filtrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-auto">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Ordenar por: </div>
+        </div>
+        <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
+          <option value="1">Nombre usuario 🡹</option>
+          <option value="2">Nombre usuario 🡻</option>
+          <option value="3">Más antiguo 🡹</option>
+          <option value="4">Más reciente 🡻</option>
+        </select>
+      </div>
     </div>
   </div>
 
+
   <div class="top">
-    <nav class="paginate-bottom" id="paginacion" aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)"><<</a></li>
-
-        <li class="page-item"><a class="page-link" v-on:click="changePage( page -1 )">{{ page - 1 }}</a></li>
-        <li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-        <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page +1 }}</a></li>
-
-        <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">>></a></li>
+    <nav class="paginate-bottom" aria-label="Page navigation example">
+      <ul class="pagination" v-for="n in ultima_pagina">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
       </ul>
     </nav>
 
@@ -40,7 +48,7 @@
   <template v-if="tarjeta">
     <div class="contentCard">
       <div class="tarjeta" v-for="(item,index) in lista_usuarios" :key="index">
-        <div class="pie">
+        <div class="izquierda">
           <img class="caratula" :src="'../storage/'+ item.avatar" alt="Card image capaaaa">
           <div class="rangos">
             Rango
@@ -56,7 +64,7 @@
             </div>
             <div class="duracion">
               Último juego adquirido:
-              <p v-if="item.games.length > 0"> {{item.games[item.games.length -1].titulo}} </p>
+              <p class="tituloJuego" v-if="item.games.length > 0"> {{item.games[item.games.length -1].titulo}} </p>
               <p v-else> -- </p>
             </div>
           </div>
@@ -90,30 +98,12 @@
   </tbody>
 </table>
   </template>
-  <!-- <nav class="Page navigation example" role="navegation" aria-label="pagination">
 
-    <a class="pagination-previous" v-on:click="changePage( page - 1)"> Anterior </a>
-
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="pagination-link is-current">{{ page }}</a>
-        </li>
+    <nav class="paginate-bottom" aria-label="Page navigation example">
+      <ul class="pagination" v-for="n in ultima_pagina">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
       </ul>
-
-    <a class="pagination-next" v-on:click="changePage( page + 1)"> Siguiente </a>
-
-  </nav> -->
-
-<nav class="paginate-bottom" aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)">Previous</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page -1 )">{{ page - 1 }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page +1 }}</a></li>
-
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">Next</a></li>
-  </ul>
-</nav>
+    </nav>
 
 </div>
 
@@ -128,6 +118,7 @@ import moment from 'moment'
         loading: true,
         lista_usuarios: [],
         page: 1,
+        ultima_pagina: null,
         pages: 1,
         orden: 1,
         fondo: '',
@@ -155,6 +146,8 @@ import moment from 'moment'
         }).then(response =>{
           this.lista_usuarios = response.data.data;
           this.pages = response.data.last_page
+          this.ultima_pagina = response.data.last_page
+          this.pagina = response.data.current_page
           this.loading = false
         });
       },
@@ -164,7 +157,14 @@ import moment from 'moment'
       changePage( page ) {
         this.page = (page <= 0 || page > this.pages) ? this.page : page
         this.obtenerDatos()
-      }
+      },
+      fondoPaginas(value){
+        if(value == this.pagina){
+          return '#245e13';
+        }else {
+          return '#002855';
+        }
+      },
     },
     filters: {
       formatDate(value){
@@ -183,25 +183,13 @@ import moment from 'moment'
 	height: 100%;
   justify-content: center;
   width: 100%;
-  margin: 0 0 0 50px;
 }
 
-.filtros{
-  display: flex;
-  /* border: 1px solid brown; */
-  flex-flow: column wrap;
-  height: 200px;
-  width: 80%;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  align-items: center;
+.filtros {
+  margin: 30px 0 25px 0;
   justify-content: center;
-  background: #023e8a;
-  color: white;
-  border-radius: 1em/1em;
-  align-self: center;
-  text-align: center;
 }
+
 
 .busqueda {
   width: 35%;
@@ -239,7 +227,7 @@ cursor: pointer;
 	/* border: 1px solid green; */
 	width: 45%;
 	margin: 10px 0 30px 0;
-  height: 150px;
+  height: 200px;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: flex-start;
@@ -248,11 +236,11 @@ cursor: pointer;
   box-shadow: 16px 16px #03045e;
 }
 
-.pie {
+.izquierda {
   /* border: 1px solid brown; */
   flex-flow: column;
   align-self: flex-end;
-  width: 20%;
+  flex: 1;
   height: 100%;
   display:flex;
 }
@@ -283,20 +271,21 @@ cursor: pointer;
 }
 
 .titulo {
-    /* border: 1px solid purple; */
-    width: 80%;
-    height: 100%;
-    text-align: center;
-    display:flex;
-    font-size: 20px;
-    flex-flow: column;
+  /* border: 1px solid purple; */
+  width: 80%;
+  height: 100%;
+  text-align: center;
+  display:flex;
+  font-size: 20px;
+  flex-flow: column;
+  flex: 3;
 }
 
 .titDes{
   display: flex;
   flex-flow: column wrap;
   width: 100%;
-  height: 100%;
+  flex: 10;
 }
 
 .span {
@@ -328,6 +317,7 @@ span {
   border-radius: 10%;
 }
 
+
 .duracion {
   width: auto;
   height: auto;
@@ -337,17 +327,21 @@ span {
   background: #0077b6;
   margin-top: 3px;
   align-self: center;
-  padding: 0px 10px;
+  padding: 0 10px;
+}
+
+.duracion p {
+  font-size: 16px;
 }
 
 .membresia{
   display:flex;
   flex-flow: row;
-  height: 20%;
   text-align: center;
   align-self:end;
   font-size: 14px;
-  /* width: 100%; */
+  margin: 0 5px;
+  flex: 1;
 }
 
 .tipos {
@@ -409,20 +403,22 @@ th{
     font-size: 14px;
   }
 
-  .pie{
+  .izquierda{
     width: 30%;
   }
 
   .titulo{
     width: 70%;
+    flex-flow: column wrap;
   }
 }
 
 
 @media (max-width: 650px){
   .filtros{
-    width: 50%;
+    width: 100%;
     height: auto;
+    justify-content:center;
   }
 
   .boton{
@@ -432,6 +428,8 @@ th{
   .busqueda {
     width: 90%;
   }
-
+  .duracion, .span {
+    padding: 0px;
+  }
 }
 </style>

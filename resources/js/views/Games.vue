@@ -3,41 +3,53 @@
 
 <div class="contenedor" v-else>
 
-  <div class="filtros">
-    <div class="busquedas">
-      <label for="busqueda">Busca por título o género </label>
-      <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
-
-      <label for="ordernarPor">Elige como ordenar los resultados</label>
-      <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-        <option value="1">Titulo 🡹</option>
-        <option value="2">Titulo 🡻</option>
-        <option value="3">Fecha de lanzamiento 🡹</option>
-        <option value="4">Fecha de lanzamiento 🡻</option>
-      </select>
-      <button type="button" class="btn btn-success" @click="obtenerDatos">Filtrar</button>
+  <div class="form-row align-items-center filtros">
+    <div class="col-auto">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Buscar por titulo </div>
+        </div>
+        <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-success" @click="obtenerDatos">Filtrar</button>
+        </div>
+      </div>
     </div>
+
+    <div class="col-auto">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Ordenar por: </div>
+        </div>
+        <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
+          <option value="1">Titulo 🡹</option>
+          <option value="2">Titulo 🡻</option>
+          <option value="3">Fecha de lanzamiento 🡹</option>
+          <option value="4">Fecha de lanzamiento 🡻</option>
+          <option value="5">Valoracion media 🡻</option>
+          <option value="6">Valoracion media 🡹</option>
+        </select>
+      </div>
+    </div>
+
   </div>
 
-<nav class="paginate-bottom" id="paginacion" aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)"> ← </a></li>
-
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page -1 )">{{ page - 1 }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page +1 }}</a></li>
-
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)"> → </a></li>
-  </ul>
-</nav>
+  <nav class="paginate-bottom" aria-label="Page navigation example">
+    <ul class="pagination" v-for="n in ultima_pagina">
+      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+    </ul>
+  </nav>
 
   <div class="contentCard">
     <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
-      <div class="pie">
+      <div class="izquierda">
         <img class="caratula" :src="'../storage/'+ item.imagen" alt="Card image">
         <div class="opciones">
-          <div class="opcion" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)"><i class="bi bi-heart-fill" style="color:red;"></i></div>
-          <div class="opcion" v-else @click="agregaPosesion(item.id)"><i class="bi bi-heart"></i></div>
+          <div class="opcion">
+            <div class="cuadro" v-if="current_user.rol == 'Administrador'" title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
+            <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
+            <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego"><i class="bi bi-heart"></i></div>
+          </div>
         </div>
       </div>
       <div class="titulo">
@@ -55,33 +67,21 @@
         </div>
       </div>
     </div>
+    <b-modal id="eligePlataforma" title="Second Modal" hide-footer ok-only>
+      <label for="observación">Elija plataforma</label>
+      <select id="observacion" class="form-select mb-3" v-model="plataforma_id">
+        <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
+      </select>
+      <button class="btn btn-success" type="submit" @click="agregaPosesion(plataforma_id)">Agregar juego</button>
+    </b-modal>
+    <template v-if="abrirModal"> <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/> </template>
   </div>
 
-  <!-- <nav class="Page navigation example" role="navegation" aria-label="pagination">
-
-    <a class="pagination-previous" v-on:click="changePage( page - 1)"> Anterior </a>
-
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="pagination-link is-current">{{ page }}</a>
-        </li>
-      </ul>
-
-    <a class="pagination-next" v-on:click="changePage( page + 1)"> Siguiente </a>
-
-  </nav> -->
-
-<nav class="paginate-bottom" aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)"> ← </a></li>
-
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page -1 )">{{ page - 1 }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page +1 }}</a></li>
-
-    <li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)"> → </a></li>
-  </ul>
-</nav>
+  <nav class="paginate-bottom" aria-label="Page navigation example">
+    <ul class="pagination" v-for="n in ultima_pagina">
+      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+    </ul>
+  </nav>
 
 </div>
 
@@ -96,12 +96,18 @@ import Swal from 'sweetalert2'
       return {
         loading: true,
         lista_juegos: [],
+        listaPlataformas: [],
         page: 1,
-        pages: 1,
+        pagina: null,
+        primera_pagina:1,
+        ultima_pagina: 1,
         orden: 1,
         filters: {
           buscador: '',
-        }
+        },
+        abrirModal: false,
+        game_id: null,
+        plataforma_id: null,
       }
     },
     mounted(){
@@ -121,18 +127,19 @@ import Swal from 'sweetalert2'
           }
         }).then(response =>{
           this.lista_juegos = response.data.data;
-          this.pages = response.data.last_page
+          this.ultima_pagina = response.data.last_page
           this.loading =  false
+          this.pagina = response.data.current_page
         });
       },
-      changePage( page ) {
-        this.page = (page <= 0 || page > this.pages) ? this.page : page
+    changePage( page ) {
+        this.page = (page <= 0 || page > this.ultima_pagina) ? this.page : page
         this.obtenerDatos()
       },
       checkUser(value){
         if(value){
           for (let index = 0; index < value.length; index++) {
-            if(value[index].id == this.current_user){
+            if(value[index].id == this.current_user.id){
               return true
             }
             return false
@@ -141,9 +148,19 @@ import Swal from 'sweetalert2'
           return false
         }
       },
+      sendInfo(value){
+        this.game_id = value
+        axios.get('http://localhost:8000/api/getPlataformasById',{
+          params: {
+            game_id: value,
+          }
+        }).then(response => {
+          this.listaPlataformas = response.data[0].plataformas;
+        })
+      },
       agregaPosesion(value){
         Swal.fire({
-          title: "¿Quieres agregar este juego a tu lista de propiedades?",
+          title: "¿Quieres agregar este juego a tu lista de propiedades ?",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -153,7 +170,8 @@ import Swal from 'sweetalert2'
           if(result.isConfirmed){
             axios.post('http://localhost:8000/api/game_user/create_posesion', {
               params: {
-                game_id: value
+                plataforma_id: value,
+                game_id: this.game_id
               }
             }).then(response =>{
               toastr.success('has adquirido el juego!');
@@ -197,7 +215,19 @@ import Swal from 'sweetalert2'
         }else {
           return "#005000"
         }
-      }
+      },
+      fondoPaginas(value){
+        if(value == this.pagina){
+          return '#245e13';
+        }else {
+          return '#002855';
+        }
+      },
+      editarJuego(value){
+        this.abrirModal = true
+        this.game_id = value
+        this.$bvModal.show("modal-AddGame")
+      },
     },
     filters: {
       roundValors: function(value) {
@@ -215,29 +245,23 @@ import Swal from 'sweetalert2'
 
 <style scoped>
 
+.filtros {
+  margin: 30px 0 25px 0;
+}
+
+
 .contenedor{
 	display: flex;
   flex-flow: column wrap;
 	height: 100%;
   justify-content: center;
   width: 100%;
-  margin: 0 0 0 50px;
   align-items:center;
+  margin: 0;
 }
 
-.filtros{
-  display: flex;
-  /* border: 1px solid brown; */
-  flex-flow: column wrap;
-  height: 200px;
-  width: 80%;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  align-items: center;
-  justify-content: center;
-  background: #023e8a;
-  color: white;
-  border-radius: 1em/1em;
+.page-link:hover {
+  cursor: pointer;
 }
 
 .contentCard{
@@ -261,32 +285,35 @@ import Swal from 'sweetalert2'
   box-shadow: 16px 16px #03045e;
 }
 
-.pie {
+.izquierda {
   /* border: 1px solid brown; */
   flex-flow: column;
   align-self: flex-end;
-  width: 20%;
+  flex: 1;
   height: 100%;
   display:flex;
 }
 
 .opciones{
   display:flex;
-  flex-flow: row column;
   height: 20%;
-  width: 50px;
 }
 
 .opcion {
+  display: flex;
   flex: 1;
   height: 100%;
   /* border: 1px solid blue; */
   text-align: center;
-
 }
 
-.opciones:hover {
+.cuadro:hover {
   cursor: pointer;
+}
+
+.cuadro {
+  width: 50px;
+  height: 100%;
 }
 
 .caratula {
@@ -299,11 +326,11 @@ import Swal from 'sweetalert2'
 }
 
 .titulo {
-    /* border: 1px solid purple; */
-    width: 80%;
-    height: 100%;
-    text-align: center;
-    display:flex;
+  /* border: 1px solid purple; */
+  flex: 3;
+  height: 100%;
+  text-align: center;
+  display:flex;
 }
 
 .titDes{
@@ -333,18 +360,21 @@ span {
   flex: 1;
   /*border: 1px solid white;*/
 }
+
 .span-title {
   flex: 2;
 }
+
 .span-title a{
   flex: 2;
   color: silver;
 }
+
 .span-valor {
   flex: revert;
   text-align: end;
   font-size: 20px;
-  height: 100%;
+  height: max-content;
   color: black;
 }
 
@@ -354,7 +384,7 @@ span {
   display:flex;
   flex-flow: row;
   font-size: 20px;
-  margin: 5px;
+  margin: 25px;
 }
 
 .tiempo {
@@ -371,8 +401,11 @@ span {
 .page-link {
   background: #023e7d;
   color: white;
-  /* border-radius: 50%; */
+}
 
+.etc {
+  align-self: end;
+  margin: 0 10px;
 }
 
 .page-link:hover {
@@ -393,7 +426,7 @@ span {
     font-size: 10px;
   }
 
-  .pie {
+  .izquierda {
     width: 15%;
   }
 

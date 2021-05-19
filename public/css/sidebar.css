@@ -3,15 +3,9 @@ a {
   width: 100%;
 }
 
-.pagina {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: stretch;
-  background: white;
-}
-
 #header {
   background-color: #0077b6 !important;
+  font-family: Oswald,sans-serif !important;
 
 }
 
@@ -24,42 +18,10 @@ body {
   flex: 15;
   margin: 0px 0 120px 0;
   width: inherit;
+  font-family: Oswald,sans-serif;
 }
 
-.navBglateral {
-  background-color: #074680;
-  height: 100%;
-  position: relative;
-  justify-self: flex-start;
-  align-items: stretch;
-  flex: 1;
-}
-.navBglateral nav {
-  padding-top: 0;
-}
 
-.navBglateral nav a {
-  transition: 0.3s;
-  padding-bottom: 15px;
-  padding-top: 15px;
-  color: white;
-  border-bottom: 1px solid white;
-}
-.navBglateral nav a:hover {
-  background-color: #0575AB;
-  color: white;
-}
-.navBglateral nav a:hover i {
-  color: white;
-}
-.navBglateral nav i {
-  padding-right: 10px;
-}
-.navBglateral nav small {
-  color: white;
-  text-align: center;
-  margin-top: 15px;
-}
 
 #navbarDropdown{
   color: white;
@@ -71,72 +33,4 @@ body {
   align-self: center;
   border-radius: 0%;
   margin-right: 10px;
-}
-
-@media (max-width: 767px) {
-  .navBglateral {
-    height: 100%;
-  }
-  .navBglateral nav {
-    padding-top: 0px;
-  }
-}
-
-@media (max-width: 1000px){
-  .avatar img {
-    display: none;
-  }
-}
-
-@media (max-width: 1350px){
-  .avatar img {
-    display: none;
-  }
-
-  .pagina {
-    flex-flow: column;
-    align-items: flex-start;
-    width: 100%;
-    display: flex;
-  }
-
-.secciones {
-  display: flex;
-  flex-direction: row wrap;
-  justify-content: flex-start;
-  text-align: center;
-
-}
-
-.secciones a {
-  background-color: #074680;
-
-}
-
-}
-
-@media (max-width: 576px) {
-  .navBglateral {
-    height: 100vh;
-    max-width: 55px;
-  }
-  .navBglateral nav {
-    padding-top: 0px;
-  }
-  /* .navBglateral nav h1 {
-    display: none;
-  } */
-  .navBglateral nav a {
-    text-align: center;
-  }
-  .navBglateral nav i {
-    padding-right: 0px;
-  }
-  /* .navBglateral nav span {
-    display: none;
-  } */
-
-    .avatar img {
-    opacity: 0;
-  }
 }

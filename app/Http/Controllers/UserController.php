@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-  /**
-  * Display a listing of the resource.
-  *
-  * @return \Illuminate\Http\Response
-  */
-  public function index(Request $request)
-  {
+
+  public function index(Request $request){
+
 		$buscador = $request->get('filters');
     $orden = $request->get('orden');
 
@@ -34,76 +31,37 @@ class UserController extends Controller
     return User::with('games')->withCount('reviews')->withCount('games')->orderBy($columna,$tipo_orden)->paginate(10);
   }
 
-  public function getUserById($id)
-  {
-      // return Game::where('id', $id)->first();
+  public function getUserById($id){
       return User::with('reviews')->with('games')->withAvg('reviews','puntuacion')->where('id', $id)->get();
   }
 
+  public function getUsers() {
+    return User::get(['id','name']);
+  }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+  public function update(Request $request) {
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    $formulario_user = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return Game::where('id', $id)->first();
-    }
+    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 'public') : 'fotos/indice.png';
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    $user_id = $formulario_user['id'];
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    $user = User::find($user_id);
+    $user->name = $formulario_user['name'];
+    $user->email = $formulario_user['email'];
+    $user->FecNac = $formulario_user['FecNac'];
+    $user->sexo = $formulario_user['sexo'];
+    $user->ocupacion = $formulario_user['ocupacion'];
+    $user->ubicacion = $formulario_user['ubicacion'];
+    $user->aficiones = $formulario_user['aficiones'];
+    $user->biografia = $formulario_user['biografia'];
+    $user->avatar = $imagenEnlace;
+    $user->save();
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  public function getStatsSexoUsers(){
+    return DB::table('users')->selectRaw('sexo, count(id) as cantidad')->groupBy('sexo')->get();
+  }
+
 }

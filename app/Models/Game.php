@@ -8,10 +8,17 @@ use App\Models\Review;
 
 class Game extends Model
 {
-    use HasFactory;
+		use HasFactory;
+
+		protected $fillable = [
+			'titulo',
+			'desarrolladora',
+			'imagen',
+			'lanzamiento',
+		];
 
 	public function reviews(){
-		return $this->hasMany(Review::class, 'game_id');
+		return $this->hasMany(Review::class, 'game_id')->orderBy('created_at','asc');
 	}
 
 	public function games(){
@@ -20,6 +27,14 @@ class Game extends Model
 
 	public function Users(){
 		return $this->belongsToMany(User::class);
-  }
+	}
+
+	public function Generos(){
+		return $this->belongsToMany(Genero::class);
+	}
+
+	public function Plataformas(){
+		return $this->belongsToMany(Plataforma::class)->orderBy('fabricante','desc');
+	}
 
 }

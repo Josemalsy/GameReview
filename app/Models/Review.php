@@ -29,5 +29,8 @@ class Review extends Model
 		return $this->belongsTo(Game::class,'game_id');
 	}
 
+	public function games1(){
+		return $this->belongsTo(Game::class,'game_id');
+	}
 
 }

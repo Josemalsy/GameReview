@@ -7,7 +7,10 @@
 				<div class="contenedor">
 					<div class="columna-avatar">
 						<img class="avatar" :src="'../storage/'+usuario.avatar" alt="Card image">
-						<div class="send-review" v-if="current_user == id_user">Editar perfil</div>
+						<div class="editar-Perfil" v-if="current_user.id == id_user" v-b-modal="'modal-editProfile'">Editar perfil <modal-editProfile :current_user="current_user"/></div>
+						<p><div class="editar-Perfil" v-b-modal="'modal-enviarMensaje'"> Mensaje privado <modal-enviarMensaje :current_user="current_user" :nombreDestino=usuario.name :receptor_id=id_user :tituloModal="'Mandar mensaje'" /></div></p>
+						<p><div class="editar-Perfil"><a :href="'/usuario/'+ id_user + '/reviews/'"> Mostrar reseñas</a></div></p>
+						<div class="editar-Perfil"><a :href="'/usuario/'+ id_user + '/juegos/'"> Lista de juegos</a></div>
 					</div>
 						<div class="contentDatos">
 						<div class="datosPersonales">
@@ -33,68 +36,35 @@
 					<div class="stats">	Ultimo juego adquirido: <p v-if="usuario.games.length > 0">{{usuario.games[usuario.games.length -1].titulo}}</p><p v-else> No ha adquirido juegos </p></div>
 				</div>
 
-				<div class="separacion">
-					<span class="separador" @click="muestraReviews">
-						<template v-if="!reviews"> Mostrar reseñas </template>
-						<template v-else> Ocultar reseñas</template>
-					</span>
-				</div>
 
-				<template v-if="reviews">
-					<div class="comentarios">
-						<nav class="paginate-bottom" aria-label="Page navigation example">
-							<ul class="pagination">
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)"> ← </a></li>
+			<div class="estadisticas">
+				<button class="generos btn btn-primary" @click="getDatosGeneros">
+					<template v-if="!generosMostrar">Mostrar gráfico de generos</template><template v-else> Ocultar gráfico de generos</template>
+				</button>
 
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page -1 )">{{ page - 1 }}</a></li>
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page +1 }}</a></li>
+				<template v-if="generosMostrar && loadingGeneros == false"><HorizontBar-chart class="generos-grafico" :chart-data="dataGeneros" :options="optionsGeneros" :height="150"></HorizontBar-chart></template>
 
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)"> → </a></li>
-							</ul>
-						</nav>
-						<div class="cargando" v-if="loadingComments"> <Loading/> </div>
-						<div class="comment-box" v-for="(item,index) in reviewsList" :key="index">
-							<div class="lateralComment">
-								<div class="nick"> <a :href="'/game/'+ item.games.id"> {{item.games.titulo}} </a></div>
-								<div class="caratula"><img class="caratula" :src="'../storage/'+ item.games.imagen" alt="Card image capaaaa"></div>
-								<div class="rango">{{item.games.desarrolladora}}</div>
-							</div>
-							<div class="comment">
-								<div class="comment-header">
-									<div class="fechaEscrito"> Escrito el: {{item.created_at | formatDate}}</div>
-									<div class="puntosPersonales">
-										<div class="personalRating">Base <p>{{item.juegoBase | roundValors}}H</p></div>
-										<div class="personalRating">Extras<p>{{item.juegoExtendido | roundValors}}H</p></div>
-										<div class="personalRating">100% <p>{{item.juegoTotal | roundValors}}H</p></div>
-										<div class="personalRating">Valoracion<p>{{item.puntuacion | roundValors}}%</p></div>
-									</div>
-								</div>
-								<div class="comment-message" v-html="item.mensaje"></div>
-							</div>
-						</div>
-						<nav class="paginate-bottom" aria-label="Page navigation example">
-							<ul class="pagination">
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page - 1)">Previous</a></li>
+				<button class="plataformas btn btn-success" @click="getDatosPlataformas">
+					<template v-if="!plataformasMostrar"> Mostrar gráfico de plataformas</template> <template v-else> Ocultar gráfico de plataformas</template>
+				</button>
 
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page - 1 )">{{ page - 1 }}</a></li>
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page )">{{ page }}</a></li>
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">{{ page + 1 }}</a></li>
+				<template v-if="plataformasMostrar && loadingPlataformas == false"><HorizontBar-chart class="generos-grafico" :chart-data="dataPlataformas" :options="optionsPlataformas" :height="150"></HorizontBar-chart></template>
 
-								<li class="page-item"><a class="page-link" v-on:click="changePage( page + 1)">Next</a></li>
-							</ul>
-						</nav>
-					</div>
-				</template>
+			</div>
 
 			</div>
 		</div>
 </template>
 
 <script>
+import HorizontBarChart from '../components/chartJs/HorizontBarChart.js'
 import moment from 'moment'
 
+				//METER NOTIFICACION A RESEÑA RECHAZADA
 export default {
+  components: {
+    HorizontBarChart
+  },
   props : ['current_user'],
 	mounted() {
 		this.obtenerDatos()
@@ -102,13 +72,64 @@ export default {
 	data() {
 		return {
 			loading: true,
+			loadingGeneros: true,
+			loadingPlataformas: true,
 			id_user: this.$route.params.id,
-			reviews: false,
-			page: 1,
-      pages: 1,
-			loadingComments: true,
+			generosMostrar: false,
+			cargarGeneros: false,
+			plataformasMostrar: false,
+			cargarPlataformas: false,
 			usuario: [],
-			reviewsList: [],
+      dataGeneros: null,
+			valoresGeneros: [],
+			generos: [],
+			plataformas: [],
+			valoresPlataformas: [],
+
+			optionsGeneros: {
+				responsive: true,
+				maintainAspectRatio: false,
+				aspectRatio: 2,
+				scales: {
+					xAxes: [{
+						ticks: {
+							stepSize: 5,
+							fixedStepSize: 1,
+							beginAtZero: true,
+						},
+					}],
+					yAxes: [{
+						ticks:{
+							beginAtZero: true,
+							stepSize: 5,
+							fixedStepSize: 1,
+						},
+					}]
+				}
+			},
+
+			optionsPlataformas: {
+				responsive: true,
+				maintainAspectRatio: false,
+				aspectRatio: 2,
+				scales: {
+					xAxes: [{
+						ticks: {
+							stepSize: 5,
+							fixedStepSize: 1,
+							beginAtZero: true,
+						},
+					}],
+					yAxes: [{
+						ticks:{
+							beginAtZero: true,
+							stepSize: 5,
+							fixedStepSize: 1,
+						},
+					}]
+				}
+			}
+
 		}
 	},
 	methods: {
@@ -116,37 +137,67 @@ export default {
 			this.loading =  true,
 			axios.get('http://localhost:8000/api/usuario/' + this.id_user).then(response =>{
 				this.usuario = response.data[0];
-				console.log(this.usuario)
 				this.loading = false
 			});
 		},
-		muestraReviews(){
-			this.reviews = !this.reviews;
-			if(this.reviewsList.length == 0){
-				this.ObtenerDatosUserReview();
-			}
-		},
-		changePage( page ) {
-			this.page = (page <= 0 || page > this.pages) ? this.page : page
-			this.ObtenerDatosUserReview()
-		},
-		ObtenerDatosUserReview(){
-			this.loadingComments = true
-			// console.log(this.page)
-			const params = {
-				page: this.page
-			}
-			axios.get('http://localhost:8000/api/review_user/' + this.id_user + '/?page='+ this.page, {
-				params: {
-					id: this.id_user
+    getDatosGeneros(){
+			this.generosMostrar = !this.generosMostrar
+			if(this.cargarGeneros == false){
+			this.loadingGeneros = true
+				axios.get('http://localhost:8000/api/stats_user_genero/', {
+					params: {
+						user_id: this.id_user
+					}
+				}).then(response =>{
+					let arraySize = response.data.length
+					for(let x = 0; x < arraySize; x++){
+						this.generos.push(response.data[x].nombre)
+						this.valoresGeneros.push(response.data[x].cantidad)
+					}
+					this.cargarGeneros = true
+					this.loadingGeneros = false
+				});
+				this.dataGeneros = {
+					labels: this.generos,
+					datasets: [{
+						axis: 'y',
+						label: 'Cantidad',
+						barThickness: 20,
+						backgroundColor: '#0077B6',
+						data: this.valoresGeneros,
+					}]
 				}
-			}).then(response =>{
-				this.reviewsList = response.data.data;
-				console.log(response.data.data)
-				this.pages = response.data.last_page
-				this.loadingComments = false;
-			});
-		},
+			}
+    },
+		getDatosPlataformas(){
+			this.plataformasMostrar = !this.plataformasMostrar
+			if(this.cargarPlataformas == false){
+			this.loadingPlataformas = true
+				axios.get('http://localhost:8000/api/stats_user_plataformas/', {
+					params: {
+						user_id: this.id_user
+					}
+				}).then(response =>{
+					let arraySize = response.data.length
+					for(let x = 0; x < arraySize; x++){
+						this.plataformas.push(response.data[x].nombre)
+						this.valoresPlataformas.push(response.data[x].cantidad)
+					}
+					this.cargarPlataformas = true
+					this.loadingPlataformas = false
+				});
+				this.dataPlataformas = {
+					labels: this.plataformas,
+					datasets: [{
+						axis: 'y',
+						label: 'Cantidad',
+						barThickness: 20,
+						backgroundColor: '#218838',
+						data: this.valoresPlataformas,
+					}]
+				}
+			}
+    }
 	},
 	filters: {
 		formatDate(value){
@@ -157,7 +208,7 @@ export default {
 		},
 		roundValors: function(value) {
 			if (!value){
-				return 'Sin valoraciones realizadas'
+				return 'Sin datos'
 			}
 			value = parseFloat(value).toFixed(2)
 			return value;
@@ -196,7 +247,7 @@ export default {
 }
 
 .cabecera, .divisor, .stats {
-	border-radius: 1em/1em;
+	border-radius: 4px;
 }
 
 .contenedor {
@@ -220,6 +271,13 @@ export default {
 	width: 90px;
 	height: 90px;
 	align-self: center;
+}
+
+.editar-Perfil, .editar-Perfil a {
+	background: #0077b6;
+	color: white;
+	border-radius: 4px;
+	text-decoration:none;
 }
 
 .principal {
@@ -287,145 +345,33 @@ export default {
 
 }
 
-.separacion{
-	width: 80%;
-	height: auto;
-	background: #468faf;
-	margin-top: 15px;
-	display:flex;
-	flex-flow: column;
-	color: white;
-	font-size: 14px;
-  border-radius: 1em/1em;
-	align-self: center;
-  text-align: center;
-}
-
-.separacion:hover{
-	cursor:pointer;
-}
-
-.comentarios {
-	/* border: 1px solid black; */
+.estadisticas{
+	width: 100%;
 	display:flex;
 	flex-flow: column wrap;
-	width: 100%;
-	height: auto;
-	margin: 10px 10px 10px 0;
 }
 
-.paginate-bottom{
-  display: flex;
-  justify-content: center;
-}
-
-.page-link {
-	background: #023e8a;
-	color: white;
-
-}
-
-.comment-box {
-	/* border: 1px solid green; */
-	display:flex;
+.botones {
+	display: flex;
 	flex-flow: row wrap;
-	width: 100%;
-	height: auto;
-	color: black;
+}
+
+.generos{
+	background: #0077B6;
+}
+
+.generos:hover{
+	background: #00B4D8;
+}
+
+.generos, .plataformas{
 	margin: 10px 0;
-	/* background: #BAD7F2; */
-	border-radius: 1em/1em;
 }
 
-.lateralComment {
-	display: flex;
-	flex-flow: column wrap;
-	flex: 1;
-	border: 1px solid blue;
-	font-size: 18px;
-	justify-content: flex-start;
-	background: #dad7cd;
-	border-radius: 1em/1em;
-
-}
-
-.nick, .rango {
-	/* border: 1px solid purple; */
-	text-align: center;
-	height: auto;
-	background: #0466c8;
-	border-radius: 1em/1em;
-}
-
-.nick a{
-	color: black;
-}
-
-.caratula{
-	display:flex;
-	justify-content: center;
-}
-
-.caratula img {
-	padding: 10px;
-	height: 90px;
-  width: 90px;
-
-}
-
-.comment {
-	display: flex;
-	flex-flow: column;
-	flex: 4;
-	border: 1px solid blue;
-	/* background: #00b4d8; */
-	background: #001233;
-	border-radius: 1em/1em;
-
-}
-
-.comment-header {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
+.generos-grafico{
 	width: 100%;
-	height: auto;
-	/* border: 1px solid red; */
-	background: #0466c8;
-	border-radius: 1em/1em;
-
-}
-
-.fechaEscrito{
-	display:flex;
-	flex: 1;
-	margin-left: 10px;
-
-}
-
-.puntosPersonales {
-	display:flex;
-	flex-flow: row wrap;
-	flex: 1;
-	justify-content: space-between;
-
-}
-
-.personalRating {
-	border-left: 1px solid blue;
-	flex: 1;
-	text-align: center;
-
-}
-
-.comment-message {
-	flex: 6;
-	/* border: 1px solid blue; */
-	margin: 10px;
-	padding: 10px;
-	background: #dad7cd;
-	border-radius: 1em/1em;
-	font-size: 16px;
+	height: 500px;
+	font-size: 14px;
 }
 
 @media (max-width: 700px) {
@@ -441,25 +387,9 @@ export default {
 		width: 100%;
 	}
 
-.valoracion {
-	width: 98%;
-}
-
-.comment-box {
-	flex-flow: column wrap;
-}
-
-.lateralComment{
-	flex-flow: row wrap;
-}
-.nick, .rango {
-	flex:1;
-}
-
-.caratula {
-	flex: 2;
-	display: none;
-}
+	.valoracion {
+		width: 98%;
+	}
 
 }
 

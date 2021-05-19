@@ -24,9 +24,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
-// Route::resource('/', GameController::class);
-
 Route::get('/{any}', [App\Http\Controllers\SpaController::class, 'index'])->where('any', '^(?!api).*$');
-
-// Route::get('/usuario',[RegisterController::class,'show']);

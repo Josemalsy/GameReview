@@ -57,7 +57,7 @@
               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 @if(Auth::user()->avatar)
-                <?php $avatar =  Auth::user()->avatar ?>
+                @php $avatar =  Auth::user()->avatar @endphp
                   <img src='{{asset("storage/$avatar")}}'>
                     @else
                       <img src='{{asset("storage/fotos/indice.png")}}'>
@@ -82,25 +82,15 @@
     </div>
 	</nav>
 
-  <div class="pagina">
-    <div class="navBglateral">
-      <nav class="navLateral navbar-toggleable-sm">
-        <div class="navbar  flex-column mt-md-0  pt-md-0  p-0 w-100" id="navbarWEX">
-          <div class="secciones">
-            <a href="#" class="nav-link"><i class="bi bi-gear-fill" aria-hidden="true"></i><span>Settings </span></a>
-            <a href="/" class="nav-link"><i class="bi bi-joystick" aria-hidden="true"></i><span>Juegos</span></a>
-            <a href="/usuarios" class="nav-link"><i class="bi bi-people-fill" aria-hidden="true"></i><span>Usuarios</span></a>
-            <a href="#" class="nav-link"><i class="bi bi-graph-up" aria-hidden="true"></i><span>Stats</span></a>
-          </div>
-        </div>
-      </nav>
-    </div>
-    <div class="main">
-      <div id="app">
-        @yield('content')
-      </div>
-    </div>
+  <div id="sidebar">
+  @if(Auth::check())
+			<sidebar :current_user="{{ Auth::user() }}"></sidebar>
+		@else
+			<sidebar :current_user="false"></sidebar>
+	@endif
   </div>
+
+    @yield('content')
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>

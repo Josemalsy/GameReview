@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game_Plataforma extends Model
 {
-    use HasFactory;
+	use HasFactory;
+
+	protected $fillable = [
+			'plataforma_id',
+			'game_id'
+	];
+
 }
