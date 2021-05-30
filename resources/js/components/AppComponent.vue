@@ -12,7 +12,11 @@
   export default {
     props : ['current_user'],
     created () {
-      // console.log(this.current_user)
+    },
+    watch: {
+      '$route' (to, from) {
+        document.title = to.meta.title || 'Your Website'
+      }
     },
 	}
 
@@ -26,7 +30,6 @@
     background-color: white;
     height:100%;
     align-items: center;
-    /* border: 1px solid black; */
     justify-content: center;
   }
 

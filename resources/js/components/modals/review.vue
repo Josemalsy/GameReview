@@ -19,11 +19,12 @@
           <label for="juego_base">Juego Base </label>
           <input type="number" class="form-control" id="juego_base" v-model="form.juego_base" placeholder="Juego Base" @keyup="checkIntervalos" min=0 :max="form.juego_extendido">
           <span class="error" v-if="validaciones.checkJuegoBase">Debe estar entre 0 y juego extendido</span>
+          <span class="error" v-if="validaciones.checkJuegoBaseNum">Debe ser numérico</span>
         </div>
         <div class="col-md-3 mb-3">
           <label for="juego_extendido">Juego con extras</label>
           <input type="number" class="form-control" id="juego_extendido" v-model="form.juego_extendido" placeholder="Juego con extras" @keyup="checkIntervalos" disabled :min="form.juego_base" :max="form.completado_total">
-          <span class="errr"o v-if="validaciones.checkJuegoExtendidoMenor">Debe estar entre juego_base y juego completado</span>
+          <span class="error" v-if="validaciones.checkJuegoExtendidoMenor">Debe estar entre juego_base y juego completado</span>
           <span class="error" v-if="validaciones.checkJuegoExtendidoMayor">Debe ser menor a juego completado</span>
         </div>
         <div class="col-md-3 mb-3">
@@ -40,9 +41,11 @@
       <label for="observación">Elija plataforma <template v-if="tituloModal=='Editar Reseña'">/ Plataforma actual: {{plataformaActualNombre}} </template></label>
       <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
         <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
+        <span class="error" v-if="!form.plataforma_id">El campo valoracion no puede estar vacio</span>
+
       </select>
 
-      <button class="btn btn-success" type="submit">Enviar review</button>
+      <button class="btn btn-success" type="submit" v-if="form.juego_base && form.mensaje && form.valoracion && form.plataforma_id && (!form.juego_base || validaciones.checkJuegoBase != true && validaciones.checkJuegoExtendidoMenor != true && validaciones.checkJuegoExtendidoMayor != true && validaciones.completado_total != true)">Enviar review</button>
       <button class="btn btn-danger" type="button" @click.prevent="cancelData">Limpiar formulario</button>
     </form>
   </b-modal>
@@ -70,10 +73,11 @@ import  VueEditor from "vue2-editor";
           checkValoracionVacio: false,
           checkValoracionBetween: false,
           checkMensaje: false,
-          checkJuegoBase: false,
-          checkJuegoExtendidoMenor: false,
-          checkJuegoExtendidoMayor: false,
-          checkCompletadoTotal: false
+          checkJuegoBase: null,
+          checkJuegoBaseNum: null,
+          checkJuegoExtendidoMenor: null,
+          checkJuegoExtendidoMayor: null,
+          checkCompletadoTotal: null
         },
         plataformaActualNombre: null,
         listaPlataformas: [],
@@ -161,14 +165,16 @@ import  VueEditor from "vue2-editor";
         }
       },
       checkIntervalos(){
-        //COMPRUEBA JUEGO BASE Y EL LIMITE INFERIOR DE JUEGO EXTENDIDO
-        if(this.form.juego_base) {
           this.form.juego_base = parseInt(this.form.juego_base);
+          this.form.juego_extendido = parseInt(this.form.juego_extendido);
+          this.form.completado_total = parseInt(this.form.completado_total);
+
+
+        if(this.form.juego_base) {
           $("#juego_extendido").prop('disabled',false);
           $("#juego_base").removeClass().addClass("form-control is-valid");
           if(this.form.juego_extendido){
             $("#completado_total").prop('disabled',false);
-            this.form.juego_extendido = parseInt(this.form.juego_extendido);
             if(this.form.juego_base > this.form.juego_extendido){
               this.validaciones.checkJuegoBase = true
               this.validaciones.checkJuegoExtendidoMenor = true

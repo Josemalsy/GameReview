@@ -9,6 +9,12 @@ class Plataforma extends Model
 {
     use HasFactory;
 
+  protected $fillable = [
+    'nombre',
+    'fabricante'
+	];
+
+
   public function games(){
 		return $this->belongsToMany(Game::class)->orderBy('id','desc');
   }

@@ -4,7 +4,8 @@
 
     <div class="menu">
 
-      <li class="menuBoton" v-b-modal="'modal-enviarMensaje'"> Nuevo mensaje <modal-enviarMensaje :current_user="current_user" :tituloModal="'Enviar Mensaje'" /></li>
+      <li class="menuBoton" v-b-modal="'modal-enviarMensaje'" v-if="current_user.email_verified_at"> Nuevo mensaje <modal-enviarMensaje :current_user="current_user" :tituloModal="'Enviar Mensaje'" /></li>
+      <li class="menuBoton" v-b-modal="'modal-enviarMensaje'" style="background-color: #2B4562" v-else> Valida tu email para poder enviar mensajes privados </li>
       <li class="menuBoton" @click="getMensajesRecibidos">Recibidos <template v-if="opcion == 1"> <span class="flecha">←</span> </template></li>
       <li class="menuBoton" @click="getMensajesEnviadosLeidos">Enviados leidos <template v-if="opcion == 2">  <span class="flecha">←</span> </template></li>
       <li class="menuBoton" @click="getMensajesEnviadosNoLeidos">Enviados sin leer <template v-if="opcion == 3">  <span class="flecha">←</span> </template></li>
@@ -64,6 +65,7 @@ export default {
     }else{
       this.getMensajesEnviadosNoLeidos()
     }
+
   },
   data() {
     return {
@@ -195,7 +197,6 @@ export default {
   }
 
   .cabecera {
-    /* border: 1px solid blue; */
     display: flex;
     height: auto;
     margin-top: 10px;
@@ -228,6 +229,7 @@ export default {
     border-radius: 4px;
     font-size: 15px;
     padding: 5px 11px;
+    list-style:none
   }
 
   .flecha {

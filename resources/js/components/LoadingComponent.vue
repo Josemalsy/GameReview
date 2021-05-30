@@ -1,6 +1,6 @@
 <template>
     <div>
-			Cargando <img class="icono" :src="'/../storage/iconos/spin_loading.svg'" alt="">
+			Cargando <img class="icono" src='/../storage/iconos/spin_loading.svg'>
     </div>
 </template>
 

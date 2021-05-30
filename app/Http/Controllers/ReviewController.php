@@ -116,10 +116,10 @@ class ReviewController extends Controller
   public function consultarAvisosReviews(Request $request) {
 
     if($request->isReviewsRoute == 'true'){
-      $review = DB::table('reviews')->where('user_id',Auth::user()->id)->update(['visto' => 'Si']);
+      $review = DB::table('reviews')->where('user_id', $request->user_id)->update(['visto' => 'Si']);
     }
 
-    return DB::table('reviews')->selectRaw('count(reviews.id) as cantidad, estado')->where('user_id',Auth::user()->id)->where('estado','!=','pendiente')->where('visto','No')->groupBy('estado')->get();
+    return DB::table('reviews')->selectRaw('count(reviews.id) as cantidad, estado')->where('user_id',$request->user_id)->where('estado','!=','pendiente')->where('visto','No')->groupBy('estado')->get();
 
   }
 

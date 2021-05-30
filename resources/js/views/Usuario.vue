@@ -7,14 +7,24 @@
 				<div class="contenedor">
 					<div class="columna-avatar">
 						<img class="avatar" :src="'../storage/'+usuario.avatar" alt="Card image">
-						<div class="editar-Perfil" v-if="current_user.id == id_user" v-b-modal="'modal-editProfile'">Editar perfil <modal-editProfile :current_user="current_user"/></div>
-						<p><div class="editar-Perfil" v-b-modal="'modal-enviarMensaje'"> Mensaje privado <modal-enviarMensaje :current_user="current_user" :nombreDestino=usuario.name :receptor_id=id_user :tituloModal="'Mandar mensaje'" /></div></p>
-						<p><div class="editar-Perfil"><a :href="'/usuario/'+ id_user + '/reviews/'"> Mostrar reseñas</a></div></p>
-						<div class="editar-Perfil"><a :href="'/usuario/'+ id_user + '/juegos/'"> Lista de juegos</a></div>
+						<div class="expulsion" v-if="usuario.estado == 'Expulsado'">
+							Expulsado hasta el {{usuario.fin_expulsion | formatDate}}
+						</div>
+						<template v-if="current_user.email_verified_at">
+							<div class="editar-Perfil" v-if="current_user.id == id_user" v-b-modal="'modal-editProfile'">Editar perfil <modal-editProfile :current_user="current_user"/></div>
+							<p><div class="editar-Perfil" v-b-modal="'modal-enviarMensaje'"> Mensaje privado <modal-enviarMensaje :current_user="current_user" :nombreDestino=usuario.name :receptor_id=id_user :tituloModal="'Mandar mensaje'" /></div></p>
+							<p><div class="editar-Perfil"><router-link :to="{ name: 'reviews', query: {user_id:id_user}}">Mostrar reseñas </router-link> </div></p>
+							<div class="editar-Perfil"> <router-link :to="{ name: 'juegosPersonales', query: {user_id:id_user}}">Lista de juegos </router-link> </div>
+							<p><div class="editar-Perfil" style="background-color: red" v-if="current_user.rol == 'Administrador' && usuario.rol != 'Administrador'" v-b-modal="'modal-expulsionModal'"><modal-expulsionModal :user_id="usuario.id" :estado="usuario.estado" />Expulsar usuario </div></p>
+							<div class="editar-Perfil" style="background-color: red" v-b-modal="'modal-historialExpulsiones'" v-if="current_user.rol == 'Administrador' || current_user.id == id_user"> Historial de expulsiones <modal-historialExpulsiones :user_id="id_user"/> </div>
+					</template>
+					<template v-else>
+						<div class="editar-Perfil" style="background-color: #2B4562"> Valida tu email para ver las reseñas y juegos de este usuario </div>
+
+					</template>
 					</div>
 						<div class="contentDatos">
 						<div class="datosPersonales">
-							<div> <strong>Puntos:  </strong> {{usuario.puntos}} </div>
 							<div v-if="usuario.ubicacion"><strong> Ubicacion:</strong> {{usuario.ubicacion}} </div>
 							<div ><strong>Edad:  </strong> {{usuario.FecNac | calculaEdad}} </div>
 							<div v-if="usuario.aficiones"><strong> Aficiones: </strong> {{usuario.aficiones}}</div>
@@ -60,14 +70,16 @@
 import HorizontBarChart from '../components/chartJs/HorizontBarChart.js'
 import moment from 'moment'
 
-				//METER NOTIFICACION A RESEÑA RECHAZADA
 export default {
   components: {
     HorizontBarChart
   },
   props : ['current_user'],
 	mounted() {
+
 		this.obtenerDatos()
+		this.$bus.$on('prueba',this.obtenerDatos)
+
 	},
 	data() {
 		return {
@@ -219,17 +231,14 @@ export default {
 
 <style scoped>
 	.perfil {
-	/* border: 1px solid red; */
 	display: flex;
 	width: 80%;
 	height: auto;
 	flex-flow: row wrap;
 	margin: 50px 10px 50px 10px;
-	/* background: #CAF0F8; */
 }
 
 .cabecera {
-	/* border: 1px solid blue; */
 	display: flex;
 	height: auto;
 	margin-top: 10px;
@@ -256,7 +265,6 @@ export default {
 }
 
 .columna-avatar {
-	/* border: 1px solid green; */
 	display: flex;
 	height: auto;
 	margin: 5px;
@@ -273,6 +281,15 @@ export default {
 	align-self: center;
 }
 
+.expulsion{
+  display:flex;
+  flex-flow: row;
+  height: 20%;
+  text-align: center;
+  align-self:center;
+  color: red;
+}
+
 .editar-Perfil, .editar-Perfil a {
 	background: #0077b6;
 	color: white;
@@ -281,7 +298,6 @@ export default {
 }
 
 .principal {
-	/* border: 1px solid blue; */
 	display: flex;
 	width: 100%;
 	margin-top: 10px;
@@ -302,7 +318,6 @@ export default {
 }
 
 .biografia {
-	/* border: 1px solid; */
 	font-size: 16px;
 	margin: 20px 0;
 	width: 85%;
@@ -336,7 +351,6 @@ export default {
 
 .stats {
 	flex: 1;
-	/* border: 1px solid black; */
 	background: #0077B6;
 	margin: 5px;
 	display:flex;

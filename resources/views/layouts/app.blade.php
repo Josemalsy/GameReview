@@ -8,19 +8,18 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
+  <link rel="shortcut icon" href='{{asset("storage/logos/iconoGameReviews.png")}}'>
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
   <!-- JavaScript Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 
-
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
 	<!-- Styles -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
 
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -33,7 +32,7 @@
 	<nav id="header" class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
-        <h2>{{ config('app.name', 'Laravel') }} </h2>
+        <img src='{{asset("storage/logos/GameReviews2.png")}}'>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
@@ -47,10 +46,10 @@
           @guest
             @if (Route::has('login'))
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                <a class="nav-link" href="{{ route('login') }}" style="color:white">Iniciar Sesión</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                <a class="nav-link" href="{{ route('register') }}" style="color:white">Registrate</a>
               </li>
             @endif
             @else

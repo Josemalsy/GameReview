@@ -11,13 +11,18 @@
         </div>
 
         <div class="centro">
-        <template v-if="opcion == 1">
-          <button class="responderMensaje btn" v-b-modal="'modal-enviarMensaje'"> Responder
-          <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :emisor_id="mensaje.emisor_id" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.emisor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
+        <template v-if="current_user.email_verified_at">
+          <template v-if="opcion == 1">
+            <button class="responderMensaje btn" v-b-modal="'modal-enviarMensaje'"> Responder
+            <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :emisor_id="mensaje.emisor_id" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.emisor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
+          </template>
+          <template v-else>
+            <button class="responderMensaje" v-b-modal="'modal-enviarMensaje'"> Responder
+            <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.receptor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
+          </template>
         </template>
         <template v-else>
-          <button class="responderMensaje" v-b-modal="'modal-enviarMensaje'"> Responder
-          <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.receptor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
+          <li class="menuBotonValidar" style="background-color: #2B4562"> Valida tu email para poder responder mensajes </li>
         </template>
           <div class="mensaje">
             <div class="usuario">
@@ -188,7 +193,7 @@ export default {
     order: 0;
   }
 
-  .menuBoton {
+  .menuBoton, .menuBotonValidar {
     margin-top: 5px;
     color: white;
     background: #0077B6;
@@ -196,6 +201,11 @@ export default {
     border-radius: 4px;
     font-size: 15px;
     padding: 5px 11px;
+    list-style: none;
+  }
+
+  .menuBotonValidar {
+    width: 25%;
   }
 
   .menuBoton:hover {
@@ -347,6 +357,9 @@ export default {
     width: 100%;
   }
 
+  .menuBotonValidar {
+    width: 100%;
+  }
 
   .botonBorrar {
     justify-content: end;

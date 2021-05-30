@@ -43,7 +43,9 @@ import moment from 'moment'
 export default {
   props : ['current_user'],
   mounted() {
-    this.ObtenerDatosUserReview()
+
+		this.ObtenerDatosUserReview()
+
   },
 	data() {
 		return {
@@ -114,17 +116,14 @@ export default {
 <style scoped>
 
 .perfil {
-  /* border: 1px solid red; */
   display: flex;
   width: 80%;
   height: auto;
   flex-flow: row wrap;
   margin: 10px;
-  /* background: #CAF0F8; */
 }
 
 .comentarios {
-	/* border: 1px solid black; */
 	display:flex;
 	flex-flow: column wrap;
 	width: 100%;
@@ -147,14 +146,12 @@ export default {
 }
 
 .comment-box {
-	/* border: 1px solid green; */
 	display:flex;
 	flex-flow: row wrap;
 	width: 100%;
 	height: auto;
 	color: black;
 	margin: 10px 0;
-	/* background: #BAD7F2; */
 	border-radius: 4px;
 }
 
@@ -170,8 +167,7 @@ export default {
 }
 
 
-.nick, .rango {
-	/* border: 1px solid purple; */
+.nick {
 	text-align: center;
 	height: auto;
 	background: #0077B6;
@@ -193,7 +189,6 @@ export default {
 	display: flex;
 	flex-flow: column;
 	flex: 4;
-	/* background: #00b4d8; */
 	background: #001233;
 	border-radius: 4px;
 
@@ -216,7 +211,6 @@ export default {
 
 .comment-message {
 	flex: 6;
-	/* border: 1px solid blue; */
 	margin: 10px;
 	padding: 10px;
 	background: #C0E6ED;
@@ -287,7 +281,7 @@ export default {
 	flex-flow: row wrap;
 	border-bottom: 1px solid white;
 }
-.nick, .rango {
+.nick, {
 	flex:1;
 }
 

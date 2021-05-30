@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Game_Plataforma;
 use App\Models\Game_Genero;
+use App\Models\Game_User;
+use App\Models\Review;
 
 
 class GameController extends Controller
@@ -123,15 +125,21 @@ class GameController extends Controller
   }
 
   public function getJuegoById($id) {
-    // return Game::where('id', $id)->first();
     return Game::withCount('users')->with('reviews')->withCount('reviews')
                 ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
                 ->where('id', $id)
                 ->get();
   }
 
-  public function destroy($id)
+  public function deleteGame(Request $request)
   {
-      //
+
+    $game_id = $request->game_id;
+
+    DB::table('Game_Plataforma')->where('game_id',$game_id)->delete();
+    DB::table('Game_Genero')->where('game_id',$game_id)->delete();
+    DB::table('Game_User')->where('game_id',$game_id)->delete();
+    Review::where('game_id',$game_id)->delete();
+    Game::find($game_id)->delete();
   }
 }

@@ -10,20 +10,22 @@
               <input type="text" class="form-control" id="destinatario" v-model="nombreDestino" disabled>
             </template>
             <template v-else>
-              <multiselect id="destinatario" v-model="form.receptor_id" class="selectpicker" label="name" track-by="id" :options="listaUsers" data-live-search="true"></multiselect>
+              <multiselect id="destinatario" v-model="form.receptor_id" class="selectpicker" label="name" track-by="id" :options="listaUsers" data-live-search="true" @input="compruebaDestino(form.receptor_id)"></multiselect>
             </template>
-              <span class="error" v-if="!form.receptor_id">Debe indicar un destinatario</span>
+              <span class="error" v-if="checkDestino == false">Debe indicar un destinatario</span>
+              <span class="valido" v-if="checkDestino == true">Destinatario válido</span>
+
           </div>
           <div class="col-md-12 mb-12">
-            <label for="titulo">Titulo </label>
+            <label for="titulo">Titulo</label>
             <input type="text" class="form-control" id="titulo" v-model="form.titulo" placeholder="Titulo" :placeholder="form.titulo" @keyup="validarTitulo(form.titulo)" @blur="validarTitulo(form.titulo)">
-            <span class="error" v-if="checkTitulo">El contenido del título no puede estar vacío</span>
-            <span class="error" v-if="checkLongitudTitulo">El título no puede superar los 100 caracteres</span>
+            <span class="error" v-if="checkTitulo == false">El contenido del título no puede estar vacío</span>
+            <span class="error" v-if="checkLongitudTitulo == false">El título no puede superar los 100 caracteres</span>
           </div>
           <div class="col-md-12 mb-12">
             <label for="mensaje">Mensaje </label>
-            <vue-editor v-model="form.mensaje" id="mensaje" :editor-toolbar="customToolbar" @keyup="validarMensaje(form.mensaje)" @blur="validarMensaje(form.mensaje)"/>
-            <span class="error" v-if="checkMensaje && !form.mensaje">El contenido del mensaje no puede estar vacío</span>
+            <vue-editor v-model="form.mensaje" id="mensaje" :editor-toolbar="customToolbar" @selection-change="validarMensaje(form.mensaje)" @blur="validarMensaje(form.mensaje)"/>
+            <span class="error" v-if="checkMensaje == false">El contenido del mensaje no puede estar vacío</span>
           </div>
         </div>
           <button type="submit" class="btn btn-primary" v-if="form.receptor_id && form.titulo && form.titulo.length <= 100 && form.mensaje">{{tituloModal}}</button>
@@ -43,9 +45,10 @@ export default {
     return {
       listaUsers: [],
       checkDestino: false,
-      checkMensaje: false,
-      checkTitulo: false,
-      checkLongitudTitulo: false,
+      checkMensaje: null,
+      checkTitulo: null,
+      checkLongitudTitulo: null,
+      checkDestino: null,
       form: {
         titulo: null,
         mensaje: null,
@@ -76,9 +79,7 @@ export default {
       })
     },
     enviarMensaje(){
-          console.log(this.tituloModal)
-
-      if(!this.checkDestino && !this.checkMensaje && !this.checkTitulo && !this.checkLongitudTitulo){
+      if(this.checkDestino == true && this.checkMensaje == true && this.checkTitulo == true && this.checkLongitudTitulo == true && this.current_user != false){
 
         if(this.tituloModal == "Enviar Mensaje" || this.tituloModal == 'Mandar mensaje'){
 
@@ -107,26 +108,50 @@ export default {
       }
     },
     validarTitulo(value){
-      this.checkTitulo = false
-      this.checkLongitudTitulo = false
-      if(value == '' || value == null){
-        this.checkTitulo = true
+      this.checkTitulo = true
+      this.checkLongitudTitulo = true
+
+      let espacios
+
+      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+
+      if(value == '' || value == null || espacios ){
+        this.checkTitulo = false
         $("#titulo").removeClass("is-valid").addClass("is-invalid");
-      }else {
+      } else {
+        this.checkTitulo = true
         $("#titulo").removeClass("is-invalid").addClass("is-valid");
         if(value.length >= 100){
-          this.checkLongitudTitulo = true
+          this.checkLongitudTitulo = false
           $("#titulo").removeClass("is-valid").addClass("is-invalid");
         }else {
+          this.checkLongitudTitulo = true
           $("#titulo").removeClass("is-invalid").addClass("is-valid");
         }
+
       }
 
     },
     validarMensaje(value){
       this.checkMensaje = false
-      if(value == '' || value == null){
+
+      let espacios
+
+      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+
+      if(value == '' || value == null || espacios){
         this.checkMensaje = true
+      }else {
+        this.checkMensaje = false
+
+      }
+    },
+    compruebaDestino(value){
+      this.checkDestino = true
+      if(value == '' || value == null){
+        this.checkDestino = false
+      }else {
+        this.checkDestino = true
       }
     },
     cancelData(){
@@ -147,6 +172,11 @@ export default {
 
   .error {
     color: red;
+    font-size: 12px;
+  }
+
+  .valido {
+    color: green;
     font-size: 12px;
   }
 

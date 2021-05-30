@@ -4,7 +4,7 @@
       <div class="tarjetaCuadro">
         <div class="superior">
           <div class="titulo"> {{item.games1.titulo}} </div>
-          <div class="user"> {{item.users.name}} </div>
+          <div class="user"> <a :href="'usuario/'+item.users.id" title="acceder al perfil de este usuario"> {{item.users.name}} </a> </div>
         </div>
         <div class="mensaje" v-html="item.mensaje"></div>
         <div class="pie">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import  VueEditor from "vue2-editor";
+  import  VueEditor from "vue2-editor";
 
 export default {
   mounted() {
@@ -116,6 +116,11 @@ export default {
   .titulo, .user{
     flex: 1;
     text-align: center;
+  }
+
+  .user a{
+    color: black;
+    text-decoration: none;
   }
 
   .acciones {

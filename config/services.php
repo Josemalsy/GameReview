@@ -15,9 +15,9 @@ return [
     */
 
     'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'domain' => env('sandboxd9efbd7ff7a4472cbe7659bafd250c67.mailgun.org'),
+        'secret' => env('1d8b4d592fab0d79d8b382ba8951df0c-c322068c-ed07f565'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.eu.mailgun.net'),
     ],
 
     'postmark' => [
@@ -29,5 +29,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
+    'sendgrid' => [
+			'api_key' => env('SENDGRID_API_KEY'),
+	],
 
 ];

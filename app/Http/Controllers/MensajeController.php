@@ -32,10 +32,10 @@ class MensajeController extends Controller {
   public function consultarAvisosMensajes(Request $request) {
 
     if($request->isMensajeRoute == 'true'){
-      $mensaje = DB::table('mensajes')->where('receptor_id',Auth::user()->id)->update(['visto' => 'Si']);
+      $mensaje = DB::table('mensajes')->where('receptor_id',$request->user_id)->update(['visto' => 'Si']);
     }
 
-    return count(Mensaje::where('receptor_id', Auth::user()->id)->where('visto','No')->with('receptor')->get());
+    return count(Mensaje::where('receptor_id', $request->user_id)->where('visto','No')->with('receptor')->get());
 
   }
 

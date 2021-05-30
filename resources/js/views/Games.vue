@@ -2,6 +2,7 @@
 	<div class="cargando" v-if="loading"> <Loading/> </div>
 
 <div class="contenedor" v-else>
+  <head><title>GameReviews - Juegos</title></head>
 
   <div class="form-row align-items-center filtros">
     <div class="col-auto">
@@ -46,9 +47,21 @@
         <img class="caratula" :src="'../storage/'+ item.imagen" alt="Card image">
         <div class="opciones">
           <div class="opcion">
-            <div class="cuadro" v-if="current_user.rol == 'Administrador'" title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
-            <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
-            <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego"><i class="bi bi-heart"></i></div>
+            <template v-if="current_user != false">
+              <template v-if="current_user.rol == 'Administrador'">
+                <div class="cuadro"  title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
+                <div class="cuadro"  title="eliminar juego" @click="eliminarJuego(item.id)"><i class="bi bi-trash"></i> </div>
+              </template>
+              <template v-if="current_user.email_verified_at">
+                <template v-if="current_user.id">
+                  <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
+                  <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego"><i class="bi bi-heart"></i></div>
+                </template>
+              </template>
+              <template v-else>
+                <small>Valida tu email para agregar este juego a tu lista</small>
+              </template>
+            </template>
           </div>
         </div>
       </div>
@@ -74,7 +87,7 @@
       </select>
       <button class="btn btn-success" type="submit" @click="agregaPosesion(plataforma_id)">Agregar juego</button>
     </b-modal>
-    <template v-if="abrirModal"> <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/> </template>
+    <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
   </div>
 
   <nav class="paginate-bottom" aria-label="Page navigation example">
@@ -91,7 +104,7 @@
 import Swal from 'sweetalert2'
 
   export default {
-      props : ['current_user'],
+    props : ['current_user'],
     data() {
       return {
         loading: true,
@@ -119,7 +132,6 @@ import Swal from 'sweetalert2'
         page: this.page
         }
         this.loading =  true,
-        // this.page++;
         axios.get('http://localhost:8000/api/juegos/?page='+ this.page, {
           params: {
             orden: this.orden,
@@ -182,7 +194,7 @@ import Swal from 'sweetalert2'
       },
       eliminaPosesion(value){
         Swal.fire({
-          title: "¿Quieres eliminar este juego d tu lista de propiedades?",
+          title: "¿Quieres eliminar este juego de tu lista de propiedades?",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -224,10 +236,30 @@ import Swal from 'sweetalert2'
         }
       },
       editarJuego(value){
-        this.abrirModal = true
         this.game_id = value
         this.$bvModal.show("modal-AddGame")
       },
+      eliminarJuego(value){
+        Swal.fire({
+          title: "¿Quieres eliminar este juego de la base de datos?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, eliminalo',
+        }).then((result) => {
+          if(result.isConfirmed){
+            axios.delete('http://localhost:8000/api/juego/delete_game', {
+              params: {
+                game_id: value
+              }
+            }).then(response =>{
+              toastr.error('Has eliminado este juego de la base de datos')
+              this.obtenerDatos()
+            });
+          }
+        })
+      }
     },
     filters: {
       roundValors: function(value) {
@@ -273,7 +305,6 @@ import Swal from 'sweetalert2'
 }
 
 .tarjeta {
-	/* border: 1px solid green; */
 	width: 45%;
 	margin: 10px 0 30px 0;
   height: 200px;
@@ -286,7 +317,6 @@ import Swal from 'sweetalert2'
 }
 
 .izquierda {
-  /* border: 1px solid brown; */
   flex-flow: column;
   align-self: flex-end;
   flex: 1;
@@ -303,7 +333,6 @@ import Swal from 'sweetalert2'
   display: flex;
   flex: 1;
   height: 100%;
-  /* border: 1px solid blue; */
   text-align: center;
 }
 
@@ -317,7 +346,6 @@ import Swal from 'sweetalert2'
 }
 
 .caratula {
-	/* border: 1px solid red; */
 	height: 80%;
 	width: 100%;
   background: #023e8a;
@@ -326,7 +354,6 @@ import Swal from 'sweetalert2'
 }
 
 .titulo {
-  /* border: 1px solid purple; */
   flex: 3;
   height: 100%;
   text-align: center;
@@ -358,7 +385,6 @@ import Swal from 'sweetalert2'
 
 span {
   flex: 1;
-  /*border: 1px solid white;*/
 }
 
 .span-title {

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Review;
 use App\Models\Game;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
   use HasFactory, Notifiable;
 
@@ -25,7 +25,9 @@ class User extends Authenticatable
     'FecNac',
     'sexo',
     'avatar',
-
+    'confirmation_code',
+    'causa_expulsion',
+    'fin_expulsion',
   ];
 
   /**
@@ -65,6 +67,10 @@ class User extends Authenticatable
 
   public function mensajes_recibidos(){
 		return $this->hasMany(Mensaje::class,'receptor_id','user_id');
+  }
+
+  public function expulsiones(){
+		return $this->hasMany(Expulsion::class);
   }
 
 }

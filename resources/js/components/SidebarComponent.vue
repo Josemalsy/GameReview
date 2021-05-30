@@ -9,9 +9,10 @@
         <span class="avisoReviews" v-if="avisoReviewsAceptados" :title="'Tiene '+ cantidadReviewsAceptados + ' avisos de reviews'"> <a :href="'/usuario/' + current_user.id + '/reviews'">{{cantidadReviewsAceptados}}</a></span>
         <b-dropdown id="dropdown-1" text="Perfil" variant="red" toggle-class="text-light">
             <b-dropdown-item :href="'/usuario/' + current_user.id"><i class="bi bi-person"></i>{{current_user.name}}</b-dropdown-item>
+            <b-dropdown-item v-b-modal="'modal-editProfile'"><i class="bi bi-tools"></i>Editar perfil<modal-editProfile :current_user="current_user"/></b-dropdown-item>
             <b-dropdown-item :href="'/usuario/' + current_user.id + '/reviews'"><i class="bi bi-clipboard"></i>Reviews realizadas</b-dropdown-item>
             <b-dropdown-item :href="'/usuario/' + current_user.id + '/juegos'"><i class="bi bi-controller"></i>Lista de juegos</b-dropdown-item>
-            <b-dropdown-item href="/settings"><i class="bi bi-gear" aria-hidden="true"></i>Settings</b-dropdown-item>
+            <b-dropdown-item href="/staff_tools" v-if="current_user.rol != 'Usuario'"><i class="bi bi-gear" aria-hidden="true"></i>Panel de staff</b-dropdown-item>
             <b-dropdown-item href="/mensajes"><i class="bi bi-envelope"></i>Mensajes </a>
           </b-dropdown-item>
         </b-dropdown>
@@ -20,17 +21,21 @@
       <a href="/stats" class="nav-link"><i class="bi bi-graph-up" aria-hidden="true"></i><span>Stats </span></a>
     </div>
 
+    <div class="aviso-confirmacion" v-if="!current_user.email_verified_at && current_user != false">Un correo electrónico ha sido enviado a tu email para que lo confirmes. Si no ha llegado puedes solicitar otro <a href="/email/verify">en este enlace</a>  </div>
+
+
     <div class="cabecera" v-if="avisoReviewsRechazados">Tienes {{cantidadReviewsRechazados}} nueva review rechazada. Una acumulación de reviews rechazadas puede provocar la EXPULSIÓN de la web</div>
 
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   props : ['current_user'],
   mounted() {
-    this.getDatosMensajes()
-    this.getDatosReviews()
+    this.getDatos()
   },
   data() {
     return {
@@ -42,50 +47,66 @@ export default {
       cantidadReviewsRechazados: null,
       urlMensajes: false,
       urlReviews: false,
+      hoy: moment().format('YYYY-MM-DD'),
+
     }
   },
   methods: {
-    getDatosMensajes(){
+    getDatos(){
       if(this.current_user != false){
-        if(window.location.pathname == '/mensajes'){
-          this.urlMensajes = true
+        window.location.pathname == '/mensajes' ? this.getDatosMensajes(this.urlMensajes = true) : this.getDatosMensajes(this.urlMensajes = false)
+        window.location.pathname == '/usuario/' + this.current_user.id +  '/reviews' ? this.getDatosReviews(this.urlReviews = true) : this.getDatosReviews(this.urlReviews = false)
+
+        let fin_expulsion = moment(this.current_user.fin_expulsion)
+        if(this.current_user.fin_expulsion){
+          if(fin_expulsion.isSameOrBefore(this.hoy) ){
+            this.getUnban()
+          }
+
         }
-        axios.get('http://localhost:8000/api/consultar_avisos_mensajes', {
-          params: {
-            isMensajeRoute: this.urlMensajes,
-          }
-        }).then(response => {
-          if(response.data > 0 ){
-            this.avisoMensajes = true
-            this.cantidadMensajes = response.data
-          }
-        })
       }
     },
-    getDatosReviews(){
-      if(this.current_user != false){
-        if(window.location.pathname == '/usuario/' + this.current_user.id +  '/reviews'){
-          this.urlReviews = true
+    getDatosMensajes(){
+      this.urlMensajes == true
+      axios.get('http://localhost:8000/api/consultar_avisos_mensajes', {
+        params: {
+          isMensajeRoute: this.urlMensajes,
+          user_id: this.current_user.id
         }
-        axios.get('http://localhost:8000/api/consultar_avisos_reviews', {
-          params: {
-            isReviewsRoute: this.urlReviews,
+      }).then(response => {
+        if(response.data > 0 ){
+          this.avisoMensajes = true
+          this.cantidadMensajes = response.data
+        }
+      })
+    },
+    getDatosReviews(){
+      axios.get('http://localhost:8000/api/consultar_avisos_reviews', {
+        params: {
+          isReviewsRoute: this.urlReviews,
+          user_id: this.current_user.id
+        }
+      }).then(response => {
+        for(let x = 0; x < response.data.length; x++){
+          if(response.data[x].estado == 'Aceptado' ){
+            this.avisoReviewsAceptados = true
+            this.cantidadReviewsAceptados = response.data[x].cantidad
           }
-        }).then(response => {
-          for(let x = 0; x < response.data.length; x++){
-            if(response.data[x].estado == 'Aceptado' ){
-              this.avisoReviewsAceptados = true
-              this.cantidadReviewsAceptados = response.data[x].cantidad
-            }
-            if(response.data[x].estado == 'Rechazado' ){
-              this.avisoReviewsRechazados = true
-              this.cantidadReviewsRechazados = response.data[x].cantidad
-            }
+          if(response.data[x].estado == 'Rechazado' ){
+            this.avisoReviewsRechazados = true
+            this.cantidadReviewsRechazados = response.data[x].cantidad
           }
-        })
-      }
-    }
-  },
+        }
+      })
+    },
+    getUnban(){
+      axios.get('http://localhost:8000/api/getUnban', {
+        params: {
+          user_id: this.current_user.id
+        }
+      })
+    },
+  }
 }
 
 </script>
@@ -126,7 +147,6 @@ export default {
   background: #FF7F00;
   color: white;
   padding: 5px;
-  color:white;
 }
 
 .aviso a:hover{
@@ -144,19 +164,32 @@ export default {
   background: #245e13;
 }
 
-.cabecera {
-	/* border: 1px solid blue; */
+.aviso-confirmacion a{
+  color: blue;
+}
+
+.cabecera, .aviso-confirmacion {
 	display: flex;
 	height: auto;
 	margin-top: 10px;
 	flex-flow: column wrap;
 	margin: 5px;
 	width: auto ;
-	padding: 10px;
-	font-size: 25px;
-	background: #b21414;
+
 	color: white;
   text-align: center;
+}
+
+.cabecera {
+	background: #b21414;
+	padding: 10px;
+	font-size: 25px;
+}
+
+.aviso-confirmacion {
+  background: #006F62;
+  padding: 5px;
+	font-size: 20px;
 }
 
 @media(700px) {

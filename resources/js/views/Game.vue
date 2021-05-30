@@ -6,10 +6,15 @@
 			<div class="caratula">
 				<img class="imagen" :src="'../storage/'+ game.imagen" alt="Card image">
 			</div>
-			<div class="send-review" style="background-color: #FF4500;" v-if="!current_user"> Logueate para enviar tu review <modal-review /></div>
-			<div class="send-review" v-else-if="!checkUserReview" v-b-modal="'review-modal'" current_user.id="'current_user'"> Añade tu revisión <modal-review :tituloModal="'Enviar Reseña'"/></div>
-			<div class="send-review" style="background-color: green;" v-b-modal="'review-modal'" v-else>Valoracion realizada / Editarla <modal-review :current_user="current_user" :tituloModal="'Editar Reseña'" /></div>
-			<div class="plataformas"><span class="etiqueta" v-for="(item,index) in game.plataformas" :style="{background: estableceFondo(item.fabricante)}">{{item.nombre}}</span></div>
+			<template v-if="current_user.email_verified_at">
+				<div class="send-review" style="background-color: #FF4500;" v-if="!current_user"> Logueate para enviar tu review <modal-review /></div>
+				<div class="send-review" v-else-if="!checkUserReview" v-b-modal="'review-modal'" current_user.id="'current_user'"> Añade tu revisión <modal-review :tituloModal="'Enviar Reseña'"/></div>
+				<div class="send-review" style="background-color: green;" v-b-modal="'review-modal'" v-else>Valoracion realizada / Editarla <modal-review :current_user="current_user" :tituloModal="'Editar Reseña'" /></div>
+			</template>
+			<template v-else>
+				<div class="send-review" style="background-color: #2B4562;"> Valida tu email para poder escribir reseñas</div>
+			</template>
+				<div class="plataformas"><span class="etiqueta" v-for="(item,index) in game.plataformas" :style="{background: estableceFondo(item.fabricante)}">{{item.nombre}}</span></div>
 		</div>
 		<div class="principal">
 			<div class="cabecera">
@@ -74,7 +79,6 @@
 					<div class="lateralComment">
 						<div class="nick"> <a :href="'/usuario/'+item.users.id"> {{item.users.name}} </a></div>
 						<div class="avatar"><img class="caratula" :src="'../storage/'+ item.users.avatar" alt="Card image capaaaa"></div>
-						<div class="rango">Rango</div>
 					</div>
 					<div class="comment">
 						<div class="comment-header">
@@ -113,6 +117,7 @@ export default {
   },
   props : ['current_user'],
 	mounted() {
+
 		this.obtenerDatos()
 		this.$bus.$on('prueba',this.obtenerDatos)
 	},
@@ -620,7 +625,7 @@ export default {
 	border-right: 1px solid white;
 }
 
-.nick, .rango {
+.nick {
 	text-align: center;
 	height: auto;
 	background: #0466c8;

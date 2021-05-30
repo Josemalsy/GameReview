@@ -39,19 +39,15 @@
       </ul>
     </nav>
 
-    <div class="boton" @click="alterTableCard">
-      <template v-if="tarjeta"> <i class="bi bi-table" title="table"> </i> </template>
-      <template v-else> <i class="bi bi-card-list" title="tarjeta"></i> </template>
-    </div>
 
   </div>
-  <template v-if="tarjeta">
+  <template>
     <div class="contentCard">
       <div class="tarjeta" v-for="(item,index) in lista_usuarios" :key="index">
         <div class="izquierda">
           <img class="caratula" :src="'../storage/'+ item.avatar" alt="Card image capaaaa">
-          <div class="rangos">
-            Rango
+          <div class="expulsion" v-if="item.estado == 'Expulsado'">
+            Expulsado
           </div>
         </div>
         <div class="titulo">
@@ -76,28 +72,7 @@
     </div>
   </template>
 
-  <template v-else>
-    <table class="table table-striped table-primary">
-  <thead>
-    <tr>
-      <th style="min-width: 150px;">Nombre</th>
-      <th style="min-width: 120px;">Reseñas</th>
-      <th style="min-width: 120px;">Juegos</th>
-      <th style="min-width: 200px;">Ultimo juego</th>
-      <th style="min-width: 100px;">registrado</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="(item,index) in lista_usuarios" :key="index">
-      <td> {{item.name}} </td>
-      <td> {{item.reviews_count}} </td>
-      <td> {{item.games_count}} </td>
-      <td> <span v-if="item.games.length > 0"> {{item.games[0].titulo}} </span> <span v-else> -- </span> </td>
-      <td> {{item.created_at | formatDate}} </td>
-    </tr>
-  </tbody>
-</table>
-  </template>
+
 
     <nav class="paginate-bottom" aria-label="Page navigation example">
       <ul class="pagination" v-for="n in ultima_pagina">
@@ -134,11 +109,7 @@ import moment from 'moment'
     methods: {
       obtenerDatos(){
         this.loading = true
-        const params = {
-        page: this.page
-        }
-        // this.page++;
-        axios.get('http://localhost:8000/api/usuarios/?page='+ this.page, {
+        axios.post('http://localhost:8000/api/get_all_users/?page='+ this.page, {
           params: {
             orden: this.orden,
             filters: this.filters.buscador,
@@ -224,7 +195,6 @@ cursor: pointer;
 }
 
 .tarjeta {
-	/* border: 1px solid green; */
 	width: 45%;
 	margin: 10px 0 30px 0;
   height: 200px;
@@ -237,7 +207,6 @@ cursor: pointer;
 }
 
 .izquierda {
-  /* border: 1px solid brown; */
   flex-flow: column;
   align-self: flex-end;
   flex: 1;
@@ -245,25 +214,23 @@ cursor: pointer;
   display:flex;
 }
 
-.rangos{
+.expulsion{
   display:flex;
   flex-flow: row;
   height: 20%;
   text-align: center;
   align-self:center;
-  /* width: 100%; */
+  color: red;
 }
 
 .opcion {
   width: 100%;
   height: 100%;
-  /* border: 1px solid blue; */
   text-align: center;
   align-self:center;
 }
 
 .caratula {
-	/* border: 1px solid red; */
 	height: 80%;
 	width: 100%;
   padding: 10px;
@@ -271,7 +238,6 @@ cursor: pointer;
 }
 
 .titulo {
-  /* border: 1px solid purple; */
   width: 80%;
   height: 100%;
   text-align: center;
@@ -297,7 +263,6 @@ cursor: pointer;
 
 span {
   flex: 1;
-  /*border: 1px solid white;*/
 }
 .span-title {
   flex: 2;
@@ -362,7 +327,6 @@ span {
 .page-link {
   background: #023e7d;
   color: white;
-  /* border-radius: 50%; */
 
 }
 
@@ -373,23 +337,12 @@ span {
 }
 
 .table {
-  /* background: #C6E0F5; */
   text-align: center;
   width: 50%;
   font-size: 15px;
   margin: 25px 25px 25px 0;
   align-self: center;
 }
-
-/* thead {
-  border-bottom: 1px solid black;
-  font-size: 16px;
-  color: black;
-}
-
-th{
-  padding: 10px;
-} */
 
 
 @media (max-width: 1300px){

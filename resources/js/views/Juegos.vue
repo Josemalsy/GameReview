@@ -5,13 +5,24 @@
 			<div class="cabecera">Lista de juegos</div>
 
       <template>
+				<div class="comment-header">
+					<div class="listado-cabecera">
+						<div class="apartado">Titulo</div>
+						<div class="apartado">Base</div>
+						<div class="apartado">Extras</div>
+						<div class="apartado">100</div>
+						<div class="apartado">Valoracion</div>
+
+					</div>
+				</div>
+
 				<div class="comment-header" v-for="(item, index) in todosLosJuegos" :key="index" >
 					<div class="listado">
-						<div class="apartado">Titulo <p><router-link :to="{ path: '/game/ ' + item.game_id }" >{{item.titulo}}</router-link></p></div>
-						<div class="apartado">Base<p v-if="item.juegoBase" class="existe"><i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
-						<div class="apartado">Extras <p v-if="item.juegoExtendido" class="existe"> <i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
-						<div class="apartado">100%<p v-if="item.completadoTotal" class="existe"><i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
-						<div class="apartado">Valoracion<p v-if="item.puntuacion" class="existe"> <i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
+						<div class="apartado"> <p><router-link :to="{ path: '/game/ ' + item.game_id }" >{{item.titulo}}</router-link></p></div>
+						<div class="apartado"><p v-if="item.juegoBase" class="existe"><i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
+						<div class="apartado"> <p v-if="item.juegoExtendido" class="existe"> <i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
+						<div class="apartado"><p v-if="item.completadoTotal" class="existe"><i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
+						<div class="apartado"><p v-if="item.puntuacion" class="existe"> <i class="bi bi-check-square-fill"></i> </p><p v-else class="no-existe"><i class="bi bi-x-square-fill" ></i></p></div>
 					</div>
 				</div>
 			</template>
@@ -30,7 +41,7 @@ import moment from 'moment'
 export default {
   props : ['current_user'],
   mounted() {
-    this.ObtenerReviews()
+		this.obtenerJuegos()
   },
 	data() {
 		return {
@@ -47,7 +58,7 @@ export default {
 		}
 	},
   methods: {
-    ObtenerReviews(){
+    obtenerJuegos(){
 			this.loading = true
 			this.loadingContenido = true
 			axios.get('http://localhost:8000/api/muestra_juegos/', {
@@ -107,17 +118,14 @@ export default {
 <style scoped>
 
 .perfil {
-  /* border: 1px solid red; */
   display: flex;
   width: 80%;
   height: auto;
   flex-flow: row wrap;
   margin: 10px;
-  /* background: #CAF0F8; */
 }
 
 .cabecera {
-	/* border: 1px solid blue; */
 	display: flex;
 	height: auto;
 	margin-top: 10px;
@@ -142,16 +150,17 @@ export default {
 }
 
 
-.listado {
+.listado, .listado-cabecera {
 	display:flex;
 	flex-flow: row wrap;
 	flex: 1;
 	justify-content: space-between;
+	background: #c0e6ed;
 
 }
 
-.listado {
-	background: #c0e6ed;
+.listado-cabecera {
+	font-size: 25px;
 }
 
 .apartado {
@@ -186,6 +195,10 @@ export default {
 
 a{
 	font-size: 16px;
+}
+
+.listado-cabecera {
+	font-size: 18px;
 }
 
 }
