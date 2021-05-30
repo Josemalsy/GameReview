@@ -40,7 +40,7 @@
                     <div class="col-xs-12 col-sm-6 col-md-6">
                       <div class="form-group">
                         <label for="password" class="col-md-6 col-form-label text-md-left">Contraseña</label>
-                          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
                             @error('password')
                               <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -75,13 +75,13 @@
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-6">
                       <div class="form-group">
-                        <label for="genero" class="col-md-6 col-form-label text-md-left">Elige tú genero</label>
-                          <select class="form-control input-lg @error('genero') is-invalid @enderror" name="genero" value="{{ old('genero') }}" autocomplete="genero">
+                        <label for="sexo" class="col-md-6 col-form-label text-md-left">Elige tú sexo</label>
+                          <select class="form-control input-lg @error('sexo') is-invalid @enderror" name="sexo" value="{{ old('sexo') }}" autocomplete="sexo">
                             <option value="Hombre">Hombre</option>
                             <option value="Mujer">Mujer</option>
                             <option Value="Otro">Otro</option>
                           </select>
-                            @error('genero')
+                            @error('sexo')
                               <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                               </span>

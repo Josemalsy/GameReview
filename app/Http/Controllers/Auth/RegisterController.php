@@ -59,7 +59,7 @@ class RegisterController extends Controller
 					'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 					'password' => ['required', 'string', 'min:8', 'confirmed'],
 					'FecNac' => ['required'],
-					'genero' => ['required'],
+					'sexo' => ['required'],
 					'avatar' => ['mimes:jpg,jpeg,png,webj','max:20']
 			],[
 				'name.required' => 'El campo nombre es obligatorio',
@@ -73,7 +73,7 @@ class RegisterController extends Controller
 				'password.confirmed' => 'Las contraseñas no coinciden',
 				'password.min' => 'La contraseña debe tener más de 8 caracteres',
 				'FecNac.required' => 'Debe introducir una fecha de nacimiento',
-				'genero.required' => 'Debe introducir su género',
+				'sexo.required' => 'Debe introducir su género',
 				'avatar.mimes' => 'El avatar debe ser formato  PNG/JPG/JPEG/WEBJ',
 				'avatar.max' => 'El avatar no puede pesar mas de 20kb',
 			]);
@@ -102,7 +102,7 @@ class RegisterController extends Controller
 				'email' => $data['email'],
 				'password' => Hash::make($data['password']),
 				'FecNac' => $data['FecNac'],
-				'sexo' =>  $data['genero'],
+				'sexo' =>  $data['sexo'],
 				'avatar' => $imagenEnlace,
 				'confirmation_code' => $data['confirmation_code']
 		]);

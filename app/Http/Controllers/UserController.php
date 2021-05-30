@@ -7,6 +7,7 @@ use App\Models\Expulsion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -57,37 +58,71 @@ class UserController extends Controller
   public function update(Request $request) {
 
     $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 'public') : 'fotos/indice.png';
-
-    $this->validate($request, [
-
-      'name' => ['required','unique:users', 'string', 'max:255'],
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-      'password' => ['required', 'string', 'min:8', 'confirmed'],
-      'FecNac' => ['required'],
-      'genero' => ['required'],
-      'avatar' => ['mimes:jpg,jpeg,png,webj','max:20']
-  ],[
-    'name.required' => 'El campo nombre es obligatorio',
-    'name.unique' => 'El nombre de usuario ya está en uso',
-    'name.max' => 'El nombre no puede ocupar mas de 255 caracteres',
-    'email.required' => 'El campo correo electrónico es obligatorio',
-    'email.unique' => 'El correo electrónico ya está en uso',
-    'email.max' => 'El correo electrónico no puede ocupar mas de 255 caracteres',
-    'password.required' => 'Debe introducir una contraseña',
-    'password.confirmed' => 'Las contraseñas no coinciden',
-    'password.min' => 'La contraseña debe tener más de 8 caracteres',
-    'FecNac.required' => 'Debe introducir una fecha de nacimiento',
-    'genero.required' => 'Debe introducir su género',
-    'avatar.mimes' => 'El avatar debe ser formato  PNG/JPG/JPEG/WEBJ',
-    'avatar.max' => 'El avatar no puede pesar mas de 20kb',
-  ]);
-
     $user = User::find($request->id);
+
+    abort_if(!Hash::check($request->current_password, $user->password), 420,'La contraseña actual no coincide con la de la base de datos');
+
+    if(empty(request()->file('avatar'))){
+      $request->validate([
+        'name' => ['required','unique:users,name,'. $request->id, 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->id ],
+        'password' => ['confirmed','confirmed'],
+        'FecNac' => ['required'],
+        'sexo' => ['required'],
+        'current_password' => 'required',
+        ],[
+        'name.required' => 'El campo nombre es obligatorio',
+        'name.unique' => 'El nombre de usuario ya está en uso',
+        'name.max' => 'El nombre no puede ocupar mas de 255 caracteres',
+        'email.required' => 'El campo correo electrónico es obligatorio',
+        'email.unique' => 'El correo electrónico ya está en uso',
+        'email.max' => 'El correo electrónico no puede ocupar mas de 255 caracteres',
+        'password.required' => 'Debe introducir una contraseña',
+        'password.confirmed' => 'Las contraseñas no coinciden',
+        'password.min' => 'La contraseña debe tener más de 8 caracteres',
+        'current_password.current_password' => 'La contraseña actual no coincide',
+        'current_password.required' => 'Debes indicar tu contraseña actual',
+        'FecNac.required' => 'Debe introducir una fecha de nacimiento',
+        'sexo.required' => 'Debe introducir su género',
+        ]
+      );
+    }else {
+      $request->validate([
+          'name' => ['required','unique:users,name,'. $request->id, 'string', 'max:255'],
+          'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->id ],
+          'password' => ['confirmed'],
+          'FecNac' => ['required'],
+          'sexo' => ['required'],
+          'avatar' => ['mimes:jpg,jpeg,png,webj','max:20'],
+          'current_password' => 'required',
+        ],[
+          'name.required' => 'El campo nombre es obligatorio',
+          'name.unique' => 'El nombre de usuario ya está en uso',
+          'name.max' => 'El nombre no puede ocupar mas de 255 caracteres',
+          'email.required' => 'El campo correo electrónico es obligatorio',
+          'email.unique' => 'El correo electrónico ya está en uso',
+          'email.max' => 'El correo electrónico no puede ocupar mas de 255 caracteres',
+          'password.required' => 'Debe introducir una contraseña',
+          'password.confirmed' => 'Las contraseñas no coinciden',
+          'password.min' => 'La contraseña debe tener más de 8 caracteres',
+          'current_password.current_password' => 'La contraseña actual no coincide',
+          'current_password.required' => 'Debes indicar tu contraseña actual',
+          'FecNac.required' => 'Debe introducir una fecha de nacimiento',
+          'sexo.required' => 'Debe introducir su género',
+          'avatar.mimes' => 'El avatar debe ser formato  PNG/JPG/JPEG/WEBJ',
+          'avatar.max' => 'El avatar no puede pesar mas de 20kb',
+          'avatar.required' => 'Es obligatorio ponerse un avatar',
+        ]
+      );
+    }
+
     $user->name = $request->name;
     $user->email = $request->email;
     $user->FecNac = $request->FecNac;
     $user->sexo = $request->sexo;
-    $user->password =  Hash::make($request->password);
+    if ( !empty($request->input('password')) ){
+      $user->password =  Hash::make($request->password);
+    }
     $user->ocupacion = $request->ocupacion;
     $user->ubicacion = $request->ubicacion;
     $user->aficiones = $request->aficiones;

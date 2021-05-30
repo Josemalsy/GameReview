@@ -1,12 +1,13 @@
 <template>
-  <b-modal hide-footer ref="modal" id="modal-editProfile" size="xl" title="Editar usuario">
+  <b-modal hide-footer ref="modal" id="modal-editProfile" size="xl" title="Editar usuario" @shown="beforeOpen" @hide="cancelData">
     <form method="POST" enctype="multipart/form-data" v-on:submit.prevent="updateUser">
     <template v-if="validationErrors">
-      <li v-for="(item, index) in validationErrors" :key="index">{{item}}</li>
+      <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
     </template>
+    <li class="errorServ" v-if="validationCurrentPasssword"> {{validationCurrentPasssword}}</li>
         <div class="form-row">
           <div class="imagen">
-            <img class="caratula" :src="'../storage/'+ form.avatar" v-if="caratula">
+            <img class="caratula" :src="'/../storage/'+ form.avatar" v-if="caratula">
             <img class="caratula" :src="imagen" v-if="!caratula">
           </div>
           <div class="form-group col-md-12">
@@ -68,22 +69,30 @@
       </div>
     </div>
 
+      <div class="form-group col-md-12">
+        <label for="current_password">Contraseña actual</label>
+        <input id="current_password" type="password" class="form-control" name="current_password" v-model="form.current_password" @blur="compruebaContraseñaActual(form.current_password)" @keyup="compruebaContraseñaActual(form.current_password)">
+        <span class="error" v-if="checkCurrentPassword == false">Las contraseña está vacía o solo contienen espacios. Debe tener al menos 8 caracteres, mayusc. minusc. números y caracteres especiales. Caracteres especiales aceptados: @!_"-</span>
+      </div>
+
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="password">Nueva contraseña</label>
-          <input type="password" id="password" class="form-control" name="password" v-model="form.password" @keyup="compruebaContraseñas(repitePassword)">
-          <span class="error" v-if="checkPassword == false">Las contraseñas no coinciden</span>
+          <input type="password" id="password" class="form-control" name="password" v-model="form.password" @keyup="compruebaContraseñas(form.password_confirmation)">
+          <span class="error" v-if="checkPassword == false">Las contraseña está vacía o solo contienen espacios. Debe tener al menos 8 caracteres, mayusc. minusc. números y caracteres especiales. Caracteres especiales aceptados: @!_"-</span>
+          <p><span class="error" v-if="checkCoinciden == false">Las contraseña no coinciden</span></p>
           <span class="valido" v-if="checkPassword == true">Las contraseñas coinciden</span>
         </div>
         <div class="form-group col-md-6">
-          <label for="repitePassword">Repite la contraseña</label>
-          <input type="password" id="repitePassword" class="form-control" name="repitePassword" v-model="repitePassword" @keyup="compruebaContraseñas(repitePassword)">
-          <span class="error" v-if="checkPassword == false">Las contraseñas no coinciden</span>
+          <label for="password_confirmation">Repite la contraseña</label>
+          <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" v-model="form.password_confirmation" @keyup="compruebaContraseñas(form.password_confirmation)">
+          <span class="error" v-if="checkPassword == false">Las contraseña está vacía o solo contienen espacios. Debe tener al menos 8 caracteres, mayusc. minusc. números y caracteres especiales. Caracteres especiales aceptados: @!_"-</span>
+          <p><span class="error" v-if="checkCoinciden == false">Las contraseña no coinciden</span></p>
           <span class="valido" v-if="checkPassword == true">Las contraseñas coinciden</span>
         </div>
       </div>
 
-    <button type="submit" class="btn btn-primary" v-if="checkName == true && checkEmail == true && imagenSyze == true && imagenType == true && checkPassword != false">Editar perfil</button>
+    <button type="submit" class="btn btn-primary" v-if="checkName == true && checkEmail == true && form.current_password != null && imagenSyze == true && imagenType == true && checkPassword != false">Editar perfil</button>
     </form>
   </b-modal>
 </template>
@@ -99,29 +108,49 @@ export default {
       usuario: null,
       caratula: true,
       form: {
-        id: this.current_user.id,
-        name: this.current_user.name,
-        email: this.current_user.email,
-        FecNac: this.current_user.FecNac,
-        sexo: this.current_user.sexo,
-        ocupacion: this.current_user.ocupacion,
-        ubicacion: this.current_user.ubicacion,
-        aficiones: this.current_user.aficiones,
-        biografia: this.current_user.biografia,
-        avatar: this.current_user.avatar,
+        id: null,
+        name: null,
+        email: null,
+        FecNac: null,
+        sexo: null,
+        ocupacion: null,
+        ubicacion: null,
+        aficiones: null,
+        biografia: null,
+        avatar: null,
+        current_password: null,
         password: null,
+        password_confirmation: null,
       },
       imagenCargada: null,
-      repitePassword: null,
+      password_confirmation: null,
       imagenType: true,
       imagenSyze: true,
       checkName: true,
       checkEmail: true,
       checkPassword: null,
+      checkCoinciden: null,
+      checkCurrentPassword: null,
       validationErrors: null,
+      validationCurrentPasssword: null,
     }
   },
   methods: {
+    beforeOpen(){
+        this.form.id = this.current_user.id
+        this.form.name = this.current_user.name
+        this.form.email = this.current_user.email
+        this.form.FecNac = this.current_user.FecNac
+        this.form.sexo = this.current_user.sexo
+        this.form.ocupacion = this.current_user.ocupacion
+        this.form.ubicacion = this.current_user.ubicacion
+        this.form.aficiones = this.current_user.aficiones
+        this.form.biografia = this.current_user.biografia
+        this.form.avatar = this.current_user.avatar
+        this.form.current_password = null
+        this.form.password = null
+        this.form.password_confirmation = null
+    },
     onFileChange(e) {
       let file = e.target.files[0]
       this.form.avatar = file
@@ -156,8 +185,10 @@ export default {
       formData.append('ubicacion', this.form.ubicacion)
       formData.append('aficiones', this.form.aficiones)
       formData.append('biografia', this.form.biografia)
-      formData.append('avatar', this.form.avatar)
-      formData.append('password', this.form.password)
+      formData.append('avatar', this.form.avatar ? this.form.avatar : null)
+      formData.append('password', this.form.password ? this.form.password : '')
+      formData.append('password_confirmation', this.form.password_confirmation ? this.form.password : '')
+      formData.append('current_password', this.form.current_password ? this.form.current_password : '')
       formData.append('_method', 'POST');
 
       axios.post('http://localhost:8000/api/actualizarUsuario', formData)
@@ -167,9 +198,11 @@ export default {
         this.$bus.$emit('prueba')
       }).catch(error => {
         toastr.error('Error, no se pudo editar el perfil')
-        if (error.response.status == 422){
+        if(error.response.status == 420){
+          this.validationCurrentPasssword = error.response.data.message
+        }else if (error.response.status == 422){
           this.validationErrors = error.response.data.errors;
-          console.log(this.validationErrors)
+          this.validationCurrentPasssword = null
         }
       });
     },
@@ -180,16 +213,16 @@ export default {
       this.imagenSyze = true
     },
     compruebaNombre(value){
-      // let espacios
-      // value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+)*$/.test(value.trim()) : espacios = false
-      // this.checkName = true
-      // if(value == '' || espacios || value == null){
-      //   this.checkName = false
-      //   $("#name").removeClass("is-valid").addClass("is-invalid");
-      // }else {
-      //   $("#name").removeClass("is-invalid").addClass("is-valid");
-      //   this.checkName = true
-      // }
+      let espacios
+      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+)*$/.test(value.trim()) : espacios = false
+      this.checkName = true
+      if(value == '' || espacios || value == null){
+        this.checkName = false
+        $("#name").removeClass("is-valid").addClass("is-invalid");
+      }else {
+        $("#name").removeClass("is-invalid").addClass("is-valid");
+        this.checkName = true
+      }
     },
     compruebaEmail(value){
       let emailCorrecto
@@ -205,21 +238,78 @@ export default {
     },
     compruebaContraseñas(value){
       this.checkPassword = false
+      let contraseñaCorrecta
 
-      let espacios
+      value ? contraseñaCorrecta = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value) : contraseñaCorrecta = false
 
-      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+      if(this.form.password != this.form.password_confirmation ){
+        this.checkCoinciden = false
+      }else {
+        this.checkCoinciden = true
+      }
 
-      if(this.form.password == value ){
+      if(contraseñaCorrecta == true){
         this.checkPassword = true
       }else {
         this.checkPassword = false
       }
+
+      if(this.form.password == ''){
+        this.checkPassword = null
+      }
+
+    },
+    compruebaContraseñaActual(value){
+      this.checkCurrentPassword = false
+      let contraseñaActualCorrecta
+
+      value ? contraseñaActualCorrecta = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value) : contraseñaActualCorrecta = false
+
+      if(contraseñaActualCorrecta == true){
+        this.checkCurrentPassword = true
+        $("#current_password").removeClass("is-invalid").addClass("is-valid");
+      }else {
+        this.checkCurrentPassword = false
+        $("#current_password").removeClass("is-valid").addClass("is-invalid");
+      }
+    },
+    cancelData(){
+      this.form.id = null
+      this.form.name = null
+      this.form.email = null
+      this.form.FecNac = null
+      this.form.sexo = null
+      this.form.ocupacion = null
+      this.form.ubicacion = null
+      this.form.aficiones = null
+      this.form.biografia = null
+      this.form.avatar = null
+      this.form.current_password = null
+      this.form.password = null
+      this.form.password_confirmation = null
+
+      this.imagenCargada = null
+      this.password_confirmation = null
+      this.imagenType = true
+      this.imagenSyze = true
+      this.checkName = true
+      this.checkEmail = true
+      this.checkPassword = null
+      this.checkCurrentPassword = null
+      this.validationErrors = null
+      this.validationCurrentPasssword = null
     }
   },
   computed: {
     imagen(){
       return this.imagenCargada
+    }
+  },
+  filters: {
+    borraCaracteresEspeciales(value){
+      for(let i = 0; i <= value.length;i++){
+        return value[i]
+      }
     }
   }
 }
@@ -241,6 +331,13 @@ export default {
 .error {
   color: red;
   font-size: 12px;
+}
+
+.errorServ {
+  background: #c82333;
+  padding: 10px;
+  list-style:none;
+  color: white;
 }
 
 .valido {
