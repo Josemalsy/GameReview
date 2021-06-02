@@ -17,7 +17,6 @@ class IsStaff
 				}else if(Auth::user()->rol == 'Usuario'){
 					return redirect('/forbidden');
 				}else{
-                    dd("hola);
 					return $next($request);
 				}
 			} else {
