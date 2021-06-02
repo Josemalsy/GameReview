@@ -31,7 +31,6 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 //SI LARAVEL DEJA DE CREAR RUTAS SOLUCION -> PHP ARTISAN ROUTE:CACHE
 
 
-// JOSEMA, HAZ QUE CADA MIDDLEWARE CONTROLE TODAS LAS POSIBILIDADES (MIRAR ISBAN) Y APLICAR EL MIDDLEWARE RUTA A RUTA NADA DE EN GRUPO
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
