@@ -27,9 +27,14 @@
       <div class="tabla" v-for="(item, index) in users" :key="index" v-else>
         <template >
           <template v-if="!filters.estado">
-            <div class="nombre-user"> {{item.name}}</div>
+            <div class="nombre-user"><a :href="'/usuario/'+item.id" title="ver perfil">{{item.name}} </a></div>
             <div class="verHistorial" v-b-modal.historialExpulsiones @click="verHistorial(item.id)"> <i class="bi bi-clipboard-x" title="historial de expulsiones"></i> </div>
-            <div class="verPerfil"> <a :href="'/usuario/'+item.id"><i class="bi bi-person" title="Ver perfil de usuario"></i></a></div>
+            <template v-if="item.rol != 'Usuario'">
+              <div class="verPerfil"><i class="bi bi-star" title="No puedes expulsar a un moderador/administrador"></i></a></div>
+            </template>
+            <template v-else>
+              <div class="verPerfil" style="color: red;" v-b-modal="'modal-expulsionModal'" @click="expulsarUsuario(item.id, item.estado)"><i class="bi bi-x-octagon" title="expulsar usuario"></i></a></div>
+            </template>
             <template v-if="current_user.rol == 'Administrador'">
               <template v-if="item.rol != 'Administrador'">
                 <template v-if="item.rol == 'Moderador'">
@@ -45,7 +50,7 @@
           <template v-else>
             <div class="nombre-userExpulsado"> {{item.name}}</div>
             <div class="verHistorialExpulsado" v-b-modal.historialExpulsiones @click="verHistorial(item.id)">  <i class="bi bi-clipboard-x" title="historial de expulsiones"></i> </div>
-            <div class="verPerfilExpulsado"> <a :href="'/usuario/'+item.id"><i class="bi bi-person" title="Ver perfil de usuario"></i></a></div>
+            <div class="verPerfilExpulsado" v-b-modal="'modal-expulsionModal'" @click="expulsarUsuario(item.id, item.estado)"> <i class="bi bi-x-octagon" title="modificar o levantar expulsión vigente"></i></div>
             <div class="verPerfilExpulsado"  v-if="current_user.rol == 'Administrador'">
             <template v-if="current_user.rol == 'Administrador'">
               <template v-if="item.rol != 'Administrador'">
@@ -64,6 +69,7 @@
       </div>
 
       <modal-historialExpulsiones :user_id="user_id"/>
+      <modal-expulsionModal :user_id="user_id" :estado="estado" />
     </div>
 
   </div>
@@ -79,7 +85,7 @@ export default {
       this.$router.push('/forbidden');
     }else{
       this.getUsers()
-      this.$bus.$on('prueba',this.getGeneros)
+      this.$bus.$on('prueba',this.getUsers)
     }
   },
   data() {
@@ -87,6 +93,7 @@ export default {
       loading: true,
       users: [],
       user_id: null,
+      estado: null,
       agregarCrearGenero: false,
       filters: {
         buscador: '',
@@ -114,6 +121,11 @@ export default {
     verHistorial(value){
       this.user_id = value
       this.$bvModal.show("modal-historialExpulsiones")
+    },
+    expulsarUsuario(id,estado){
+      this.user_id = id
+      this.estado = estado
+      this.$bvModal.show("modal-expulsionModal")
     },
     nombrarModerador(value, nombre){
       Swal.fire({
@@ -153,7 +165,7 @@ export default {
               rol: 'Usuario'
             }
           }).then(response =>{
-            toastr.success('has devuelto a ' + nombre + 'al rol de Usuario');
+            toastr.success('has devuelto a ' + nombre + ' al rol de Usuario');
             this.getUsers()
           })
         }
@@ -240,6 +252,10 @@ export default {
   background: #D2515D;
   flex: 3;
   justify-content: center;
+}
+
+.nombre-user a, .nombre-userExpulsado a {
+  color: black;
 }
 
 .verPerfil, .verHistorial, .verPerfilExpulsado, .verHistorialExpulsado, .rol {

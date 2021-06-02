@@ -9,15 +9,18 @@ class IsStaff
 {
   public function handle($request, Closure $next)
     {
-        if (!Auth::guest()) {
-            $user = Auth::user()->rol;
-            if ($user == 'Usuario') {
 
-                return redirect('/forbidden');
-            }
-            return $next($request);
-        } else {
-            return redirect('/login');
-        }
+			if (!Auth::guest()) {
+				$user = Auth::user()->estado;
+				if ($user == 'Expulsado') {
+					return redirect('/baneo');
+				}else if(Auth::user()->rol == 'Usuario'){
+					return redirect('/forbidden');
+				}else{
+					return $next($request);
+				}
+			} else {
+					return redirect('/login');
+			}
     }
 }

@@ -17,10 +17,15 @@ class isLoging
      */
     public function handle(Request $request, Closure $next)
     {
-			dd("loggin");
-
-			if (Auth::guest()) {
-				return redirect('/login');
-			}
+      if(!Auth::guest()){
+        $user = Auth::user()->estado;
+        if($user == 'Expulsado'){
+          return redirect('/baneo');
+        }else{
+          return $next($request);
+        }
+      }else{
+        return redirect('/login');
+      }
     }
 }

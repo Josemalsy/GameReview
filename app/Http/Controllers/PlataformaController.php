@@ -30,9 +30,21 @@ class PlataformaController extends Controller {
   }
 
   public function createPlataforma(Request $request){
+
+    $request->validate([
+      'nombre' => ['required','max:255','unique:plataformas'],
+      'fabricante' => ['required','max:255']
+      ],[
+        'nombre.required' => 'La plataforma no puede estar vacía',
+        'nombre.max' => 'La plataforma no puede tener más de 255 caracteres',
+        'nombre.unique' => 'Ya existe una plataforma con ese nombre',
+        'fabricante.required' => 'el nombre del fabricante de la plataforma no puede estar vacío',
+        'fabricante.max' => 'el nombre del fabricante de la plataforma no puede tener más de 255 caracteres'
+      ]);
+
     $plataforma = New Plataforma([
-      'nombre'=> $request['params']['nombrePlataforma'],
-      'fabricante' => $request['params']['fabricantePlataforma']
+      'nombre'=> $request->nombre,
+      'fabricante' => $request->fabricante
     ]);
     $plataforma->save();
 
@@ -40,10 +52,21 @@ class PlataformaController extends Controller {
 
   public function updatePlataforma(Request $request) {
 
-    $plataforma = Plataforma::find($request['params']['plataforma_id']);
+    $request->validate([
+      'nombre' => ['required','max:255','unique:plataformas,nombre,'.$request->plataforma_id],
+      'fabricante' => ['required','max:255']
+      ],[
+        'nombre.required' => 'La plataforma no puede estar vacía',
+        'nombre.max' => 'La plataforma no puede tener más de 255 caracteres',
+        'nombre.unique' => 'Ya existe una plataforma con ese nombre',
+        'fabricante.required' => 'el nombre del fabricante de la plataforma no puede estar vacío',
+        'fabricante.max' => 'el nombre del fabricante de la plataforma no puede tener más de 255 caracteres'
+      ]);
 
-    $plataforma->nombre = $request['params']['nombrePlataforma'];
-    $plataforma->fabricante = $request['params']['fabricantePlataforma'];
+    $plataforma = Plataforma::find($request->plataforma_id);
+
+    $plataforma->nombre = $request->nombre;
+    $plataforma->fabricante = $request->fabricante;
     $plataforma->save();
 
   }

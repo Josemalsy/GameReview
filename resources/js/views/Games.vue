@@ -125,6 +125,7 @@ import Swal from 'sweetalert2'
     },
     mounted(){
       this.obtenerDatos();
+      this.$bus.$on('prueba',this.obtenerDatos)
     },
     methods: {
       obtenerDatos(){

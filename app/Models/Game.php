@@ -18,7 +18,7 @@ class Game extends Model
 		];
 
 	public function reviews(){
-		return $this->hasMany(Review::class, 'game_id')->orderBy('created_at','asc');
+		return $this->hasMany(Review::class, 'game_id')->orderBy('id','asc');
 	}
 
 	public function games(){

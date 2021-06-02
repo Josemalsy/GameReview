@@ -75,7 +75,11 @@ export default {
 		},
 		ObtenerJuegosSinReviews(){
 			this.loading = true
-			axios.get('http://localhost:8000/api/getJuegosSinReview/').then(response =>{
+			axios.get('http://localhost:8000/api/getJuegosSinReview/',{
+				params: {
+					user_id: this.id_user
+				}
+			}).then(response =>{
 				this.juegosSinReview = response.data;
 				this.loading = false
 				if(!this.loading){

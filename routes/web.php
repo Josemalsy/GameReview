@@ -18,10 +18,9 @@ use Illuminate\Support\facades\Mail;
 |
 */
 
-
-// Route::get('/prueba', function () {
-// 	return 9;
-// })->middleware(['auth','verified']);
+Route::get('/prueba', function () {
+	return 9;
+})->middleware(['auth','verified']);
 
 Route::get('/email/verify', function () {
 	return view('auth.verify-email');
@@ -34,64 +33,32 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 
-Route::group(['middleware' => ['IsStaff']], function() {
-
-  Route::get('/staff_tools', function() {
-		return view('welcome');
-	});
-
-	Route::get('/staff_tools/listaGeneros', function() {
-		return view('welcome');
-	});
-
-	Route::get('/staff_tools/listaPlataformas', function() {
-		return view('welcome');
-	});
-
-	Route::get('/staff_tools/listaUsuarios', function() {
-		return view('welcome');
-	});
-
-});
-
-
-Route::group(['middleware' => ['IsLoging']], function() {
-
-	Route::get('/mensajes', function () {
-		return view('welcome');
-	});
+Route::group(['middleware' => 'IsLoging'], function() {
 
 	Route::get('/mensajes/leer_mensaje', function () {
 		return view('welcome');
 	});
 
-	Route::get('/usuario/{id}', function () {
+	Route::get('/mensajes', function () {
 		return view('welcome');
 	});
 
 	Route::get('/usuario/{id}/reviews', function () {
 		return view('welcome');
-	});
+	})->middleware(['auth','verified']);
 
 	Route::get('/usuario/{id}/juegos', function () {
 		return view('welcome');
-	});
+	})->middleware(['auth','verified']);
 
-	Route::get('/staff_tools', function() {
+	Route::get('/usuario/{id}', function () {
 		return view('welcome');
 	});
 
-	Route::get('/staff_tools/listaGeneros', function() {
+	Route::get('/game/{id}', function () {
 		return view('welcome');
 	});
 
-	Route::get('/staff_tools/listaPlataformas', function() {
-		return view('welcome');
-	});
-
-	Route::get('/staff_tools/listaUsuarios', function() {
-		return view('welcome');
-	});
 
 });
 
@@ -101,33 +68,17 @@ Route::group(['middleware' => 'IsBan'], function() {
 		return view('welcome');
 	});
 
-	Route::get('/usuarios', function () {
-		return view('welcome');
-	});
-
 	Route::get('/stats', function () {
 		return view('welcome');
 	});
 
-	Route::get('/mensajes', function () {
+	Route::get('/usuarios', function () {
 		return view('welcome');
 	});
 
-	Route::get('/mensajes/leer_mensaje', function () {
-		return view('welcome');
-	});
+});
 
-	Route::get('/usuario/{id}', function () {
-		return view('welcome');
-	});
-
-	Route::get('/usuario/{id}/reviews', function () {
-		return view('welcome');
-	});
-
-	Route::get('/usuario/{id}/juegos', function () {
-		return view('welcome');
-	});
+Route::group(['middleware' => 'IsStaff'], function() {
 
 	Route::get('/staff_tools', function() {
 		return view('welcome');

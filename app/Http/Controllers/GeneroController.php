@@ -21,8 +21,17 @@ class GeneroController extends Controller {
   }
 
   public function createGenero(Request $request){
+
+    $request->validate([
+      'nombre' => ['required','max:255','unique:generos'],
+      ],[
+        'nombre.required' => 'El género no puede estar vacío',
+        'nombre.max' => 'El género no puede tener más de 255 caracteres',
+        'nombre.unique' => 'Ya hay un género con ese nombre'
+      ]);
+
     $genero = New Genero([
-      'nombre'=> $request['params']['nombreGenero']
+      'nombre'=> $request->nombre
     ]);
     $genero->save();
 
@@ -30,9 +39,17 @@ class GeneroController extends Controller {
 
   public function updateGenero(Request $request) {
 
-    $genero = Genero::find($request['params']['genero_id']);
+    $request->validate([
+      'nombre' => ['required','max:255','unique:generos,nombre,'.$request->genero_id],
+      ],[
+        'nombre.required' => 'El género no puede estar vacío',
+        'nombre.max' => 'El género no puede tener más de 255 caracteres',
+        'nombre.unique' => 'Ya hay un género con ese nombre',
+      ]);
 
-    $genero->nombre = $request['params']['nombreGenero'];
+    $genero = Genero::find($request->genero_id);
+
+    $genero->nombre = $request->nombre;
     $genero->save();
 
   }

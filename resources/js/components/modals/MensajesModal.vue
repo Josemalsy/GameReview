@@ -3,6 +3,11 @@
 
     <div class="enviarMensaje">
       <form method="POST" enctype="multipart/form-data" v-on:submit.prevent="enviarMensaje">
+
+        <template v-if="validationErrors">
+          <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+        </template>
+
         <div class="form-row">
           <div class="col-md-12 mb-12">
             <label for="destinatario">Destinatario </label>
@@ -18,17 +23,23 @@
           </div>
           <div class="col-md-12 mb-12">
             <label for="titulo">Titulo</label>
-            <input type="text" class="form-control" id="titulo" v-model="form.titulo" placeholder="Titulo" :placeholder="form.titulo" @keyup="validarTitulo(form.titulo)" @blur="validarTitulo(form.titulo)">
+            <template v-if="tituloModal == 'Responder Mensaje'">
+              <input type="text" class="form-control" id="titulo" v-model="form.titulo" placeholder="Titulo" :placeholder="form.titulo" @keyup="validarTitulo(form.titulo)" disabled>
+            </template>
+            <template v-else>
+              <input type="text" class="form-control" id="titulo" v-model="form.titulo" placeholder="Titulo" :placeholder="form.titulo" @keyup="validarTitulo(form.titulo)">
+            </template>
             <span class="error" v-if="checkTitulo == false">El contenido del título no puede estar vacío</span>
             <span class="error" v-if="checkLongitudTitulo == false">El título no puede superar los 100 caracteres</span>
           </div>
           <div class="col-md-12 mb-12">
-            <label for="mensaje">Mensaje </label>
-            <vue-editor v-model="form.mensaje" id="mensaje" :editor-toolbar="customToolbar" @selection-change="validarMensaje(form.mensaje)" @blur="validarMensaje(form.mensaje)"/>
-            <span class="error" v-if="checkMensaje == false">El contenido del mensaje no puede estar vacío</span>
+            <label for="mensaje">Mensaje  </label>
+            <vue-editor v-model="form.mensaje" id="mensaje" :editor-toolbar="customToolbar"/>
+            <span class="error" v-if="checkMensaje == false" >El contenido del mensaje no puede estar vacío</span>
+            <span v-if="form.mensaje">{{validarMensaje(form.mensaje)}}</span>
           </div>
         </div>
-          <button type="submit" class="btn btn-primary" v-if="form.receptor_id && form.titulo && form.titulo.length <= 100 && form.mensaje">{{tituloModal}}</button>
+          <button type="submit" class="btn btn-primary" v-if="form.receptor_id && checkTitulo == true && checkLongitudTitulo == true && checkMensaje == true">{{tituloModal}}</button>
       </form>
     </div>
 
@@ -44,11 +55,11 @@ export default {
   data() {
     return {
       listaUsers: [],
-      checkDestino: false,
       checkMensaje: null,
       checkTitulo: null,
       checkLongitudTitulo: null,
       checkDestino: null,
+      validationErrors: null,
       form: {
         titulo: null,
         mensaje: null,
@@ -67,9 +78,14 @@ export default {
     beforeOpen(){
         this.getDatosUsuarios()
       if( this.tituloModal == 'Responder Mensaje'){
-        this.form.titulo = "RE: " + this.tituloMensaje;
-        this.form.receptor_id = this.emisor_id;
+        this.form.titulo = this.tituloMensaje
+        this.form.receptor_id = this.receptor_id
+        this.form.conversacion_id = this.conversacion_id
+        this.checkDestino = true
+        this.checkTitulo = true
+        this.checkLongitudTitulo = true
       } else if( this.tituloModal == 'Mandar mensaje'){
+        this.checkDestino = true
         this.form.receptor_id = this.receptor_id
       }
     },
@@ -79,30 +95,36 @@ export default {
       })
     },
     enviarMensaje(){
-      if(this.checkDestino == true && this.checkMensaje == true && this.checkTitulo == true && this.checkLongitudTitulo == true && this.current_user != false){
+      this.validarMensaje(this.form.mensaje)
+      if(this.checkDestino == true && this.checkMensaje == true && this.checkLongitudTitulo == true && this.current_user != false){
 
-        if(this.tituloModal == "Enviar Mensaje" || this.tituloModal == 'Mandar mensaje'){
+        if(this.tituloModal == "Enviar Mensaje" || this.tituloModal == "Mandar mensaje"){
 
-          axios.post('http://localhost:8000/api/enviar_mensaje',{
-            params: {
-              formulario: this.form,
-            }
-          }).then(response => {
-            this.$refs["modal"].hide();
+          axios.post('http://localhost:8000/api/enviar_mensaje',this.form)
+          .then(response => {
+            this.$refs["modal"].hide()
             this.$bus.$emit('prueba')
-          })
+            toastr.success('Mensaje enviado con éxito')
+          }).catch(error => {
+            toastr.error('Error, no se pudo enviar el mensaje')
+            if (error.response.status == 422){
+              this.validationErrors = error.response.data.errors;
+            }
+          });
 
         } else {
           this.form.receptor_id = this.receptor_id
           this.form.conversacion_id = this.conversacion_id
-          axios.post('http://localhost:8000/api/responder_mensaje',{
-            params: {
-              formulario: this.form,
-            }
-          }).then(response => {
-            this.$refs["modal"].hide();
+          axios.post('http://localhost:8000/api/responder_mensaje', this.form).then(response => {
+            this.$refs["modal"].hide()
             this.$bus.$emit('prueba')
-          })
+            toastr.success('Mensaje respondido con éxito')
+          }).catch(error => {
+            toastr.error('Error, no se pudo responder el mensaje')
+            if (error.response.status == 422){
+              this.validationErrors = error.response.data.errors;
+            }
+          });
         }
 
       }
@@ -113,38 +135,36 @@ export default {
 
       let espacios
 
-      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+      value ? espacios = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+)*$/.test(value.trim()) : espacios = false
 
-      if(value == '' || value == null || espacios ){
+      if(value){
+        espacios == true
+      }
+
+      if(!value || !espacios ){
         this.checkTitulo = false
         $("#titulo").removeClass("is-valid").addClass("is-invalid");
       } else {
         this.checkTitulo = true
         $("#titulo").removeClass("is-invalid").addClass("is-valid");
-        if(value.length >= 100){
-          this.checkLongitudTitulo = false
-          $("#titulo").removeClass("is-valid").addClass("is-invalid");
-        }else {
-          this.checkLongitudTitulo = true
-          $("#titulo").removeClass("is-invalid").addClass("is-valid");
-        }
 
       }
-
     },
     validarMensaje(value){
-      this.checkMensaje = false
 
       let espacios
 
-      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+      let patron = /(?!^ +$)^.+$/
 
-      if(value == '' || value == null || espacios){
-        this.checkMensaje = true
-      }else {
+      value = value.trim()
+
+      if(!value) {
         this.checkMensaje = false
+      }else {
+        this.checkMensaje = true
 
       }
+
     },
     compruebaDestino(value){
       this.checkDestino = true
@@ -157,13 +177,24 @@ export default {
     cancelData(){
       this.form.titulo = null
       this.form.mensaje = null
-      this.form.emisor_id = null
       this.form.receptor_id = null
+      this.checkDestino = null
+      this.validationErrors = null
+      this.checkMensaje = null
+      this.checkTitulo = null
+      this.checkLongitudTitulo = null
     },
     onClose(type) {
       this.cancelData()
     }
   },
+  filters: {
+    borraCaracteresEspeciales(value){
+      for(let i = 0; i <= value.length;i++){
+        return value[i]
+      }
+    }
+  }
 
 }
 </script>
@@ -179,5 +210,12 @@ export default {
     color: green;
     font-size: 12px;
   }
+
+.errorServ {
+  background: #c82333;
+  padding: 10px;
+  list-style:none;
+  color: white;
+}
 
 </style>

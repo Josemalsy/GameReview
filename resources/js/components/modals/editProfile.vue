@@ -216,7 +216,7 @@ export default {
       let espacios
       value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ1-9]+)*$/.test(value.trim()) : espacios = false
       this.checkName = true
-      if(value == '' || espacios || value == null){
+      if(!value || espacios){
         this.checkName = false
         $("#name").removeClass("is-valid").addClass("is-invalid");
       }else {

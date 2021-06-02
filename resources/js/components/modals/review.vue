@@ -1,10 +1,15 @@
 <template>
   <b-modal hide-footer ref="modal" id="review-modal" @shown="beforeOpen" size="xl" :title="tituloModal" @hidden="cancelData">
     <form method="POST" enctype="multipart/form-data" v-on:submit.prevent="createReview">
+
+      <template v-if="validaciones.validationErrors">
+        <li v-for="(item, index) in validaciones.validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+      </template>
+
       <div class="form-row">
         <div class="col-md-3 mb-3 valoracion-input">
           <label for="valoracion">¿Qué nota le das al juego de 0 a 100? </label>
-          <input type="number" class="form-control" id="valoracion" v-model="form.valoracion" @keyup="porcentajeBarra(form.valoracion),checkValoracion(form.valoracion)" @blur="checkValoracion(form.valoracion)" placeholder="Valoración" min=0 max=100 required>
+          <input type="number" class="form-control" id="valoracion" v-model="form.valoracion" @keyup="porcentajeBarra(form.valoracion),checkValoracion(form.valoracion)" @blur="checkValoracion(form.valoracion)" placeholder="Valoración" min:0 max:100>
           <span class="error" v-if="validaciones.checkValoracionVacio">El campo valoracion no puede estar vacio</span>
           <span class="error" v-if="validaciones.checkValoracionBetween">El campo valoracion debe estar entre 0 y 100</span>
         </div>
@@ -23,13 +28,13 @@
         </div>
         <div class="col-md-3 mb-3">
           <label for="juego_extendido">Juego con extras</label>
-          <input type="number" class="form-control" id="juego_extendido" v-model="form.juego_extendido" placeholder="Juego con extras" @keyup="checkIntervalos" disabled :min="form.juego_base" :max="form.completado_total">
+          <input type="number" class="form-control" id="juego_extendido" v-model="form.juego_extendido" placeholder="Juego con extras" @keyup="checkIntervalos" disabled :min="form.juego_base" :max="form.completado_total" >
           <span class="error" v-if="validaciones.checkJuegoExtendidoMenor">Debe estar entre juego_base y juego completado</span>
           <span class="error" v-if="validaciones.checkJuegoExtendidoMayor">Debe ser menor a juego completado</span>
         </div>
         <div class="col-md-3 mb-3">
           <label for="completado_total">Completado al 100%</label>
-          <input type="number" class="form-control" id="completado_total" v-model="form.completado_total" placeholder="Completado al 100%" :min="form.juego_extendido" @keyup="checkIntervalos" disabled>
+          <input type="number" class="form-control" id="completado_total" v-model="form.completado_total" placeholder="Completado al 100%" @keyup="checkIntervalos" disabled :min="form.juego_extendido">
           <span class="error" v-if="validaciones.checkCompletadoTotal">Debe ser mayor a juego extendido</span>
         </div>
       </div>
@@ -56,7 +61,7 @@
 import  VueEditor from "vue2-editor";
 
   export default {
-    props: ['current_user', 'tituloModal'],
+    props: ['current_user', 'tituloModal', 'review_id'],
     data() {
       return {
         form : {
@@ -68,6 +73,7 @@ import  VueEditor from "vue2-editor";
           valoracion: null,
           plataforma_id: null,
           review_id: null,
+          user_id: this.current_user.id,
         },
         validaciones: {
           checkValoracionVacio: false,
@@ -77,7 +83,8 @@ import  VueEditor from "vue2-editor";
           checkJuegoBaseNum: null,
           checkJuegoExtendidoMenor: null,
           checkJuegoExtendidoMayor: null,
-          checkCompletadoTotal: null
+          checkCompletadoTotal: null,
+          validationErrors: null
         },
         plataformaActualNombre: null,
         listaPlataformas: [],
@@ -122,8 +129,7 @@ import  VueEditor from "vue2-editor";
       traeReview(){
         axios.get('http://localhost:8000/api/get_reviews_By_User_Game',{
           params: {
-            game_id: this.$route.params.id,
-            user_id: this.current_user.id
+            review_id: this.review_id,
           }
         }).then(response => {
           this.form.juego_base = response.data[0].juegoBase
@@ -259,29 +265,31 @@ import  VueEditor from "vue2-editor";
       },
       createReview(){
         if(this.tituloModal == 'Enviar Reseña'){
-          axios.post('http://localhost:8000/api/review/post_review', {
-            params: {
-              formulario: this.form,
-            }
-          }).then(response => {
+          axios.post('http://localhost:8000/api/review/post_review',this.form)
+          .then(response => {
             toastr.success('review realizada');
             this.$refs["modal"].hide();
             this.$bus.$emit('prueba')
           }).catch(error => {
             toastr.error('Error, no se pudo agregar la review')
-          });
-        }else{
-          axios.post('http://localhost:8000/api/review/edit_review', {
-            params: {
-              formulario: this.form,
+            if (error.response.status == 422){
+              this.validaciones.validationErrors = error.response.data.errors;
             }
-          }).then(response => {
+          });
+
+        }else{
+          axios.post('http://localhost:8000/api/review/edit_review',this.form)
+          .then(response => {
             toastr.success('review editada');
             this.$refs["modal"].hide();
             this.$bus.$emit('prueba')
           }).catch(error => {
             toastr.error('Error, no se pudo editar la review')
+            if (error.response.status == 422){
+              this.validaciones.validationErrors = error.response.data.errors;
+            }
           });
+
         }
       },
       cancelData(){
@@ -294,15 +302,24 @@ import  VueEditor from "vue2-editor";
         this.validaciones.checkValoracionVacio = false
         this.validaciones.checkValoracionBetween = false
         this.validaciones.checkMensaje = false
-        this.validaciones.checkJuegoBase = false
-        this.validaciones.checkJuegoExtendidoMenor = false
-        this.validaciones.checkJuegoExtendidoMayor = false
-        this.validaciones.checkCompletadoTotal = false
+        this.validaciones.checkJuegoBase = null
+        this.validaciones.checkJuegoBaseNum = null
+        this.validaciones.checkJuegoExtendidoMenor = null
+        this.validaciones.checkJuegoExtendidoMayor = null
+        this.validaciones.checkCompletadoTotal = null
+        this.validationErrors = null
       },
       onClose(type) {
         this.cancelData()
       }
     },
+    filters: {
+    borraCaracteresEspeciales(value){
+      for(let i = 0; i <= value.length;i++){
+        return value[i]
+      }
+    }
+  }
   }
 </script>
 

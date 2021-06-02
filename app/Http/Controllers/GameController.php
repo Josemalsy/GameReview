@@ -9,12 +9,13 @@ use App\Models\Game_Plataforma;
 use App\Models\Game_Genero;
 use App\Models\Game_User;
 use App\Models\Review;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class GameController extends Controller
 {
 
   public function index(Request $request) {
+
 		$buscador = $request->get('filters');
     $orden = $request->get('orden');
 
@@ -55,15 +56,35 @@ class GameController extends Controller
 
   public function addGames(Request $request) {
 
-    $formulario_juego = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
+    abort_if($request->plataformas['1'] != '{', 420, 'Debe seleccionar al menos una plataforma');
+    abort_if($request->generos['1'] != '{', 420, 'Debe seleccionar al menos un género');
+
+    $request->validate([
+      'titulo' => ['required','max:255','unique'],
+      'desarrolladora' => ['required','max:255'],
+      'lanzamiento' => ['required'],
+      'imagen' => ['required','mimes:jpg,jpeg,png,webj','max:500'],
+      ],[
+        'titulo.required' => 'El titulo no puede estar vacío',
+        'titulo.max' => 'El titulo no puede tener más de 255 caracteres',
+        'titulo.unique' => 'Ya hay un juego con ese nombre',
+        'lanzamiento.required' => 'La fecha de lanzamiento no puede estar vacío',
+        'imagen.required' => 'La imagen del juego es obligatoria',
+        'imagen.mimes' => 'La imagen solo puede tener los siguientes formatos: PNG/JPG/JPEG/WEBJ',
+        'imagen.max' => 'La imagen tiene que pesar menos de 500kb',
+        'plataformas.required' => 'Debe seleccionar al menos una plataforma',
+      ]);
+
+
     $imagenEnlace = request()->file('imagen')->store('caratulas', 'public');
     $array_plataformas = json_decode($request->plataformas, true);
     $array_generos = json_decode($request->generos, true);
 
+
     $juego = new Game([
-      'titulo' => $formulario_juego['titulo'],
-      'desarrolladora' => $formulario_juego['desarrolladora'],
-      'lanzamiento' => $formulario_juego['lanzamiento'],
+      'titulo' => $request->titulo,
+      'desarrolladora' => $request->desarrolladora,
+      'lanzamiento' => $request->lanzamiento,
       'imagen' => $imagenEnlace,
     ]);
     $juego->save();
@@ -74,7 +95,6 @@ class GameController extends Controller
         'plataforma_id' => $array_plataformas[$i]['id']
       ]);
     }
-
 
     for ($i=0; $i < count($array_generos) ; $i++) {
       DB::table('game_genero')->insert([
@@ -88,16 +108,49 @@ class GameController extends Controller
 
   public function updateGame(Request $request) {
 
-    $formulario_juego = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
+    abort_if($request->plataformas['1'] != '{', 420, 'Debe seleccionar al menos una plataforma');
+    abort_if($request->generos['1'] != '{', 420, 'Debe seleccionar al menos un género');
+
+    if(gettype($request->imagen) == "string"){
+
+      $request->validate([
+        'titulo' => ['required','max:255','unique:games,titulo,'. $request->id],
+        'desarrolladora' => ['required','max:255'],
+        'lanzamiento' => ['required'],
+        ],[
+          'titulo.required' => 'El titulo no puede estar vacío',
+          'titulo.max' => 'El titulo no puede tener más de 255 caracteres',
+          'titulo.unique' => 'Ya hay un juego con ese nombre',
+          'lanzamiento.required' => 'La fecha de lanzamiento no puede estar vacío',
+          'plataformas.required' => 'Debe seleccionar al menos una plataforma',
+        ]);
+
+    }else {
+
+      $request->validate([
+        'titulo' => ['required','max:255','unique:games,titulo,'. $request->id],
+        'desarrolladora' => ['required','max:255'],
+        'lanzamiento' => ['required'],
+        'imagen' => ['required','mimes:jpg,jpeg,png,webj','max:500'],
+        ],[
+          'titulo.required' => 'El titulo no puede estar vacío',
+          'titulo.max' => 'El titulo no puede tener más de 255 caracteres',
+          'titulo.unique' => 'Ya hay un juego con ese nombre',
+          'lanzamiento.required' => 'La fecha de lanzamiento no puede estar vacío',
+          'plataformas.required' => 'Debe seleccionar al menos una plataforma',
+          'imagen.required' => 'La imagen del juego es obligatoria',
+          'imagen.mimes' => 'La imagen solo puede tener los siguientes formatos: PNG/JPG/JPEG/WEBJ',
+          'imagen.max' => 'La imagen tiene que pesar menos de 500kb',
+        ]);
+      }
 
     $array_plataformas = json_decode($request->plataformas, true);
     $array_generos = json_decode($request->generos, true);
-    // $imagenEnlace = request()->file('imagen')->store('caratulas', 'public');
-    // dd($imagenEnlace);
-    $game = Game::find($formulario_juego['id']);
-    $game->titulo = $formulario_juego['titulo'];
-    $game->desarrolladora = $formulario_juego['desarrolladora'];
-    $game->lanzamiento = $formulario_juego['lanzamiento'];
+
+    $game = Game::find($request->id);
+    $game->titulo = $request->titulo;
+    $game->desarrolladora = $request->desarrolladora;
+    $game->lanzamiento = $request->lanzamiento;
     if(!empty(request()->file('imagen'))){
       $imagenEnlace = request()->file('imagen')->store('caratulas', 'public');
       $game->imagen = $imagenEnlace;
@@ -105,30 +158,44 @@ class GameController extends Controller
 
     $game->save();
 
-    DB::table('game_genero')->where(['game_id'=>$formulario_juego['id']])->delete();
-    DB::table('game_plataforma')->where(['game_id'=>$formulario_juego['id']])->delete();
+    DB::table('game_genero')->where(['game_id'=>$request->id])->delete();
+    DB::table('game_plataforma')->where(['game_id'=>$request->id])->delete();
 
     for ($i=0; $i < count($array_plataformas) ; $i++) {
       DB::table('game_plataforma')->insert([
-        'game_id' =>  33,
+        'game_id' =>  $game->id,
         'plataforma_id' => $array_plataformas[$i]['id']
       ]);
     }
 
     for ($i=0; $i < count($array_generos) ; $i++) {
       DB::table('game_genero')->insert([
-        'game_id' =>  33,
+        'game_id' =>  $game->id,
         'genero_id' => $array_generos[$i]['id']
       ]);
     }
 
   }
 
-  public function getJuegoById($id) {
-    return Game::withCount('users')->with('reviews')->withCount('reviews')
+  public function getJuegoById($id,Request $request) {
+
+    if(empty($request->user_id)){
+
+      return Game::withCount('users')->with('reviews')->withCount('reviews')
+      ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
+      ->where('id', $id)->get();
+
+    }else {
+
+      return Game::withCount('users')->with('reviews')->withCount('reviews')
                 ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
                 ->where('id', $id)
-                ->get();
+                ->whereHas('reviews',function (Builder $query) use($request) {
+                  $query->where('user_id',$request->user_id);
+                })->get();
+
+    }
+
   }
 
   public function deleteGame(Request $request)

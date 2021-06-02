@@ -48,7 +48,7 @@ class UserController extends Controller
 
     $estado = ($request->get('estado') == 'true') ? 'Expulsado' : null;
 
-    return User::select('name','id','estado','rol')->Where("name", 'like', '%' . $buscador . '%')->where('estado', $estado)->get();
+    return User::select('name','id','estado','rol')->Where("name", 'like', '%' . $buscador . '%')->where('estado', $estado)->orderBy('rol')->get();
   }
 
   public function getUsers() {
@@ -57,7 +57,6 @@ class UserController extends Controller
 
   public function update(Request $request) {
 
-    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 'public') : 'fotos/indice.png';
     $user = User::find($request->id);
 
     abort_if(!Hash::check($request->current_password, $user->password), 420,'La contraseña actual no coincide con la de la base de datos');
@@ -115,6 +114,8 @@ class UserController extends Controller
         ]
       );
     }
+    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 'public') : 'fotos/indice.png';
+
 
     $user->name = $request->name;
     $user->email = $request->email;
@@ -133,11 +134,21 @@ class UserController extends Controller
 
   public function banUser(Request $request) {
 
-    $user = $user = User::find($request['params']['user_id']);
+    $request->validate([
+      'revocar' => ['required'],
+      'user_id' => ['required']
+      ],[
+        'revocar.required' => 'El campo revocar es obligatorio',
+        'user_id.required' => 'Debe especificar un nombre de usuario'
+      ]);
 
-    if($request['params']['revocar_expulsion'] == true){
 
-      $expulsion = Expulsion::where('user_id',$request['params']['user_id'])->orderBy('id','desc')->first();
+    $user = $user = User::find($request->user_id);
+
+    if($request->revocar == true){
+
+
+      $expulsion = Expulsion::where('user_id',$request->user_id)->orderBy('id','desc')->first();
 
       $expulsion->delete();
 
@@ -146,21 +157,37 @@ class UserController extends Controller
       $user->causa_expulsion = null;
       $user->save();
 
-
-
     }else{
 
-      $user->estado = 'Expulsado';
-      $user->fin_expulsion = $request['params']['fin_expulsion'];
-      $user->causa_expulsion = $request['params']['causa'];
-      $user->save();
+      //HOY corresponde a fin de expulsión
+      //Tiempo_expulsión corresponde al tipo de expulsión
 
-      $expulsion = new Expulsion([
-        'user_id' => $request['params']['user_id'],
-        'causa' =>  $request['params']['causa'],
-        'tipo_expulsion' =>  $request['params']['tipo_expulsion']
-      ]);
-      $expulsion->save();
+      abort_if($user->rol != 'Usuario', 420, 'No puedes expulsar a un moderador o administrador');
+
+        $request->validate([
+          'causa' => ['required','max:255'],
+          'tiempo_expulsion' => ['required','string'],
+          'hoy' => ['required', 'size:10'],
+          ],[
+            'causa.required' => 'La causa de la expulsión no puede estar vacía',
+            'causa.max' => 'La causa de la expulsión tener más de 255 caracteres',
+            'tiempo_expulsion.required' => 'El tipo de expulsión no puede estar vacío',
+            'tiempo_expulsion.string' => 'El tipo de expulsión debe ser una cadena',
+            'hoy.required' => 'El campo fin de expulsión es obligatorio',
+            'hoy.size' => 'El fin de la expulsión solo puede tener 10 caracteres',
+          ]);
+
+        $user->estado = 'Expulsado';
+        $user->fin_expulsion = $request->fin_expulsion;
+        $user->causa_expulsion = $request->causa;
+        $user->save();
+
+        $expulsion = new Expulsion([
+          'user_id' => $request->user_id,
+          'causa' =>  $request->causa,
+          'tipo_expulsion' =>  $request->tiempo_expulsion
+        ]);
+        $expulsion->save();
 
     }
   }

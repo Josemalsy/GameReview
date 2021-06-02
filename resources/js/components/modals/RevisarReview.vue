@@ -1,5 +1,6 @@
 <template>
-  <b-modal hide-footer ref="modal" id="modal-RevisarReview" size="xl" title="Revisar reviews">
+  <b-modal hide-footer ref="modal" id="modal-RevisarReview" size="xl" title="Revisar reviews" @hidden="cancelData">
+
     <div v-for="(item,index) in review" :key="index">
       <div class="tarjetaCuadro">
         <div class="superior">
@@ -14,8 +15,13 @@
       </div>
     </div>
     <b-modal id="observaciones" title="Second Modal" hide-footer ok-only>
+
+      <template v-if="validationErrors">
+        <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+      </template>
+
       <label for="observación">Elija motivo</label>
-      <select id="observacion" class="form-select mb-3" v-model="observacion" @click="checkOtro">
+      <select id="observacion" class="form-select mb-3" v-model="form.observacion" @click="checkOtro">
         <option value="Spoilers">Spoilers</option>
         <option value="Faltas de respeto grave">Faltas de respeto grave</option>
         <option value="Pésima ortografía">Pésima ortografía</option>
@@ -23,9 +29,9 @@
         <option value="Otro">Otro (Especifica debajo)</option>
       </select>
       <div v-if="otro">
-        <vue-editor v-model="observacionTexto" id="mensaje" :editor-toolbar="customToolbar" />
+        <vue-editor v-model="form.observacionTexto" id="mensaje" :editor-toolbar="customToolbar" />
       </div>
-      <button v-if="observacion != null && observacion != 'Otro' || observacion =='Otro' && observacionTexto" class="btn btn-danger" type="submit" @click="isReject(review_id)">Rechazar</button>
+      <button v-if="form.observacion != null && form.observacion != 'Otro' || form.observacion =='Otro' && form.observacionTexto" class="btn btn-danger" type="submit" @click="isReject(review_id)">Rechazar</button>
     </b-modal>
   </b-modal>
 </template>
@@ -39,11 +45,15 @@ export default {
   },
   data() {
     return {
+      form: {
+        review_id: null,
+        observacion: null,
+        observacionTexto: null,
+      },
       review_id: null,
       review: null,
-      observacion: null,
       otro: false,
-      observacionTexto: null,
+      validationErrors: null,
       customToolbar: [
         ["bold", "italic", "underline"],
         [{ list: "ordered" }, { list: "bullet" }],
@@ -58,46 +68,59 @@ export default {
       })
     },
     isAcepted(id) {
-      axios.post('http://localhost:8000/api/reviewAccepted',{
-          params: {
-            review_id: id,
-          }
-        }).then(response => {
+      this.form.review_id = id
+      axios.post('http://localhost:8000/api/reviewAccepted',this.form
+      ).then(response => {
           toastr.success('Review aceptada con éxito');
           this.obtenerDatos()
       }).catch(error => {
           toastr.error('Error, no se pudo aceptar la review')
+          if (error.response.status == 422){
+            this.validationErrors = error.response.data.errors;
+          }
       });
     },
     isReject(id){
-      if(this.observacionTexto != null){
-        this.observacion = this.observacionTexto
+      this.form.review_id = id
+      if(this.form.observacionTexto != null){
+        this.form.observacion = this.form.observacionTexto
       }
-      axios.post('http://localhost:8000/api/reviewRejected',{
-          params: {
-            review_id: id,
-            observacion: this.observacion
-          }
-        }).then(response => {
+      axios.post('http://localhost:8000/api/reviewRejected',this.form)
+        .then(response => {
           toastr.success('Review rechazada con éxito');
           this.obtenerDatos()
           this.$bvModal.hide('observaciones')
       }).catch(error => {
           toastr.error('Error, no se pudo rechazar la review')
+          if (error.response.status == 422){
+              this.validationErrors = error.response.data.errors;
+          }
       });
     },
     checkOtro(){
-      if(this.observacion === 'Otro') {
+      if(this.form.observacion === 'Otro') {
         this.otro = true
-        // this.observacion = null
       } else {
         this.otro = false
       }
     },
     sendInfo(item) {
       this.review_id = item;
+    },
+    cancelData(){
+      this.validationErrors = null
+      this.form.observacion = null
+      this.form.observacionTexto = null
+      this.otro = false
     }
   },
+  filters: {
+    borraCaracteresEspeciales(value){
+      for(let i = 0; i <= value.length;i++){
+        return value[i]
+      }
+    }
+  }
 }
 </script>
 
@@ -105,6 +128,13 @@ export default {
   .tarjetaCuadro {
     border: 1px solid;
     margin: 0 0 20px 0;
+  }
+
+  .errorServ {
+    background: #c82333;
+    padding: 10px;
+    list-style:none;
+    color: white;
   }
 
   .superior {

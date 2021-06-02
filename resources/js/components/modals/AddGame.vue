@@ -2,6 +2,11 @@
   <b-modal hide-footer ref="modal" id="modal-AddGame" size="xl" :title="tituloModal" @shown="beforeOpen" @hide="cancelData">
     <form method="POST" enctype="multipart/form-data" v-on:submit.prevent="addGame">
 
+    <template v-if="validationErrors">
+      <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+    </template>
+    <li v-if="errorPlataformasGeneros" class="errorServ">{{errorPlataformasGeneros}}</li>
+
       <div class="form-row">
         <div class="imagen">
           <img class="caratula" :src="this.imagenCargada">
@@ -19,7 +24,7 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="Titulo">Título del juego</label>
-          <input type="text" class="form-control" id="titulo" required v-model="form.titulo" @keyup="compruebaTitulo(form.titulo)" @blur="compruebaTitulo(form.titulo)">
+          <input type="text" class="form-control" id="titulo" v-model="form.titulo" @keyup="compruebaTitulo(form.titulo)" @blur="compruebaTitulo(form.titulo)">
           <span class="error" v-if="checkTitulo == false">El título del juego no puede estar vacío</span>
         </div>
         <div class="form-group col-md-6">
@@ -33,12 +38,12 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="desarrolladora">Desarrolladora del juego </label>
-          <input type="text" class="form-control" id="desarrolladora" required v-model="form.desarrolladora" @keyup="compruebaDesarrolladora(form.desarrolladora)" @blur="compruebaDesarrolladora(form.desarrolladora)">
+          <input type="text" class="form-control" id="desarrolladora" v-model="form.desarrolladora" @keyup="compruebaDesarrolladora(form.desarrolladora)" @blur="compruebaDesarrolladora(form.desarrolladora)">
           <span class="error" v-if="checkDesarrolladora == false">La desarrolladora del juego no puede estar vacío</span>
         </div>
         <div class="form-group col-md-6">
           <label for="Lanzamiento">Lanzamiento del juego</label>
-          <input type="date" class="form-control" id="Lanzamiento" required v-model="form.lanzamiento" :max="hoy" @change="compruebaLanzamiento(form.lanzamiento)" @blur="compruebaLanzamiento(form.lanzamiento)">
+          <input type="date" class="form-control" id="Lanzamiento" v-model="form.lanzamiento" :max="hoy" @change="compruebaLanzamiento(form.lanzamiento)" @blur="compruebaLanzamiento(form.lanzamiento)">
           <span class="error" v-if="checkLanzamiento == false">La fecha de lanzamiento del juego no puede estar vacío</span>
           <span class="valido" v-if="checkLanzamiento == true">Fecha de lanzamiento correcta.</span>
         </div>
@@ -51,7 +56,7 @@
         <span class="valido" v-if="checkPlataforma == true">Plataformas válidas.</span>
       </div>
 
-      <button v-if="imagenType == true && imagenSyze == true && checkTitulo == true && checkGenero == true && checkDesarrolladora == true  && checkLanzamiento == true && checkPlataforma == true" type="submit" class="btn btn-primary">{{tituloModal}}</button>
+      <button type="submit" class="btn btn-primary" v-if="imagenType == true && imagenSyze == true && checkTitulo == true && checkGenero == true && checkDesarrolladora == true  && checkLanzamiento == true && checkPlataforma == true">{{tituloModal}}</button>
     </form>
   </b-modal>
 </template>
@@ -67,6 +72,7 @@ export default {
     return {
       hoy: moment().format('YYYY-MM-DD'),
       form: {
+        id:null,
         titulo: null,
         genero: null,
         desarrolladora: null,
@@ -87,15 +93,17 @@ export default {
       checkGenero: null,
       checkDesarrolladora: null,
       checkLanzamiento: null,
-      checkPlataforma: null
+      checkPlataforma: null,
+      validationErrors: null,
+      errorPlataformasGeneros: null,
     }
   },
   methods: {
     beforeOpen(){
-      if(this.tituloModal == 'Actualizar Juego'){
-        this.obtenerDatos()
         this.getPlataformaData()
         this.getGeneroData()
+      if(this.tituloModal == 'Actualizar Juego'){
+        this.obtenerDatos()
       }
     },
     getPlataformaData(){
@@ -117,8 +125,9 @@ export default {
         this.generos = this.game.generos
         this.form.desarrolladora = this.game.desarrolladora
         this.plataformas = this.game.plataformas
-        this.imagenCargada = '../storage/' +  this.game.imagen
+        this.imagenCargada = '/../storage/' +  this.game.imagen
         this.form.lanzamiento = this.game.lanzamiento
+        this.form.id = this.game_id
       });
 
       this.checkGenero = true
@@ -134,24 +143,30 @@ export default {
       this.jsonPlataformas = JSON.stringify(this.plataformas)
       this.jsonGeneros = JSON.stringify(this.generos)
 
-      formData.append('titulo', this.form.titulo)
+      formData.append('titulo', this.form.titulo ? this.form.titulo : '')
       formData.append('generos', this.jsonGeneros)
-      formData.append('desarrolladora', this.form.desarrolladora)
-      formData.append('imagen', this.form.imagen)
-      formData.append('lanzamiento', this.form.lanzamiento)
+      formData.append('desarrolladora', this.form.desarrolladora ? this.form.desarrolladora : '')
+      formData.append('imagen', this.form.imagen ? this.form.imagen : '')
+      formData.append('lanzamiento', this.form.lanzamiento ? this.form.lanzamiento : '')
       formData.append('plataformas', this.jsonPlataformas)
       formData.append('_method', 'POST');
 
       if(this.tituloModal == 'Actualizar Juego'){
-        formData.append('id', this.game_id)
+        formData.append('id', this.form.id)
+        formData.append('imagen', this.imagenCargada)
 
         axios.post('http://localhost:8000/api/juego/updateGame', formData)
         .then(response => {
           toastr.success('juego actualizado con éxito');
-          this.$refs["modal"].hide();
           this.$bus.$emit('prueba')
+          this.$refs["modal"].hide();
         }).catch(error => {
           toastr.error('Error, no se pudo actualizar el juego')
+          if(error.response.status == 420){
+              this.errorPlataformasGeneros = error.response.data.message
+          }else if (error.response.status == 422){
+              this.validationErrors = error.response.data.errors;
+            }
         });
 
       }else {
@@ -161,8 +176,14 @@ export default {
           toastr.success('juego añadido con éxito');
           this.cancelData()
           this.$bus.$emit('prueba')
+          this.$refs["modal"].hide();
         }).catch(error => {
           toastr.error('Error, no se pudo agregar el juego')
+          if(error.response.status == 420){
+              this.errorPlataformasGeneros = error.response.data.message
+          }else if (error.response.status == 422){
+            this.validationErrors = error.response.data.errors;
+          }
         });
 
       }
@@ -195,7 +216,7 @@ export default {
       this.checkTitulo = false
       let espacios
 
-      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+)*$/.test(value.trim()) : espacios = false
 
       if(value == '' || value == null || espacios){
         this.checkTitulo = false
@@ -209,7 +230,7 @@ export default {
       this.checkDesarrolladora = true
       let espacios
 
-      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(value.trim()) : espacios = false
+      value ? espacios = !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+)*$/.test(value.trim()) : espacios = false
 
       if(value == '' || espacios || value == null){
         this.checkDesarrolladora = false
@@ -245,16 +266,35 @@ export default {
     },
     cancelData(){
       this.form.titulo = null
-      this.form.genero = null
+      this.genero = null
       this.form.desarrolladora = null
       this.form.imagen = null
       this.form.lanzamiento = null
-      this.form.plataformas = null
-      this.form.imagenCargada = null
+      this.plataformas = null
+      this.imagenCargada = null
       this.form.jsonData = null
+      this.errorPlataformasGeneros = null
+      this.validationErrors = null
+      this.imagenType = null
 
+      this.imagenType = null
+      this.imagenSyze = null
+      this.checkTitulo = null
+      this.checkGenero = null
+      this.checkDesarrolladora = null
+      this.checkLanzamiento = null
+      this.checkPlataforma = null
+      this.validationErrors = null
+      this.errorPlataformasGeneros = null
     },
   },
+  filters: {
+    borraCaracteresEspeciales(value){
+      for(let i = 0; i <= value.length;i++){
+        return value[i]
+      }
+    }
+  }
 
 }
 </script>
@@ -272,5 +312,11 @@ export default {
   font-size: 12px;
 }
 
+.errorServ {
+  background: #c82333;
+  padding: 10px;
+  list-style:none;
+  color: white;
+}
 
 </style>

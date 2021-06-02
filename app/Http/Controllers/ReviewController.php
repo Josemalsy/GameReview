@@ -43,29 +43,54 @@ class ReviewController extends Controller
 
   public function post_review(Request $request){
 
-    $formulario_review = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
 
-    $game_user = Auth::user()->games()->wherePivot('user_id', $request->user()->id)->wherePivot('game_id',$formulario_review['params']['formulario']['id_game'])->first();
+    $request->validate([
+        'id_game' => ['required'],
+        'juego_base' => ['required', 'numeric'],
+        'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base, 'max:'.$request->completado_total],
+        'completado_total' => ['numeric','nullable',],
+        'mensaje' => ['required'],
+        'valoracion' => ['required', 'numeric','min:0','max:100'],
+        'plataforma_id' => ['required'],
+        'user_id' => ['required'],
+        ],[
+        'id_game.required' => 'El id del juego es obligatorio',
+        'juego_base.required' => 'La duración del juego base es obligatoria',
+        'juego_base.numeric' => 'El campo juego base debe ser numérico',
+        'juego_extendido.numeric' => 'El campo juego extendido debe ser numérico',
+        'juego_extendido.min' => 'Las horas de juego extendido no pueden ser inferior a juego base',
+        'valoracion.required' => 'La valoración del juego es obligatoria',
+        'valoracion.min' => 'La valoración no puede ser inferior a 0',
+        'valoracion.max' => 'La valoración no puede ser superior a 100',
+        'juego_extendido.max' => 'Las horas de juego extendido no pueden ser superior a completado total',
+        'completado_total.numeric' => 'El campo completado total debe ser numérico',
+        'mensaje.required' => 'Debe introducir un mensaje',
+        'plataforma_id.required' => 'Debe seleccionar la plataforma',
+        'user_id' => 'El id del usuario es obligatorio',
+        ]
+      );
 
-    $review_user = Review::where('user_id',$request->user()->id)->where('game_id', $formulario_review['params']['formulario']['id_game'])->first();
+
+    $game_user = DB::SELECT('select * from game_user where user_id = ' . $request->user_id . ' AND game_id = ' . $request->id_game);
+
+    $review_user = Review::where('user_id',$request->user_id)->where('game_id', $request->id_game)->where('estado','!=','Rechazado')->first();
 
     if(is_null($review_user)) {
-
       if(is_null($game_user)) {
         DB::table('game_user')->insert([
-            'game_id' => $formulario_review['params']['formulario']['id_game'],
-            'user_id' => $request->user()->id,
-            'plataforma_id' => $formulario_review['params']['formulario']['plataforma_id']
+            'game_id' => $request->id_game,
+            'user_id' => $request->user_id,
+            'plataforma_id' => $request->plataforma_id
         ]);
       }
       $review = new Review([
-        'game_id' => $formulario_review['params']['formulario']['id_game'],
-        'user_id' => $request->user()->id,
-        'juegoBase' => $formulario_review['params']['formulario']['juego_base'],
-        'juegoExtendido' => $formulario_review['params']['formulario']['juego_extendido'],
-        'completadoTotal' => $formulario_review['params']['formulario']['completado_total'],
-        'mensaje' => $formulario_review['params']['formulario']['mensaje'],
-        'puntuacion' => $formulario_review['params']['formulario']['valoracion'],
+        'game_id' => $request->id_game,
+        'user_id' => $request->user_id,
+        'juegoBase' => $request->juego_base,
+        'juegoExtendido' => $request->juego_extendido,
+        'completadoTotal' => $request->completado_total,
+        'mensaje' => $request->mensaje,
+        'puntuacion' => $request->valoracion,
       ]);
 
       $review->save();
@@ -77,31 +102,54 @@ class ReviewController extends Controller
   }
 
   public function edit_review(Request $request){
-    $formulario_review = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
 
-    $game_user = Auth::user()->games()->wherePivot('user_id', $request->user()->id)->wherePivot('game_id',$formulario_review['params']['formulario']['id_game'])->first();
+    $request->validate([
+      'id_game' => ['required'],
+      'juego_base' => ['required', 'numeric'],
+      'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base, 'max:'.$request->completado_total],
+      'completado_total' => ['numeric','nullable',],
+      'mensaje' => ['required'],
+      'valoracion' => ['required', 'numeric','min:0','max:100'],
+      'plataforma_id' => ['required'],
+      'user_id' => ['required'],
+      ],[
+      'id_game.required' => 'El id del juego es obligatorio',
+      'juego_base.required' => 'La duración del juego base es obligatoria',
+      'juego_base.numeric' => 'El campo juego base debe ser numérico',
+      'juego_extendido.numeric' => 'El campo juego extendido debe ser numérico',
+      'juego_extendido.min' => 'Las horas de juego extendido no pueden ser inferior a juego base',
+      'juego_extendido.max' => 'Las horas de juego extendido no pueden ser superior a completado total',
+      'completado_total.numeric' => 'El campo completado total debe ser numérico',
+      'mensaje.required' => 'Debe introducir un mensaje',
+      'plataforma_id.required' => 'Debe seleccionar la plataforma',
+      'user_id' => 'El id del usuario es obligatorio',
+      ]
+    );
 
-    $review_user = Review::where('user_id',$request->user()->id)->where('game_id', $formulario_review['params']['formulario']['id_game'])->first();
+
+    $game_user = DB::SELECT('select * from game_user where user_id = ' . $request->user_id . ' AND game_id = ' . $request->id_game);
+
+    $review_user = Review::where('user_id',$request->id_game)->where('game_id', $request->id_game)->first();
 
       if(is_null($game_user)) {
         DB::table('game_user')->insert([
-            'game_id' => $formulario_review['params']['formulario']['id_game'],
-            'user_id' => $request->user()->id,
-            'plataforma_id' => $formulario_review['params']['formulario']['plataforma_id']
+            'game_id' => $request->id_game,
+            'user_id' => $request->id_game,
+            'plataforma_id' => $request->plataforma_id
         ]);
       }else{
 
       }
 
-      $review = Review::find($formulario_review['params']['formulario']['review_id']);
+      $review = Review::find($request->review_id);
 
-      $review->game_id = $formulario_review['params']['formulario']['id_game'];
-      $review->user_id = $request->user()->id;
-      $review->juegoBase = $formulario_review['params']['formulario']['juego_base'];
-      $review->juegoExtendido = $formulario_review['params']['formulario']['juego_extendido'];
-      $review->completadoTotal = $formulario_review['params']['formulario']['completado_total'];
-      $review->mensaje = $formulario_review['params']['formulario']['mensaje'];
-      $review->puntuacion = $formulario_review['params']['formulario']['valoracion'];
+      $review->game_id = $request->id_game;
+      $review->user_id = $request->user_id;
+      $review->juegoBase = $request->juego_base;
+      $review->juegoExtendido = $request->juego_extendido;
+      $review->completadoTotal = $request->completado_total;
+      $review->mensaje = $request->mensaje;
+      $review->puntuacion = $request->valoracion;
       $review->estado = 'Pendiente';
       $review->visto = 'No';
       $review->save();
@@ -109,8 +157,7 @@ class ReviewController extends Controller
   }
 
   public function getUserGameReview(Request $request){
-
-    return Review::where('game_id',$request->game_id)->where('user_id',$request->user_id)->get();
+    return Review::where('id',$request->review_id)->get();
   }
 
   public function consultarAvisosReviews(Request $request) {
@@ -130,11 +177,13 @@ class ReviewController extends Controller
 
   public function reviewAccepted(Request $request) {
 
-    $review_array = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
+    $request->validate([
+      'review_id' => ['required']
+      ],[
+      'review_id.required' => 'Debe indicar el id de la review'
+    ]);
 
-    $review_id = $review_array['params']['review_id'];
-
-    $review = Review::find($review_id);
+    $review = Review::find($request->review_id);
 
     $review->estado = 'Aceptado';
     $review->visto = 'No';
@@ -144,12 +193,19 @@ class ReviewController extends Controller
 
   public function reviewRejected(Request $request) {
 
-    $review_array = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
-    $review_id = $review_array['params']['review_id'];
+    $request->validate([
+      'review_id' => ['required'],
+      'observacion' => ['required', 'string','max:25']
+      ],[
+      'review_id.required' => 'Debe indicar el id de la review',
+      'observacion.required' => 'Debe indicar una causa para rechazar la review',
+      'observacion.string' => 'La observación debe ser una cadena',
+      'observacion.max' => 'La observación no puede tener más de 255 caracteres'
+    ]);
 
-    $review = Review::find($review_id);
+    $review = Review::find($request->review_id);
     $review->estado = 'Rechazado';
-    $review->observaciones = $review_array['params']['observacion'];
+    $review->observaciones = $request->observacion;
     $review->visto = 'No';
     $review->save();
 

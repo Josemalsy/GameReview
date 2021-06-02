@@ -34,7 +34,7 @@
             <div class="infoMensaje">
               <div class="arriba">
                 <div class="fechaTitulo">{{mensaje.created_at | formatDate}} - {{mensaje.titulo}} </div>
-                <div class="botonBorrar"> <i class="bi bi-x-square-fill" @click="borrarMensaje(mensaje.id)" style="cursor: pointer"></i> </div>
+                <div class="botonBorrar"> <i class="bi bi-x-square-fill" @click="borrarMensaje(mensaje.id)" style="cursor: pointer" title="borrar mensaje"></i> </div>
               </div>
               <div class="textoMensaje" v-html="mensaje.mensaje"></div>
             </div>

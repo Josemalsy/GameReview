@@ -1,19 +1,20 @@
 <template>
 	<div class="cargando" v-if="loading"> <Loading/> </div>
-
 	<div class="carta" v-else>
+
 		<div class="izqda">
 			<div class="caratula">
 				<img class="imagen" :src="'../storage/'+ game.imagen" alt="Card image">
 			</div>
 			<template v-if="current_user.email_verified_at">
 				<div class="send-review" style="background-color: #FF4500;" v-if="!current_user"> Logueate para enviar tu review <modal-review /></div>
-				<div class="send-review" v-else-if="!checkUserReview" v-b-modal="'review-modal'" current_user.id="'current_user'"> Añade tu revisión <modal-review :tituloModal="'Enviar Reseña'"/></div>
-				<div class="send-review" style="background-color: green;" v-b-modal="'review-modal'" v-else>Valoracion realizada / Editarla <modal-review :current_user="current_user" :tituloModal="'Editar Reseña'" /></div>
+				<div class="send-review" v-else-if="checkUserReview == false" v-b-modal="'review-modal'" current_user.id="'current_user'"> Añade tu revisión <modal-review :current_user="current_user" :tituloModal="'Enviar Reseña'"/></div>
+				<div class="send-review" style="background-color: green;" v-b-modal="'review-modal'" v-else-if="reviewPendienteId">Valoracion realizada / Editarla <modal-review :current_user="current_user" :review_id="reviewPendienteId" :tituloModal="'Editar Reseña'" /></div>
 			</template>
 			<template v-else>
 				<div class="send-review" style="background-color: #2B4562;"> Valida tu email para poder escribir reseñas</div>
 			</template>
+			<template v-if="avisoRechazo"><span class="aviso" >Ya se te rechazó una reseña. La acumulación de rechazos puede provocar la expulsión.</span></template>
 				<div class="plataformas"><span class="etiqueta" v-for="(item,index) in game.plataformas" :style="{background: estableceFondo(item.fabricante)}">{{item.nombre}}</span></div>
 		</div>
 		<div class="principal">
@@ -139,6 +140,8 @@ export default {
 			background_barra: this.porcentajes,
 			fabricanteColor: null,
 			checkUserReview: false,
+			avisoRechazo: null,
+			reviewPendienteId: null,
 
 			valoracion: [],
 			dataValoraciones: {},
@@ -203,7 +206,11 @@ export default {
 	methods: {
 		obtenerDatos() {
 				this.loading =  true,
-				axios.get('http://localhost:8000/api/juego/' + this.id_game).then(response =>{
+				axios.get('http://localhost:8000/api/juego/' + this.id_game,{
+					params: {
+          user_id: this.current_user.id,
+        }
+				}).then(response =>{
 				this.game = response.data[0]
 				this.obtenerDatosCompletados()
 				this.porcentajeBarra(this.game.reviews_avg_puntuacion)
@@ -226,8 +233,12 @@ export default {
 				}
 				if(this.game.reviews[i].estado == 'Rechazado') {
 					this.checkUserReview = false
-				}else{
-					this.checkUserReview = true
+					this.avisoRechazo = true
+				}
+				if(this.game.reviews[i].estado == 'Pendiente' || this.game.reviews[i].estado == 'Aceptado') {
+					if(this.game.reviews[i].user_id == this.current_user.id){
+						this.reviewPendienteId = this.game.reviews[i].id
+					}
 				}
 			}
 		},
@@ -430,6 +441,21 @@ export default {
 	color: white;
 	border-radius: 4px;
 	text-align: center;
+}
+
+.aviso {
+
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	font-size: 20px;
+	width: 100%;
+	height: auto;
+	margin-top: 10px;
+	color: white;
+	border-radius: 4px;
+	text-align: center;
+	background: #d2515d;
 }
 
 .send-review:hover {
