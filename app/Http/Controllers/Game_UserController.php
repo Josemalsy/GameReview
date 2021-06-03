@@ -13,11 +13,8 @@ class Game_UserController extends Controller
 {
 	public function create_posesion(Request $request){
 		$formulario = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
-		var_dump($request->all());
 
-		dd($request->user_id);
-
-		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $formulario['params']['user_id']);
+		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $formulario['params']['user_id']]);
 	}
 
 	public function delete_posesion(Request $request){
