@@ -36,7 +36,7 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => , 'smtp.mailgun.org',
+            'host' => 'smtp.mailgun.org',
             'port' => 587,
             'encryption' =>  null,
             'username' => 'postmaster@sandboxb4636ce5c08041a2ac11e47f71b41515.mailgun.org',
