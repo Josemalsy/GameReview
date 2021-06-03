@@ -8,7 +8,7 @@
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
-          <div class="input-group-text">Buscar por titulo </div>
+          <div class="input-group-text">Buscar por titulo!!!!!!!!!!!!!!!! </div>
         </div>
         <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
         <div class="input-group-append">
