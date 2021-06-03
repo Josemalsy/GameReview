@@ -90,7 +90,7 @@ export default {
           break;
       }
 
-      axios.post('https://gamereviewsproject.herokuapp.com/api/ban_user', this.form)
+      axios.post('http://gamereviewsproject.herokuapp.com/api/ban_user', this.form)
           .then(response => {
           this.form.revocar ?  toastr.success('Has levantado la sanción al usuario con éxito') : toastr.success('has expulsado al usuario con éxito');
           this.$bus.$emit('prueba')

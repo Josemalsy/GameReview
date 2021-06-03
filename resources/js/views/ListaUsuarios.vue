@@ -104,7 +104,7 @@ export default {
   methods: {
     getUsers(){
       this.loading = true,
-      axios.get('https://gamereviewsproject.herokuapp.com/api/user_list/', {
+      axios.get('http://gamereviewsproject.herokuapp.com/api/user_list/', {
         params: {
           filters: this.filters.buscador,
           estado: this.filters.estado
@@ -137,7 +137,7 @@ export default {
         confirmButtonText: 'Si, hazlo',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.post('https://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
+          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
             params: {
               user_id: value,
               rol: 'Moderador'
@@ -159,7 +159,7 @@ export default {
         confirmButtonText: 'Si, hazlo',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.post('https://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
+          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
             params: {
               user_id: value,
               rol: 'Usuario'

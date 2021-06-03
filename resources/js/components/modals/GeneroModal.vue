@@ -44,7 +44,7 @@ export default {
 
       if(this.tituloModal == 'Actualizar género'){
 
-        axios.post('https://gamereviewsproject.herokuapp.com/api/update_genero',this.form)
+        axios.post('http://gamereviewsproject.herokuapp.com/api/update_genero',this.form)
           .then(response => {
             toastr.success('genero actualizado con éxito');
             this.$bus.$emit('prueba')
@@ -57,7 +57,7 @@ export default {
         });
 
       }else{
-        axios.post('https://gamereviewsproject.herokuapp.com/api/create_genero',this.form).then(response => {
+        axios.post('http://gamereviewsproject.herokuapp.com/api/create_genero',this.form).then(response => {
             toastr.success('genero creado con éxito');
             this.$bus.$emit('prueba')
             this.$refs["modal"].hide();
@@ -72,7 +72,7 @@ export default {
 
     },
     obtenerDatos(){
-      axios.get('https://gamereviewsproject.herokuapp.com/api/getGenerosById',{
+      axios.get('http://gamereviewsproject.herokuapp.com/api/getGenerosById',{
         params:{
           genero_id: this.form.genero_id
         }
