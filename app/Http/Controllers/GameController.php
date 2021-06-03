@@ -60,7 +60,7 @@ class GameController extends Controller
     abort_if($request->generos['1'] != '{', 420, 'Debe seleccionar al menos un género');
 
     $request->validate([
-      'titulo' => ['required','max:255','unique'],
+      'titulo' => ['required','max:255','unique:games'],
       'desarrolladora' => ['required','max:255'],
       'lanzamiento' => ['required'],
       'imagen' => ['required','mimes:jpg,jpeg,png,webj','max:500'],
