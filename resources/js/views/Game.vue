@@ -211,6 +211,7 @@ export default {
           user_id: this.current_user.id,
         }
 				}).then(response =>{
+				console.log(response.data)
 				this.game = response.data[0]
 				this.obtenerDatosCompletados()
 				this.porcentajeBarra(this.game.reviews_avg_puntuacion)
