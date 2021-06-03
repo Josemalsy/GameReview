@@ -118,7 +118,7 @@ export default {
   },
   props : ['current_user'],
 	mounted() {
-
+		console.log(this.current_user)
 		this.obtenerDatos()
 		this.$bus.$on('prueba',this.obtenerDatos)
 	},
@@ -214,165 +214,165 @@ export default {
 				console.log(response.data)
 				this.game = response.data[0]
 				this.obtenerDatosCompletados()
-				// this.porcentajeBarra(this.game.reviews_avg_puntuacion)
+				this.porcentajeBarra(this.game.reviews_avg_puntuacion)
 				this.loading = false
 			});
 		},
-		obtenerDatosCompletados(){
-			for(let i = 0; i < this.game.reviews.length; i++){
-				if(this.game.reviews[i].juegoExtendido != null){
-					this.juegoExtendido++
-				}
-				if(this.game.reviews[i].juegoBase != null){
-					this.juegoBase++
-				}
-				if(this.game.reviews[i].completadoTotal != null){
-					this.juegoTotal++
-				}
-				if(this.game.reviews[i].user_id == this.current_user.id){
-					this.checkUserReview = true
-				}
-				if(this.game.reviews[i].estado == 'Rechazado') {
-					this.checkUserReview = false
-					this.avisoRechazo = true
-				}
-				if(this.game.reviews[i].estado == 'Pendiente' || this.game.reviews[i].estado == 'Aceptado') {
-					if(this.game.reviews[i].user_id == this.current_user.id){
-						this.reviewPendienteId = this.game.reviews[i].id
-					}
-				}
-			}
-		},
-		ObtenerDatosReview(){
-			this.loadingComments = true
-			axios.get('http://gamereviewsproject.herokuapp.com/api/review/' + this.id_game + '/?page='+ this.page, {
-				params: {
-					id:this.id_game
-				}
-			}).then(response =>{
-				this.reviewsList = response.data.data;
-				this.ultima_pagina = response.data.last_page
-				this.loadingComments = false;
-				this.pagina = response.data.current_page
-			});
-		},
-		getDatosPuntuaciones(){
-			this.puntuacionesMostrar = !this.puntuacionesMostrar
-			if(this.cargaPuntuaciones == false){
-			this.loadingPuntuaciones = true
-				axios.get('http://gamereviewsproject.herokuapp.com/api/get_puntuacionesById/', {
-					params: {
-						game_id: this.id_game
-					}
-				}).then(response =>{
-					let arraySize = response.data.length
+		// obtenerDatosCompletados(){
+		// 	for(let i = 0; i < this.game.reviews.length; i++){
+		// 		if(this.game.reviews[i].juegoExtendido != null){
+		// 			this.juegoExtendido++
+		// 		}
+		// 		if(this.game.reviews[i].juegoBase != null){
+		// 			this.juegoBase++
+		// 		}
+		// 		if(this.game.reviews[i].completadoTotal != null){
+		// 			this.juegoTotal++
+		// 		}
+		// 		if(this.game.reviews[i].user_id == this.current_user.id){
+		// 			this.checkUserReview = true
+		// 		}
+		// 		if(this.game.reviews[i].estado == 'Rechazado') {
+		// 			this.checkUserReview = false
+		// 			this.avisoRechazo = true
+		// 		}
+		// 		if(this.game.reviews[i].estado == 'Pendiente' || this.game.reviews[i].estado == 'Aceptado') {
+		// 			if(this.game.reviews[i].user_id == this.current_user.id){
+		// 				this.reviewPendienteId = this.game.reviews[i].id
+		// 			}
+		// 		}
+		// 	}
+		// },
+		// ObtenerDatosReview(){
+		// 	this.loadingComments = true
+		// 	axios.get('http://gamereviewsproject.herokuapp.com/api/review/' + this.id_game + '/?page='+ this.page, {
+		// 		params: {
+		// 			id:this.id_game
+		// 		}
+		// 	}).then(response =>{
+		// 		this.reviewsList = response.data.data;
+		// 		this.ultima_pagina = response.data.last_page
+		// 		this.loadingComments = false;
+		// 		this.pagina = response.data.current_page
+		// 	});
+		// },
+		// getDatosPuntuaciones(){
+		// 	this.puntuacionesMostrar = !this.puntuacionesMostrar
+		// 	if(this.cargaPuntuaciones == false){
+		// 	this.loadingPuntuaciones = true
+		// 		axios.get('http://gamereviewsproject.herokuapp.com/api/get_puntuacionesById/', {
+		// 			params: {
+		// 				game_id: this.id_game
+		// 			}
+		// 		}).then(response =>{
+		// 			let arraySize = response.data.length
 
-					var chartData = {
-						datasets: [{
-							label: 'Valoracion',
-							backgroundColor: 'green',
-							pointRadius: 5,
-							data: []
-						}]
-					}
+		// 			var chartData = {
+		// 				datasets: [{
+		// 					label: 'Valoracion',
+		// 					backgroundColor: 'green',
+		// 					pointRadius: 5,
+		// 					data: []
+		// 				}]
+		// 			}
 
-					for(let x = 0; x < arraySize; x++){
-						this.valoracion.push(response.data[x].puntuacion)
-						chartData.datasets[0].data.push({
-							y: response.data[x].puntuacion,
-							x: response.data[x].juegoBase
-						})
-					}
+		// 			for(let x = 0; x < arraySize; x++){
+		// 				this.valoracion.push(response.data[x].puntuacion)
+		// 				chartData.datasets[0].data.push({
+		// 					y: response.data[x].puntuacion,
+		// 					x: response.data[x].juegoBase
+		// 				})
+		// 			}
 
-					this.dataValoraciones = chartData
-					this.cargaPuntuaciones = true
-					this.loadingPuntuaciones = false
+		// 			this.dataValoraciones = chartData
+		// 			this.cargaPuntuaciones = true
+		// 			this.loadingPuntuaciones = false
 
-				});
-			}
-    },
-		getDatosPlataformas(){
-			this.plataformasMostrar = !this.plataformasMostrar
-			if(this.cargarPlataformas == false){
-			this.loadingPlataformas = true
-				axios.get('http://gamereviewsproject.herokuapp.com/api/stats_Plataformas_Games/', {
-					params: {
-						game_id: this.id_game
-					}
-				}).then(response =>{
-					let arraySize = response.data.length
-					for(let x = 0; x < arraySize; x++){
-						this.plataformasDatos.push(response.data[x].cantidad)
-						this.plataformasNombre.push(response.data[x].nombre)
-					}
-					this.dataPlataformas = {
-						hoverBackgroundColor: "red",
-						hoverBorderWidth: 10,
-						labels: this.plataformasNombre,
-						datasets: [
-							{
-								label: "Data One",
-								backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#9147FF","#FCDAC2",
-																	"#9AD0F5","#22CFCF","#FF4069","#FFCD56","#FF9F40",
-																	"#633100","#305534","#FF7F00","#DE0000","#ADC9E7",],
-								data: this.plataformasDatos
-							}
-						]
-					}
-					this.cargarPlataformas = true
-					this.loadingPlataformas = false
-				});
-			}
-    },
-		porcentajeBarra(value){
-			if(value < 35){
-				this.background_barra = "#ff0000"
-			}else if(value < 50){
-				this.background_barra = "#ff8000"
-			}else if(value < 70){
-				this.background_barra = "#ffff00"
-			}else if(value < 85){
-				this.background_barra = "#80ff00"
-			}else {
-				this.background_barra = "#005000"
-			}
-		},
-		muestraReviews(){
-			this.reviews = !this.reviews;
-			if(this.reviewsList.length == 0){
-				this.ObtenerDatosReview();
-			}
-		},
-		changePage( page ) {
-      this.page = (page <= 0 || page > this.ultima_pagina) ? this.page : page
-			this.ObtenerDatosReview()
-		},
-		estableceFondo(value){
-			switch (value) {
-				case 'Nintendo':
-					return '#DE0000';
-					break;
-				case 'Sony':
-					return '#00439C';
-					break;
-				case 'Microsoft':
-					return '#0F7C0F';
-					break;
-				case 'Sega':
-					return '#30A4FB';
-					break;
-				case 'Otros':
-					return 'black';
-					break;
-			}
-		},
-		fondoPaginas(value){
-			if(value == this.pagina){
-				return '#245e13';
-			}else {
-				return '#002855';
-			}
-		},
+		// 		});
+		// 	}
+    // },
+		// getDatosPlataformas(){
+		// 	this.plataformasMostrar = !this.plataformasMostrar
+		// 	if(this.cargarPlataformas == false){
+		// 	this.loadingPlataformas = true
+		// 		axios.get('http://gamereviewsproject.herokuapp.com/api/stats_Plataformas_Games/', {
+		// 			params: {
+		// 				game_id: this.id_game
+		// 			}
+		// 		}).then(response =>{
+		// 			let arraySize = response.data.length
+		// 			for(let x = 0; x < arraySize; x++){
+		// 				this.plataformasDatos.push(response.data[x].cantidad)
+		// 				this.plataformasNombre.push(response.data[x].nombre)
+		// 			}
+		// 			this.dataPlataformas = {
+		// 				hoverBackgroundColor: "red",
+		// 				hoverBorderWidth: 10,
+		// 				labels: this.plataformasNombre,
+		// 				datasets: [
+		// 					{
+		// 						label: "Data One",
+		// 						backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#9147FF","#FCDAC2",
+		// 															"#9AD0F5","#22CFCF","#FF4069","#FFCD56","#FF9F40",
+		// 															"#633100","#305534","#FF7F00","#DE0000","#ADC9E7",],
+		// 						data: this.plataformasDatos
+		// 					}
+		// 				]
+		// 			}
+		// 			this.cargarPlataformas = true
+		// 			this.loadingPlataformas = false
+		// 		});
+		// 	}
+    // },
+		// porcentajeBarra(value){
+		// 	if(value < 35){
+		// 		this.background_barra = "#ff0000"
+		// 	}else if(value < 50){
+		// 		this.background_barra = "#ff8000"
+		// 	}else if(value < 70){
+		// 		this.background_barra = "#ffff00"
+		// 	}else if(value < 85){
+		// 		this.background_barra = "#80ff00"
+		// 	}else {
+		// 		this.background_barra = "#005000"
+		// 	}
+		// },
+		// muestraReviews(){
+		// 	this.reviews = !this.reviews;
+		// 	if(this.reviewsList.length == 0){
+		// 		this.ObtenerDatosReview();
+		// 	}
+		// },
+		// changePage( page ) {
+    //   this.page = (page <= 0 || page > this.ultima_pagina) ? this.page : page
+		// 	this.ObtenerDatosReview()
+		// },
+		// estableceFondo(value){
+		// 	switch (value) {
+		// 		case 'Nintendo':
+		// 			return '#DE0000';
+		// 			break;
+		// 		case 'Sony':
+		// 			return '#00439C';
+		// 			break;
+		// 		case 'Microsoft':
+		// 			return '#0F7C0F';
+		// 			break;
+		// 		case 'Sega':
+		// 			return '#30A4FB';
+		// 			break;
+		// 		case 'Otros':
+		// 			return 'black';
+		// 			break;
+		// 	}
+		// },
+		// fondoPaginas(value){
+		// 	if(value == this.pagina){
+		// 		return '#245e13';
+		// 	}else {
+		// 		return '#002855';
+		// 	}
+		// },
 	},
 	filters: {
 		roundValors: function(value) {
