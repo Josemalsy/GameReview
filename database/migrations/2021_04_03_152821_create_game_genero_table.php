@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateButacasTable extends Migration
+class CreateGame_GeneroTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateButacasTable extends Migration
      */
     public function up()
     {
-        Schema::create('butacas', function (Blueprint $table) {
-            $table->integer('fila');
-	        $table->integer('butaca');
-            $table->integer('sala_id');
-            $table->string('estado_butaca');
-            $table->timestamps();
+        Schema::create('game_genero', function (Blueprint $table) {
+            $table->id();
+            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('genero_id')->references('id')->on('generos');
         });
     }
 
@@ -29,6 +27,6 @@ class CreateButacasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('butacas');
+        Schema::dropIfExists('game_genero');
     }
 }

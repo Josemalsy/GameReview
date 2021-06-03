@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTarjetasTable extends Migration
+class CreateGenerosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateTarjetasTable extends Migration
      */
     public function up()
     {
-        Schema::create('tarjetas', function (Blueprint $table) {
+        Schema::create('generos', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('puntos');
-            $table->string('nombre');
+	        $table->string('nombre');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateTarjetasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tarjetas');
+        Schema::dropIfExists('generos');
     }
 }

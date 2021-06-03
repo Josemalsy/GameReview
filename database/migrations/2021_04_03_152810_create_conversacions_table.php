@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalasTable extends Migration
+class CreateConversacionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateSalasTable extends Migration
      */
     public function up()
     {
-        Schema::create('salas', function (Blueprint $table) {
+        Schema::create('conversacions', function (Blueprint $table) {
             $table->id();
-            $table->integer('aforo');
-            $table->string('tipo_sala');   
-            $table->string('tramoInicial');
-            $table->string('tramoFinal');
+            $table->foreign('user_1_id')->references('id')->on('users');
+            $table->foreign('user_2_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateSalasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salas');
+        Schema::dropIfExists('conversacions');
     }
 }
