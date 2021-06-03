@@ -125,7 +125,7 @@ Route::post('reviewRejected', [ReviewController::class,'reviewRejected']);
 
 
 //Rutas de usuario
-Route::post('get_all_users',[UserController::class,'getAllUsers']);
+Route::get('get_all_users',[UserController::class,'getAllUsers']);
 Route::get('usuario/{id}',[UserController::class,'getUserById']);
 Route::get('getAllUsers', [UserController::class, 'getUsers']);
 Route::get('stats_sexo_usuarios',[UserController::class, 'getStatsSexoUsers']);
