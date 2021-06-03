@@ -33,7 +33,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 
-Route::group(['middleware' => 'IsLoging'], function() {
+Route::group(['middleware' => 'IsGuest'], function() {
 
 	Route::get('/mensajes/leer_mensaje', function () {
 		return view('welcome');
