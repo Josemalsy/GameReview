@@ -184,7 +184,8 @@ import Swal from 'sweetalert2'
             axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion', {
               params: {
                 plataforma_id: value,
-                game_id: this.game_id
+                game_id: this.game_id,
+                user_id: this.current_user.id
               }
             }).then(response =>{
               toastr.success('has adquirido el juego!');
@@ -205,7 +206,8 @@ import Swal from 'sweetalert2'
           if(result.isConfirmed){
             axios.delete('http://gamereviewsproject.herokuapp.com/api/game_user/delete_posesion', {
               params: {
-                game_id: value
+                game_id: value,
+                user_id: this.current_user.id
               }
             }).then(response =>{
               toastr.error('Has eliminado este juego de tu lista')

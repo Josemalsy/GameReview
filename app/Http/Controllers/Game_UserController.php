@@ -14,12 +14,12 @@ class Game_UserController extends Controller
 	public function create_posesion(Request $request){
 		$formulario = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
 
-		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $request->user()->id]);
+		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $formulario['params']['user_id']);
 	}
 
 	public function delete_posesion(Request $request){
 		$game_id = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
-		DB::table('game_user')->where('game_id',$game_id['game_id'])->where('user_id',$request->user()->id)->delete();
+		DB::table('game_user')->where('game_id',$game_id['game_id'])->where('user_id',$formulario['params']['user_id'])->delete();
 	}
 
 	public function getJuegosSinReview(Request $request) {
