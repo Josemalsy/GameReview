@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'host' => , 'smtp.mailgun.org',
+            'port' => 587,
+            'encryption' =>  null,
+            'username' => 'postmaster@sandboxb4636ce5c08041a2ac11e47f71b41515.mailgun.org',
+            'password' => '65f86b43e0bdf8b2e97faba6aef4b1a5-1d8af1f4-9dea9de9',
             'timeout' => null,
             'auth_mode' => null,
         ],
