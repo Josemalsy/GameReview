@@ -8,10 +8,10 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
-  <link rel="shortcut icon" href='{{asset("storage/logos/iconoGameReviews.png")}}'>
+  <link rel="shortcut icon" href='{{secure_asset("storage/logos/iconoGameReviews.png")}}'>
 
   <!-- Scripts -->
-  <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="{{ secure_asset('js/app.js') }}" defer></script>
   <!-- JavaScript Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 
@@ -22,8 +22,8 @@
 	<!-- Styles -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
 
-	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-	<link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
+	<link href="{{ secure_asset('css/app.css') }}" rel="stylesheet">
+	<link href="{{ secure_asset('css/sidebar.css') }}" rel="stylesheet">
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
@@ -32,7 +32,7 @@
 	<nav id="header" class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
-        <img src='{{asset("storage/logos/Logo.png")}}'>
+        <img src='{{secure_asset("storage/logos/Logo.png")}}'>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
@@ -57,9 +57,9 @@
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 @if(Auth::user()->avatar)
                 @php $avatar =  Auth::user()->avatar @endphp
-                  <img src='{{asset("storage/$avatar")}}'>
+                  <img src='{{secure_asset("storage/$avatar")}}'>
                     @else
-                      <img src='{{asset("storage/fotos/indice.png")}}'>
+                      <img src='{{secure_asset("storage/fotos/indice.png")}}'>
                     @endif
                     {{ Auth::user()->name }}
                 </a>
