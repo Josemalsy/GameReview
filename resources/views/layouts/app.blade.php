@@ -32,7 +32,7 @@
 	<nav id="header" class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
-        <img src='{{asset("storage/logos/logo.png")}}'>
+        <img src='{{asset("storage/logos/Logo.png")}}'>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
