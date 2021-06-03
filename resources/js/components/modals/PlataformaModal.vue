@@ -51,7 +51,7 @@ export default {
 
       if(this.tituloModal == 'Actualizar plataforma'){
 
-        axios.post('https://gamereviewsproject.herokuapp.com:8000/api/update_plataforma',this.form)
+        axios.post('https://gamereviewsproject.herokuapp.com/api/update_plataforma',this.form)
           .then(response => {
             toastr.success('plataforma actualizado con éxito');
             this.$bus.$emit('prueba')
@@ -65,7 +65,7 @@ export default {
 
       }else{
 
-        axios.post('https://gamereviewsproject.herokuapp.com:8000/api/create_plataforma',this.form).then(response => {
+        axios.post('https://gamereviewsproject.herokuapp.com/api/create_plataforma',this.form).then(response => {
             toastr.success('plataforma creado con éxito');
             this.$bus.$emit('prueba')
             this.$refs["modal"].hide();
@@ -80,7 +80,7 @@ export default {
 
     },
     obtenerDatos(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getAllPlataformasById',{
+      axios.get('https://gamereviewsproject.herokuapp.com/api/getAllPlataformasById',{
         params: {
           plataforma_id: this.form.plataforma_id,
         }

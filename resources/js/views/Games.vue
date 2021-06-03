@@ -133,7 +133,7 @@ import Swal from 'sweetalert2'
         page: this.page
         }
         this.loading =  true,
-        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/juegos/?page='+ this.page, {
+        axios.get('https://gamereviewsproject.herokuapp.com/api/juegos/?page='+ this.page, {
           params: {
             orden: this.orden,
             filters: this.filters.buscador,
@@ -163,7 +163,7 @@ import Swal from 'sweetalert2'
       },
       sendInfo(value){
         this.game_id = value
-        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getPlataformasById',{
+        axios.get('https://gamereviewsproject.herokuapp.com/api/getPlataformasById',{
           params: {
             game_id: value,
           }
@@ -181,7 +181,7 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, agregalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.post('https://gamereviewsproject.herokuapp.com:8000/api/game_user/create_posesion', {
+            axios.post('https://gamereviewsproject.herokuapp.com/api/game_user/create_posesion', {
               params: {
                 plataforma_id: value,
                 game_id: this.game_id
@@ -203,7 +203,7 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, eliminalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('https://gamereviewsproject.herokuapp.com:8000/api/game_user/delete_posesion', {
+            axios.delete('https://gamereviewsproject.herokuapp.com/api/game_user/delete_posesion', {
               params: {
                 game_id: value
               }
@@ -250,7 +250,7 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, eliminalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('https://gamereviewsproject.herokuapp.com:8000/api/juego/delete_game', {
+            axios.delete('https://gamereviewsproject.herokuapp.com/api/juego/delete_game', {
               params: {
                 game_id: value
               }

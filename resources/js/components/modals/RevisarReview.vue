@@ -62,14 +62,14 @@ export default {
   },
   methods: {
     obtenerDatos(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/get_reviews/all')
+      axios.get('https://gamereviewsproject.herokuapp.com/api/get_reviews/all')
       .then(response => {
         this.review = response.data
       })
     },
     isAcepted(id) {
       this.form.review_id = id
-      axios.post('https://gamereviewsproject.herokuapp.com:8000/api/reviewAccepted',this.form
+      axios.post('https://gamereviewsproject.herokuapp.com/api/reviewAccepted',this.form
       ).then(response => {
           toastr.success('Review aceptada con éxito');
           this.obtenerDatos()
@@ -85,7 +85,7 @@ export default {
       if(this.form.observacionTexto != null){
         this.form.observacion = this.form.observacionTexto
       }
-      axios.post('https://gamereviewsproject.herokuapp.com:8000/api/reviewRejected',this.form)
+      axios.post('https://gamereviewsproject.herokuapp.com/api/reviewRejected',this.form)
         .then(response => {
           toastr.success('Review rechazada con éxito');
           this.obtenerDatos()

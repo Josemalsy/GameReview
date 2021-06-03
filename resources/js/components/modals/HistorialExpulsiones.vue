@@ -40,7 +40,7 @@ export default {
   methods: {
     beforeOpen(){
       this.loading = true
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getExpulsionesByUserId',{
+      axios.get('https://gamereviewsproject.herokuapp.com/api/getExpulsionesByUserId',{
         params: {
           user_id: this.user_id,
         }

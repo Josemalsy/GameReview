@@ -68,7 +68,7 @@ export default {
     },
     getDatosMensajes(){
       this.urlMensajes == true
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/consultar_avisos_mensajes', {
+      axios.get('https://gamereviewsproject.herokuapp.com/api/consultar_avisos_mensajes', {
         params: {
           isMensajeRoute: this.urlMensajes,
           user_id: this.current_user.id
@@ -81,7 +81,7 @@ export default {
       })
     },
     getDatosReviews(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/consultar_avisos_reviews', {
+      axios.get('https://gamereviewsproject.herokuapp.com/api/consultar_avisos_reviews', {
         params: {
           isReviewsRoute: this.urlReviews,
           user_id: this.current_user.id
@@ -100,7 +100,7 @@ export default {
       })
     },
     getUnban(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getUnban', {
+      axios.get('https://gamereviewsproject.herokuapp.com/api/getUnban', {
         params: {
           user_id: this.current_user.id
         }

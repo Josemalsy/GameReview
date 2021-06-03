@@ -107,19 +107,19 @@ export default {
       }
     },
     getPlataformaData(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getPlataformas')
+      axios.get('https://gamereviewsproject.herokuapp.com/api/getPlataformas')
         .then(response => {
         this.listaPlataformas = response.data;
       })
     },
     getGeneroData(){
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getGeneros')
+      axios.get('https://gamereviewsproject.herokuapp.com/api/getGeneros')
         .then(response => {
         this.listaGeneros = response.data;
       })
     },
     obtenerDatos() {
-      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/juego/' + this.game_id).then(response =>{
+      axios.get('https://gamereviewsproject.herokuapp.com/api/juego/' + this.game_id).then(response =>{
         this.game = response.data[0]
         this.form.titulo = this.game.titulo
         this.generos = this.game.generos
@@ -155,7 +155,7 @@ export default {
         formData.append('id', this.form.id)
         formData.append('imagen', this.imagenCargada)
 
-        axios.post('https://gamereviewsproject.herokuapp.com:8000/api/juego/updateGame', formData)
+        axios.post('https://gamereviewsproject.herokuapp.com/api/juego/updateGame', formData)
         .then(response => {
           toastr.success('juego actualizado con éxito');
           this.$bus.$emit('prueba')
@@ -171,7 +171,7 @@ export default {
 
       }else {
 
-        axios.post('https://gamereviewsproject.herokuapp.com:8000/api/juego/add_game', formData)
+        axios.post('https://gamereviewsproject.herokuapp.com/api/juego/add_game', formData)
         .then(response => {
           toastr.success('juego añadido con éxito');
           this.cancelData()
