@@ -177,6 +177,7 @@ class UserController extends Controller
             'hoy.size' => 'El fin de la expulsión solo puede tener 10 caracteres',
           ]);
 
+        dd($request->fin_expulsion);
         $user->estado = 'Expulsado';
         $user->fin_expulsion = $request->fin_expulsion;
         $user->causa_expulsion = $request->causa;
