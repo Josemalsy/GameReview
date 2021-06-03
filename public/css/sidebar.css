@@ -21,7 +21,9 @@ body {
   font-family: Oswald,sans-serif;
 }
 
-
+.logotipo {
+  width: 100%;
+}
 
 #navbarDropdown{
   color: white;
