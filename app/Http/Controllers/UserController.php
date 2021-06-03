@@ -216,8 +216,7 @@ class UserController extends Controller
       $user->save();
   }
 
-  public function verify($code)
-{
+  public function verify($code){
     $user = User::where('confirmation_code', $code)->first();
 
     if (! $user)

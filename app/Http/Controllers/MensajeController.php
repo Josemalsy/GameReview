@@ -167,7 +167,7 @@ class MensajeController extends Controller {
       'receptor_id.required' => 'Debe indicar un destinatario',
       'emisor_id.required' => 'Debe indicar un emisor del mensaje'
     ]
-  );
+    );
 
     $mensaje = new Mensaje([
       'conversacion_id' => $request->conversacion_id,
