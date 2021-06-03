@@ -19,7 +19,7 @@ class Game_UserController extends Controller
 
 	public function delete_posesion(Request $request){
 		$game_id = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
-		DB::table('game_user')->where('game_id',$game_id['game_id'])->where('user_id', $formulario['params']['user_id'])->delete();
+		DB::table('game_user')->where('game_id',$game_id['game_id'])->where('user_id', $game_id['params']['user_id'])->delete();
 	}
 
 	public function getJuegosSinReview(Request $request) {
