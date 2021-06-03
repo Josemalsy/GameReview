@@ -71,7 +71,7 @@ export default {
 			const params = {
 				page: this.page
 			}
-			axios.get('http://gamereviewsproject.herokuapp.com:8000/api/review_user/' + this.id_user + '/?page='+ this.page, {
+			axios.get('https://gamereviewsproject.herokuapp.com:8000/api/review_user/' + this.id_user + '/?page='+ this.page, {
 				params: {
 					id: this.id_user,
 					opcion: value

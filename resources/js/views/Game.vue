@@ -206,7 +206,7 @@ export default {
 	methods: {
 		obtenerDatos() {
 				this.loading =  true,
-				axios.get('http://gamereviewsproject.herokuapp.com:8000/api/juego/' + this.id_game,{
+				axios.get('https://gamereviewsproject.herokuapp.com:8000/api/juego/' + this.id_game,{
 					params: {
           user_id: this.current_user.id,
         }
@@ -244,7 +244,7 @@ export default {
 		},
 		ObtenerDatosReview(){
 			this.loadingComments = true
-			axios.get('http://gamereviewsproject.herokuapp.com:8000/api/review/' + this.id_game + '/?page='+ this.page, {
+			axios.get('https://gamereviewsproject.herokuapp.com:8000/api/review/' + this.id_game + '/?page='+ this.page, {
 				params: {
 					id:this.id_game
 				}
@@ -259,7 +259,7 @@ export default {
 			this.puntuacionesMostrar = !this.puntuacionesMostrar
 			if(this.cargaPuntuaciones == false){
 			this.loadingPuntuaciones = true
-				axios.get('http://gamereviewsproject.herokuapp.com:8000/api/get_puntuacionesById/', {
+				axios.get('https://gamereviewsproject.herokuapp.com:8000/api/get_puntuacionesById/', {
 					params: {
 						game_id: this.id_game
 					}
@@ -294,7 +294,7 @@ export default {
 			this.plataformasMostrar = !this.plataformasMostrar
 			if(this.cargarPlataformas == false){
 			this.loadingPlataformas = true
-				axios.get('http://gamereviewsproject.herokuapp.com:8000/api/stats_Plataformas_Games/', {
+				axios.get('https://gamereviewsproject.herokuapp.com:8000/api/stats_Plataformas_Games/', {
 					params: {
 						game_id: this.id_game
 					}

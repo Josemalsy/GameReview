@@ -90,7 +90,7 @@ export default {
       }
     },
     getDatosUsuarios(){
-      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getAllUsers').then(response => {
+      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getAllUsers').then(response => {
         this.listaUsers = response.data;
       })
     },
@@ -100,7 +100,7 @@ export default {
 
         if(this.tituloModal == "Enviar Mensaje" || this.tituloModal == "Mandar mensaje"){
 
-          axios.post('http://gamereviewsproject.herokuapp.com:8000/api/enviar_mensaje',this.form)
+          axios.post('https://gamereviewsproject.herokuapp.com:8000/api/enviar_mensaje',this.form)
           .then(response => {
             this.$refs["modal"].hide()
             this.$bus.$emit('prueba')
@@ -115,7 +115,7 @@ export default {
         } else {
           this.form.receptor_id = this.receptor_id
           this.form.conversacion_id = this.conversacion_id
-          axios.post('http://gamereviewsproject.herokuapp.com:8000/api/responder_mensaje', this.form).then(response => {
+          axios.post('https://gamereviewsproject.herokuapp.com:8000/api/responder_mensaje', this.form).then(response => {
             this.$refs["modal"].hide()
             this.$bus.$emit('prueba')
             toastr.success('Mensaje respondido con éxito')

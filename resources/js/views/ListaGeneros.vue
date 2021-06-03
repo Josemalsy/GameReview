@@ -40,7 +40,7 @@ props : ['current_user'],
   },
   methods: {
     getGeneros(){
-      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getGeneros/').then(response =>{
+      axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getGeneros/').then(response =>{
         this.generos = response.data
       })
     },
@@ -64,7 +64,7 @@ props : ['current_user'],
           confirmButtonText: 'Si, eliminalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('http://gamereviewsproject.herokuapp.com:8000/api/delete_genero', {
+            axios.delete('https://gamereviewsproject.herokuapp.com:8000/api/delete_genero', {
               params: {
                 genero_id: value
               }

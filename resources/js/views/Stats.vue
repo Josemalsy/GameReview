@@ -202,7 +202,7 @@ export default {
       this.sexoUserMostrar = !this.sexoUserMostrar
       if(this.cargarSexoUsers == false){
         this.loading.loadingSexoUsers = true
-        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/stats_sexo_usuarios/').then(response =>{
+        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/stats_sexo_usuarios/').then(response =>{
           let arraySize = response.data.length
           for(let x = 0; x < arraySize; x++){
             this.sexoDatos.push(response.data[x].cantidad)
@@ -231,7 +231,7 @@ export default {
       this.gamePlataformasMostrar = !this.gamePlataformasMostrar
       if(this.cargarGamePlataformas == false) {
         this.loading.loadingGamePlataformas = true
-        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorPlataforma/').then(response =>{
+        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorPlataforma/').then(response =>{
           let arraySize = response.data.length
           for(let x = 0; x < arraySize; x++){
             this.valoresPlataformas.push(response.data[x].cantidad)
@@ -259,7 +259,7 @@ export default {
       this.gameFabricanteMostrar = !this.gameFabricanteMostrar
       if(this.cargarGameFabricante == false) {
         this.loading.loadingGameFabricante = true
-        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorFabricante/').then(response =>{
+        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorFabricante/').then(response =>{
           let arraySize = response.data.length
           for(let x = 0; x < arraySize; x++){
             this.valoresFabricante.push(response.data[x].cantidad)
@@ -284,7 +284,7 @@ export default {
       this.gameGeneroMostrar = !this.gameGeneroMostrar
       if(this.cargarGameGenero == false) {
         this.loading.loadingGameGenero = true
-        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorGenero/').then(response =>{
+        axios.get('https://gamereviewsproject.herokuapp.com:8000/api/getCountJuegosPorGenero/').then(response =>{
           let arraySize = response.data.length
           for(let x = 0; x < arraySize; x++){
             this.valoresGenero.push(response.data[x].cantidad)
