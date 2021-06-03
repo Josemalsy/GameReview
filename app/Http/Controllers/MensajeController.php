@@ -113,6 +113,8 @@ class MensajeController extends Controller {
 
   public function enviarMensaje(Request $request) {
 
+    dd($request->all());
+
     $request->validate([
         'titulo' => ['required','max:100'],
         'mensaje' => ['required'],
