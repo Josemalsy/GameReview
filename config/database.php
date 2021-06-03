@@ -76,7 +76,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => '3306',
-            'database' => 'gamereviews',
+            'database' => ' heroku_31968713e6a1d20',
             'username' => 'b5d3a565c05fd1',
             'password' => '236a1cfa',
             'unix_socket' => env('DB_SOCKET', ''),
