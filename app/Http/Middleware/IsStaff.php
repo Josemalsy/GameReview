@@ -20,7 +20,6 @@ class IsStaff
 					return $next($request);
 				}
 			} else {
-				dd("hola");
 					return redirect('/login');
 			}
     }
