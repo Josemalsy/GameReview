@@ -10,8 +10,9 @@ class Plataforma extends Model
     use HasFactory;
 
   protected $fillable = [
+    'id',
     'nombre',
-    'fabricante'
+    'fabricante',
 	];
 
 
