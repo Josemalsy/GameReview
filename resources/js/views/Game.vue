@@ -213,8 +213,8 @@ export default {
 				}).then(response =>{
 				console.log(response.data)
 				this.game = response.data[0]
-				this.obtenerDatosCompletados()
-				this.porcentajeBarra(this.game.reviews_avg_puntuacion)
+				// this.obtenerDatosCompletados()
+				// this.porcentajeBarra(this.game.reviews_avg_puntuacion)
 				this.loading = false
 			});
 		},
