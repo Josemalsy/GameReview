@@ -87,7 +87,7 @@ export default {
 			this.vacio = false
 
       this.mensajesSeleccionados = [],
-      axios.get('http://localhost:8000/api/mensajes_recibidos', {
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/mensajes_recibidos', {
           params: {
             user_id: this.current_user.id,
           }
@@ -103,7 +103,7 @@ export default {
     getMensajesEnviadosLeidos(){
 			this.vacio = false
       this.mensajesSeleccionados = [],
-      axios.get('http://localhost:8000/api/mensajes_enviados_leidos',{
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/mensajes_enviados_leidos',{
         params: {
           user_id: this.current_user.id,
         }
@@ -120,7 +120,7 @@ export default {
 			this.vacio = false
 
       this.mensajesSeleccionados = [],
-      axios.get('http://localhost:8000/api/mensajes_enviados_no_leidos', {
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/mensajes_enviados_no_leidos', {
         params: {
           user_id: this.current_user.id,
         }
@@ -144,7 +144,7 @@ export default {
         confirmButtonText: 'Si, borralos',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.get('http://localhost:8000/api/borrar_mensajes',{
+          axios.get('http://gamereviewsproject.herokuapp.com:8000/api/borrar_mensajes',{
             params: {
               mensajes: JSON.stringify(this.mensajesSeleccionados),
               opcion: this.opcion

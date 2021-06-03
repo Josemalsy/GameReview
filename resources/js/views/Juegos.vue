@@ -61,7 +61,7 @@ export default {
     obtenerJuegos(){
 			this.loading = true
 			this.loadingContenido = true
-			axios.get('http://localhost:8000/api/muestra_juegos/', {
+			axios.get('http://gamereviewsproject.herokuapp.com:8000/api/muestra_juegos/', {
 				params: {
 					user_id: this.id_user
 				}
@@ -75,7 +75,7 @@ export default {
 		},
 		ObtenerJuegosSinReviews(){
 			this.loading = true
-			axios.get('http://localhost:8000/api/getJuegosSinReview/',{
+			axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getJuegosSinReview/',{
 				params: {
 					user_id: this.id_user
 				}

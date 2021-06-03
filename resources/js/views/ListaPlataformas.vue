@@ -40,7 +40,7 @@ props : ['current_user'],
   },
   methods: {
     getPlataformas(){
-      axios.get('http://localhost:8000/api/getPlataformas/').then(response =>{
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getPlataformas/').then(response =>{
         this.plataformas = response.data
       })
     },
@@ -65,7 +65,7 @@ props : ['current_user'],
           confirmButtonText: 'Si, eliminala',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('http://localhost:8000/api/delete_plataforma', {
+            axios.delete('http://gamereviewsproject.herokuapp.com:8000/api/delete_plataforma', {
               params: {
                 plataforma_id: value
               }

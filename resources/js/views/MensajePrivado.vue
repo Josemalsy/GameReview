@@ -83,7 +83,7 @@ export default {
   methods: {
     getDatosMensaje(){
       this.loadingMensaje = true,
-      axios.get('http://localhost:8000/api/getMensajeById', {
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getMensajeById', {
         params: {
           mensaje_id: this.mensaje_id,
         }
@@ -101,7 +101,7 @@ export default {
     },
     getDatosConversacion(){
       this.loadingConversacion = true
-      axios.get('http://localhost:8000/api/getConversacionesById', {
+      axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getConversacionesById', {
         params: {
           conversacion_id: this.conversacion_id,
         }
@@ -128,7 +128,7 @@ export default {
         confirmButtonText: 'Si, borralo',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.get('http://localhost:8000/api/borrar_mensajes', {
+          axios.get('http://gamereviewsproject.herokuapp.com:8000/api/borrar_mensajes', {
             params: {
               mensaje_id: this.mensaje_id,
               opcion: 2

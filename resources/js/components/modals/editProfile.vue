@@ -191,7 +191,7 @@ export default {
       formData.append('current_password', this.form.current_password ? this.form.current_password : '')
       formData.append('_method', 'POST');
 
-      axios.post('http://localhost:8000/api/actualizarUsuario', formData)
+      axios.post('http://gamereviewsproject.herokuapp.com:8000/api/actualizarUsuario', formData)
       .then(response => {
         toastr.success('Perfil editado correctamente');
         this.$refs["modal"].hide();

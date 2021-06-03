@@ -108,7 +108,7 @@ import  VueEditor from "vue2-editor";
         }
       },
       obtenPlataformas(){
-        axios.get('http://localhost:8000/api/getPlataformasById',{
+        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getPlataformasById',{
           params: {
             game_id: this.$route.params.id,
           }
@@ -117,7 +117,7 @@ import  VueEditor from "vue2-editor";
         })
       },
       plataformaActual(){
-        axios.get('http://localhost:8000/api/getPlataformaGameUser',{
+        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/getPlataformaGameUser',{
           params: {
             game_id: this.$route.params.id,
             user_id: this.current_user.id
@@ -127,7 +127,7 @@ import  VueEditor from "vue2-editor";
         })
       },
       traeReview(){
-        axios.get('http://localhost:8000/api/get_reviews_By_User_Game',{
+        axios.get('http://gamereviewsproject.herokuapp.com:8000/api/get_reviews_By_User_Game',{
           params: {
             review_id: this.review_id,
           }
@@ -265,7 +265,7 @@ import  VueEditor from "vue2-editor";
       },
       createReview(){
         if(this.tituloModal == 'Enviar Reseña'){
-          axios.post('http://localhost:8000/api/review/post_review',this.form)
+          axios.post('http://gamereviewsproject.herokuapp.com:8000/api/review/post_review',this.form)
           .then(response => {
             toastr.success('review realizada');
             this.$refs["modal"].hide();
@@ -278,7 +278,7 @@ import  VueEditor from "vue2-editor";
           });
 
         }else{
-          axios.post('http://localhost:8000/api/review/edit_review',this.form)
+          axios.post('http://gamereviewsproject.herokuapp.com:8000/api/review/edit_review',this.form)
           .then(response => {
             toastr.success('review editada');
             this.$refs["modal"].hide();
