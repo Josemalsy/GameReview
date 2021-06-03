@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntradasTable extends Migration
+class CreateGamesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateEntradasTable extends Migration
      */
     public function up()
     {
-        Schema::create('entradas', function (Blueprint $table) {
+        Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->text('codigo_qr');
-            $table->float('precio', 8, 2);
-            $table->integer('pelicula_id');
-            $table->integer('user_id');
+            $table->string('titulo');
+            $table->string('desarrolladora');
+            $table->string('imagen');
+            $table->date('lanzamiento');
+			$table->double('valoracion_media')->default('0');
             $table->timestamps();
         });
     }
