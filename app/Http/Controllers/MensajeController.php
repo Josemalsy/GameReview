@@ -142,6 +142,8 @@ class MensajeController extends Controller {
     }
     $conversacion->save();
 
+    dd($conversacion->id);
+
     $mensaje = new Mensaje([
       'conversacion_id' => $conversacion->id,
       'emisor_id' => $conversacion->user_1_id,
