@@ -176,7 +176,6 @@ class ReviewController extends Controller
 
   public function reviewAccepted(Request $request) {
 
-    dd($request->all());
 
     $request->validate([
       'review_id' => ['required']
@@ -188,7 +187,7 @@ class ReviewController extends Controller
 
     $review->estado = 'Aceptado';
     $review->visto = 'No';
-    $review->save();
+    // $review->save();
 
     $review_game = Review::where('game_id',$request->game_id)->where('estado','Aceptado');
 
@@ -197,7 +196,11 @@ class ReviewController extends Controller
     $review_game->juego_extendido_media = $review_game->avg('juegoExtendido');
     $review_game->completado_total_media = $review_game->avg('completadoTotal');
 
+    var_dump($review_game);
+
     $game = Game::find($request->game_id);
+
+    var_dump($game);
     $game->valoracion_media = $review_game->puntuacion_media;
     $game->juegoBase_media = $review_game->juego_base_media;
     $game->juegoExtendido_media = $review_game->juego_extendido_media;
