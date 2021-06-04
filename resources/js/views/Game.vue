@@ -36,9 +36,9 @@
 				<div class="duracion"> 100% <p>{{game.completado_total_media | roundValors}}H</p> </div>
 			</div>
 			<div class="valoracion">
-				<div class="putuacion"> Puntuacion: {{game.reviews_avg_puntuacion | roundValors}}%
+				<div class="putuacion"> Puntuacion: {{game.valoracion_media | roundValors}}%
 					<div class="progress">
-						<div class="progress-bar" role="progressbar" :style="{width: game.reviews_avg_puntuacion + '%', background: background_barra}" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+						<div class="progress-bar" role="progressbar" :style="{width: game.valoracion_media + '%', background: background_barra}" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 				</div>
 			</div>
@@ -211,7 +211,7 @@ export default {
 				}).then(response =>{
 					this.game = response.data[0]
 					this.obtenerDatosCompletados()
-					this.porcentajeBarra(this.game.reviews_avg_puntuacion)
+					this.porcentajeBarra(this.game.valoracion_media)
 					this.loading = false
 				}).catch(error =>{
 					console.log("entro")
