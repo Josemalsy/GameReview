@@ -20,7 +20,7 @@
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
-          <div class="input-group-text">Ordenar por: </div>
+          <div class="input-group-text">Ordenar!!!!!! por: </div>
         </div>
         <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
           <option value="1">Titulo 🡹</option>
@@ -70,7 +70,7 @@
           <div class="span">
             <span class="span-title"> <a class="juegoId" :href="'game/'+item.id">{{item.titulo}} </a></span>
             <span class="span-des">{{item.desarrolladora}}</span>
-            <span class="span-valor" :style="{background: estableceFondo(item.reviews_avg_puntuacion)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.reviews_avg_puntuacion | roundValors}}% </span>
+            <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
           </div>
           <div class="duracion">
             <span class="tiempo">Base <p>{{item.reviews_avg_juego_base | roundValors }}H</p></span>
