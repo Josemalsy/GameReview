@@ -153,6 +153,23 @@ class ReviewController extends Controller
       $review->visto = 'No';
       $review->save();
 
+      //ACTUALIZAMOS LOS DATOS DE LAS MEDIAS DEL JUEGO AL CAMBIAR EL ESTADO DE ACEPTADO A PENDIENTE
+
+      $review_game = Review::where('game_id',$request->id_game)->where('estado','Aceptado');
+
+      $review_game->puntuacion_media = $review_game->avg('puntuacion');
+      $review_game->juego_base_media = $review_game->avg('juegoBase');
+      $review_game->juego_extendido_media = $review_game->avg('juegoExtendido');
+      $review_game->completado_total_media = $review_game->avg('completadoTotal');
+
+      $game = Game::find($request->id_game);
+
+      $game->valoracion_media = $review_game->puntuacion_media;
+      $game->juegoBase_media = $review_game->juego_base_media;
+      $game->juegoExtendido_media = $review_game->juego_extendido_media;
+      $game->completadoTotal_media = $review_game->completado_total_media;
+      $game->save();
+
   }
 
   public function getUserGameReview(Request $request){
@@ -187,7 +204,7 @@ class ReviewController extends Controller
 
     $review->estado = 'Aceptado';
     $review->visto = 'No';
-    // $review->save();
+    $review->save();
 
     $review_game = Review::where('game_id',$request->game_id)->where('estado','Aceptado');
 
