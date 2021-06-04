@@ -16,6 +16,8 @@ class GameController extends Controller
 
   public function index(Request $request) {
 
+    dd("hola");
+
 		$buscador = $request->get('filters');
     $orden = $request->get('orden');
 
