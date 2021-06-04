@@ -33,7 +33,7 @@
 			<div class="duraciones">
 				<div class="duracion">Juego Base <p>{{game.juegoBase_media | roundValors}}H</p> </div>
 				<div class="duracion"> Juego Base + extras <p>{{game.juegoExtendido_media | roundValors}}H</p> </div>
-				<div class="duracion"> 100% <p>{{game.completado_total_media | roundValors}}H</p> </div>
+				<div class="duracion"> 100% <p>{{game.completadoTotal_media | roundValors}}H</p> </div>
 			</div>
 			<div class="valoracion">
 				<div class="putuacion">Puntuacion: {{game.valoracion_media | roundValors}}%
