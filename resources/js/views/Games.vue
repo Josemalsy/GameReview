@@ -2,8 +2,6 @@
 	<div class="cargando" v-if="loading"> <Loading/> </div>
 
 <div class="contenedor" v-else>
-  <head><title>GameReviews - Juegos</title></head>
-
   <div class="form-row align-items-center filtros">
     <div class="col-auto">
       <div class="input-group mb-2">
