@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
-use App\Models\Games;
+use App\Models\Game;
 use App\Models\Game_User;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -196,11 +196,8 @@ class ReviewController extends Controller
     $review_game->juego_extendido_media = $review_game->avg('juegoExtendido');
     $review_game->completado_total_media = $review_game->avg('completadoTotal');
 
-    // var_dump($review_game);
-
     $game = Game::find($request->game_id);
 
-    dd($game);
     $game->valoracion_media = $review_game->puntuacion_media;
     $game->juegoBase_media = $review_game->juego_base_media;
     $game->juegoExtendido_media = $review_game->juego_extendido_media;
