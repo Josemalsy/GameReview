@@ -9,7 +9,7 @@
         </div>
         <div class="mensaje" v-html="item.mensaje"></div>
         <div class="pie">
-          <div class="aceptar" @click="isAcepted(item.id)"> Aceptar </div>
+          <div class="aceptar" @click="isAcepted(item.id, item.game_id)"> Aceptar </div>
           <div class="rechazar" v-b-modal.observaciones @click="sendInfo(item.id)"> Rechazar </div>
         </div>
       </div>
@@ -47,6 +47,7 @@ export default {
     return {
       form: {
         review_id: null,
+        review_game_id: null
         observacion: null,
         observacionTexto: null,
       },
@@ -67,8 +68,9 @@ export default {
         this.review = response.data
       })
     },
-    isAcepted(id) {
-      this.form.review_id = id
+    isAcepted(review_id, game_id) {
+      this.form.review_id = review_idid
+      this.form.game_id = game_id
       axios.post('http://gamereviewsproject.herokuapp.com/api/reviewAccepted',this.form
       ).then(response => {
           toastr.success('Review aceptada con éxito');

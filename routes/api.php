@@ -70,7 +70,7 @@ Route::post('update_genero',[GeneroController::class, 'updateGenero']);
 Route::delete('delete_genero',[GeneroController::class, 'deleteGenero']);
 Route::get('getCountJuegosPorGenero',[GeneroController::class, 'getCountJuegosPorGenero']);
 
-
+//CASCAN LOS JUEGOS QUE NO TIENEN REVIEWS REALIZADAS
 
 //Rutas de juegos
 Route::get('juegos',[GameController::class,'index']);

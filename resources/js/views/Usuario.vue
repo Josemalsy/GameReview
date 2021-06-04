@@ -150,6 +150,8 @@ export default {
 			axios.get('http://gamereviewsproject.herokuapp.com/api/usuario/' + this.id_user).then(response =>{
 				this.usuario = response.data[0];
 				this.loading = false
+			}).catch(error =>{
+				this.$router.push('/game_not_found');
 			});
 		},
     getDatosGeneros(){

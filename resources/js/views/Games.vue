@@ -70,7 +70,7 @@
           <div class="span">
             <span class="span-title"> <a class="juegoId" :href="'game/'+item.id">{{item.titulo}} </a></span>
             <span class="span-des">{{item.desarrolladora}}</span>
-            <span class="span-valor" :style="{background: estableceFondo(item.reviews_avg_puntuacion)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.reviews_avg_puntuacion | roundValors}}% </span>
+            <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
           </div>
           <div class="duracion">
             <span class="tiempo">Base <p>{{item.reviews_avg_juego_base | roundValors }}H</p></span>
@@ -337,6 +337,7 @@ import Swal from 'sweetalert2'
   flex: 1;
   height: 100%;
   text-align: center;
+  width: 100%;
 }
 
 .cuadro:hover {

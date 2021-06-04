@@ -47,7 +47,7 @@ class GameController extends Controller
 
 		if($buscador != null && $buscador != '') {
 
-      return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->Where("titulo", 'like', '%' . $buscador . '%')->orWhere("desarrolladora",'like',  '%' . $buscador . '%')->orderBy($columna,$tipo_orden)->paginate(10);
+      return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->Where("titulo", 'like', '%' . $buscador . '%')->orderBy($columna,$tipo_orden)->paginate(10);
     }
 
     return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->with('reviews')->orderBy($columna,$tipo_orden)->paginate(10);
@@ -179,20 +179,28 @@ class GameController extends Controller
 
   public function getJuegoById($id,Request $request) {
 
-    if(empty($request->user_id)){
 
-      return Game::withCount('users')->with('reviews')->withCount('reviews')
-      ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
-      ->where('id', $id)->get();
 
+    if(count(Game::where('id',$id)->get()) == 0){
+      trigger_error('error');
     }else {
 
-      return Game::withCount('users')->with('reviews')->withCount('reviews')
-                ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
-                ->where('id', $id)
-                ->whereHas('reviews',function (Builder $query) use($request) {
-                  $query->where('user_id',$request->user_id);
-                })->get();
+      $user_review = count(Review::where('game_id', $id)->where('user_id',$request->user_id)->get());
+
+      if($user_review > 0) {
+
+        return Game::withCount('users')->with('reviews')->withCount('reviews')
+              ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
+              ->where('id', $id)
+              ->whereHas('reviews',function (Builder $query) use($request) {
+                $query->where('user_id',$request->user_id);
+              })->get();
+
+        }else {
+          return Game::withCount('users')->with('reviews')->withCount('reviews')
+          ->withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with('plataformas')->with('generos')
+          ->where('id', $id)->get();
+        }
 
     }
 

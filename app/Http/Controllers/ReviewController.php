@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class ReviewController extends Controller
 {
   public function reviewsByGameId($id){
-    return Review::with('users')->where('game_id',$id)->paginate(2);
+    return Review::with('users')->where('game_id',$id)->where('estado','Aceptado')->paginate(2);
   }
 
   public function reviewsByUserId(Request $request){
@@ -44,33 +44,31 @@ class ReviewController extends Controller
 
   public function post_review(Request $request){
 
-
     $request->validate([
-        'id_game' => ['required'],
-        'juego_base' => ['required', 'numeric'],
-        'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base, 'max:'.$request->completado_total],
-        'completado_total' => ['numeric','nullable',],
-        'mensaje' => ['required'],
-        'valoracion' => ['required', 'numeric','min:0','max:100'],
-        'plataforma_id' => ['required'],
-        'user_id' => ['required'],
-        ],[
-        'id_game.required' => 'El id del juego es obligatorio',
-        'juego_base.required' => 'La duración del juego base es obligatoria',
-        'juego_base.numeric' => 'El campo juego base debe ser numérico',
-        'juego_extendido.numeric' => 'El campo juego extendido debe ser numérico',
-        'juego_extendido.min' => 'Las horas de juego extendido no pueden ser inferior a juego base',
-        'valoracion.required' => 'La valoración del juego es obligatoria',
-        'valoracion.min' => 'La valoración no puede ser inferior a 0',
-        'valoracion.max' => 'La valoración no puede ser superior a 100',
-        'juego_extendido.max' => 'Las horas de juego extendido no pueden ser superior a completado total',
-        'completado_total.numeric' => 'El campo completado total debe ser numérico',
-        'mensaje.required' => 'Debe introducir un mensaje',
-        'plataforma_id.required' => 'Debe seleccionar la plataforma',
-        'user_id' => 'El id del usuario es obligatorio',
-        ]
-      );
-
+      'id_game' => ['required'],
+      'juego_base' => ['required', 'numeric'],
+      'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base],
+      'completado_total' => ['numeric','nullable','min:'.$request->juego_extendido],
+      'mensaje' => ['required'],
+      'valoracion' => ['required', 'numeric','min:0','max:100'],
+      'plataforma_id' => ['required'],
+      'user_id' => ['required'],
+      ],[
+      'id_game.required' => 'El id del juego es obligatorio',
+      'juego_base.required' => 'La duración del juego base es obligatoria',
+      'juego_base.numeric' => 'El campo juego base debe ser numérico',
+      'juego_extendido.numeric' => 'El campo juego extendido debe ser numérico',
+      'juego_extendido.min' => 'Las horas de juego extendido no pueden ser inferior a juego base',
+      'valoracion.required' => 'La valoración del juego es obligatoria',
+      'valoracion.min' => 'La valoración no puede ser inferior a 0',
+      'valoracion.max' => 'La valoración no puede ser superior a 100',
+      'completado_total.numeric' => 'El campo completado total debe ser numérico',
+      'completado_total.min' => 'El campo completado total no puede ser inferior a juego extendido',
+      'mensaje.required' => 'Debe introducir un mensaje',
+      'plataforma_id.required' => 'Debe seleccionar la plataforma',
+      'user_id' => 'El id del usuario es obligatorio',
+      ]
+    );
 
     $game_user = DB::SELECT('select * from game_user where user_id = ' . $request->user_id . ' AND game_id = ' . $request->id_game);
 
@@ -107,8 +105,8 @@ class ReviewController extends Controller
     $request->validate([
       'id_game' => ['required'],
       'juego_base' => ['required', 'numeric'],
-      'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base, 'max:'.$request->completado_total],
-      'completado_total' => ['numeric','nullable',],
+      'juego_extendido' => ['numeric','nullable','min:'.$request->juego_base],
+      'completado_total' => ['numeric','nullable','min:'.$request->juego_extendido],
       'mensaje' => ['required'],
       'valoracion' => ['required', 'numeric','min:0','max:100'],
       'plataforma_id' => ['required'],
@@ -119,8 +117,8 @@ class ReviewController extends Controller
       'juego_base.numeric' => 'El campo juego base debe ser numérico',
       'juego_extendido.numeric' => 'El campo juego extendido debe ser numérico',
       'juego_extendido.min' => 'Las horas de juego extendido no pueden ser inferior a juego base',
-      'juego_extendido.max' => 'Las horas de juego extendido no pueden ser superior a completado total',
       'completado_total.numeric' => 'El campo completado total debe ser numérico',
+      'completado_total.min' => 'El campo completado total no puede ser inferior a juego extendido',
       'mensaje.required' => 'Debe introducir un mensaje',
       'plataforma_id.required' => 'Debe seleccionar la plataforma',
       'user_id' => 'El id del usuario es obligatorio',
@@ -190,6 +188,14 @@ class ReviewController extends Controller
     $review->visto = 'No';
     $review->save();
 
+    $review_game = Review::where('game_id',$request->game_id)->where('estado','Aceptado');
+
+    $review_game->average = $review_game->avg('puntuacion');
+    $game = Game::find($request->game_id);
+    $game->valoracion_media = $review_game->average;
+    $game->save();
+
+
   }
 
   public function reviewRejected(Request $request) {
@@ -213,7 +219,7 @@ class ReviewController extends Controller
   }
 
   public function getPuntuacionesById(Request $request) {
-    return Review::select('puntuacion', 'juegoBase')->where('game_id',$request->game_id)->get();
+    return Review::select('puntuacion', 'juegoBase')->where('game_id',$request->game_id)->where('estado','Aceptado')->get();
   }
 
 }

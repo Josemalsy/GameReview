@@ -39,7 +39,13 @@ class UserController extends Controller
   }
 
   public function getUserById($id){
+
+    if(count(User::where('id',$id)->get()) == 0){
+      trigger_error('error');
+    }else {
       return User::with('reviews')->with('games')->withAvg('reviews','puntuacion')->where('id', $id)->get();
+    }
+
   }
 
   public function userList(Request $request){
