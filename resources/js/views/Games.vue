@@ -6,7 +6,7 @@
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
-          <div class="input-group-text">Buscar por titulooooooeeeo </div>
+          <div class="input-group-text">Buscar por titulo </div>
         </div>
         <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
         <div class="input-group-append">
@@ -52,8 +52,8 @@
               </template>
               <template v-if="current_user.email_verified_at">
                 <template v-if="current_user.id">
-                  <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
-                  <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego"><i class="bi bi-heart"></i></div>
+                  <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego de tu lista de adquiridos" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
+                  <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego a tu lista de adquiridos"><i class="bi bi-heart"></i></div>
                 </template>
               </template>
               <template v-else>

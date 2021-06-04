@@ -151,7 +151,7 @@ export default {
 				this.usuario = response.data[0];
 				this.loading = false
 			}).catch(error =>{
-				this.$router.push('/game_not_found');
+				this.$router.push('/user_not_found');
 			});
 		},
     getDatosGeneros(){
