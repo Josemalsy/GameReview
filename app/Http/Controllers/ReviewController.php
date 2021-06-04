@@ -190,9 +190,16 @@ class ReviewController extends Controller
 
     $review_game = Review::where('game_id',$request->game_id)->where('estado','Aceptado');
 
-    $review_game->average = $review_game->avg('puntuacion');
+    $review_game->puntuacion_media = $review_game->avg('puntuacion');
+    $review_game->juego_base_media = $review_game->avg('juegoBase');
+    $review_game->juego_extendido_media = $review_game->avg('juegoExtendido');
+    $review_game->completado_total_media = $review_game->avg('completadoTotal');
+
     $game = Game::find($request->game_id);
-    $game->valoracion_media = $review_game->average;
+    $game->valoracion_media = $review_game->puntuacion_media;
+    $game->juegoBase_media = $review_game->juego_base_media;
+    $game->juegoExtendido_media = $review_game->juego_extendido_media;
+    $game->completadoTotal_media = $review_game->completado_total_media;
     $game->save();
 
 

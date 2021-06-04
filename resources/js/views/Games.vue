@@ -71,9 +71,9 @@
             <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
           </div>
           <div class="duracion">
-            <span class="tiempo">Base <p>{{item.reviews_avg_juego_base | roundValors }}H</p></span>
-            <span class="tiempo">Extras <p>{{ item.reviews_avg_juego_extendido | roundValors}}H</p></span>
-            <span class="tiempo">100% <p>{{ item.reviews_avg_completado_total | roundValors}}H</p></span>
+            <span class="tiempo">Base <p>{{item.juegoBase_media | roundValors }}H</p></span>
+            <span class="tiempo">Extras <p>{{ item.juegoExtendido_media | roundValors}}H</p></span>
+            <span class="tiempo">100% <p>{{ item.completado_total_media | roundValors}}H</p></span>
           </div>
         </div>
       </div>
