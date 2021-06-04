@@ -20,7 +20,7 @@
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
-          <div class="input-group-text">Ordenar! por: </div>
+          <div class="input-group-text">Ordenar por: </div>
         </div>
         <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
           <option value="1">Titulo 🡹</option>
