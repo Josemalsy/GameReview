@@ -47,7 +47,7 @@ export default {
     return {
       form: {
         review_id: null,
-        review_game_id: null
+        review_game_id: null,
         observacion: null,
         observacionTexto: null,
       },
