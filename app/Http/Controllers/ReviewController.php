@@ -176,6 +176,8 @@ class ReviewController extends Controller
 
   public function reviewAccepted(Request $request) {
 
+    dd($request->all());
+
     $request->validate([
       'review_id' => ['required']
       ],[

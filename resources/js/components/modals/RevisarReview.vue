@@ -69,6 +69,7 @@ export default {
       })
     },
     isAcepted(review_id, game_id) {
+      console.log(game_id)
       this.form.review_id = review_id
       this.form.game_id = game_id
       axios.post('http://gamereviewsproject.herokuapp.com/api/reviewAccepted',this.form
