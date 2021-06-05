@@ -153,7 +153,7 @@ import Swal from 'sweetalert2'
           console.log(value.users.length)
           $.each(value.users, (index, value) => {
             console.log(value.id)
-            if(value == this.current_user.id){
+            if(value.id == this.current_user.id){
               return true
             }
           })
