@@ -95,10 +95,6 @@ export default {
       user_id: null,
       estado: null,
       agregarCrearGenero: false,
-      form:{
-        id_user: null,
-        rol: null,
-      },
       filters: {
         buscador: '',
         estado: false,
@@ -141,10 +137,12 @@ export default {
         confirmButtonText: 'Si, hazlo',
       }).then((result) => {
         if(result.isConfirmed){
-          this.form.id_user = value
-          this.form.rol = 'Moderador'
-          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', this.form)
-          .then(response =>{
+          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
+            params: {
+              user_id: value,
+              rol: 'Moderador'
+            }
+          }).then(response =>{
             this.getUsers()
             toastr.success('has nombrado a ' + nombre + ' moderador');
           })
