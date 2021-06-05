@@ -154,11 +154,10 @@ export default {
 
       let espacios
 
-      let patron = /(?!^ +$)^.+$/
 
       value = value.trim()
 
-      if(!value || !patron) {
+      if(!value) {
         this.checkMensaje = false
       }else {
         this.checkMensaje = true

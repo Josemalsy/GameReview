@@ -143,8 +143,8 @@ export default {
               rol: 'Moderador'
             }
           }).then((response => {
-            this.getUsers()
             toastr.success('has nombrado a ' + nombre + ' moderador');
+            this.getUsers()
           }))
         }
       })
