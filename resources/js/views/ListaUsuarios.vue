@@ -142,10 +142,10 @@ export default {
               user_id: value,
               rol: 'Moderador'
             }
-          }).then(response =>{
+          }).then((response => {
             this.getUsers()
             toastr.success('has nombrado a ' + nombre + ' moderador');
-          })
+          }))
         }
       })
     },
