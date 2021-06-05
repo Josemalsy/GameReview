@@ -135,7 +135,7 @@ export default {
 
       let espacios
 
-      value ? espacios = /(?!^ +$)^.*$/.test(value.trim()) : espacios = false
+      value ? espacios = /(?!^ +$)^.+$/.test(value.trim()) : espacios = false
 
       if(value){
         espacios == true
@@ -158,7 +158,7 @@ export default {
 
       value = value.trim()
 
-      if(!value) {
+      if(!value || !patron) {
         this.checkMensaje = false
       }else {
         this.checkMensaje = true
