@@ -22,10 +22,10 @@
           <div class="input-group-text">Ordenar por: </div>
         </div>
         <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-          <option value="1">Nombre usuario 🡹</option>
-          <option value="2">Nombre usuario 🡻</option>
-          <option value="3">Más antiguo 🡹</option>
-          <option value="4">Más reciente 🡻</option>
+          <option value="1">Nombre usuario <i class="bi bi-arrow-up"></i></option>
+          <option value="2">Nombre usuario <i class="bi bi-arrow-down"></i></option>
+          <option value="3">Más antiguo <i class="bi bi-arrow-up"></i></option>
+          <option value="4">Más reciente <i class="bi bi-arrow-down"></i></option>
         </select>
       </div>
     </div>
