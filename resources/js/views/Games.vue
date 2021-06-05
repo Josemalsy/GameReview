@@ -89,6 +89,7 @@
   </div>
 
   <template>{{checkUser()}}</template>
+  <template>{{posesion}}</template>
 
   <nav class="paginate-bottom" aria-label="Page navigation example">
     <ul class="pagination" v-for="n in ultima_pagina">
@@ -154,6 +155,7 @@ import Swal from 'sweetalert2'
         if(value){
           $.each(value.users, (index, value) => {
             if(value.id == this.current_user.id){
+              return true
               this.posesion = true
             }
           })
