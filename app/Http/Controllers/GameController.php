@@ -47,10 +47,10 @@ class GameController extends Controller
 
 		if($buscador != null && $buscador != '') {
 
-      return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->Where("titulo", 'like', '%' . $buscador . '%')->orderBy($columna,$tipo_orden)->paginate(10);
+      return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->Where("titulo", 'like', '%' . $buscador . '%')->orderBy($columna,$tipo_orden)->paginate(1);
     }
 
-    return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->with('reviews')->orderBy($columna,$tipo_orden)->paginate(10);
+    return Game::withAvg('reviews','puntuacion')->withAvg('reviews','juegoBase')->withAvg('reviews','juegoExtendido')->withAvg('reviews','completadoTotal')->with("users")->with('reviews')->orderBy($columna,$tipo_orden)->paginate(1);
 
 	}
 
