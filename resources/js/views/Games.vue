@@ -148,6 +148,7 @@ import Swal from 'sweetalert2'
         this.obtenerDatos()
       },
       checkUser(value){
+        console.log(value)
         if(value){
           for (let index = 0; index < value.length; index++) {
             console.log(value[index])
