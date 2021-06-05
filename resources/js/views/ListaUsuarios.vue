@@ -48,7 +48,7 @@
             </template>
           </template>
           <template v-else>
-            <div class="nombre-userExpulsado"> {{item.name}}</div>
+            <div class="nombre-userExpulsado">{{item.name}}</div>
             <div class="verHistorialExpulsado" v-b-modal.historialExpulsiones @click="verHistorial(item.id)">  <i class="bi bi-clipboard-x" title="historial de expulsiones"></i> </div>
             <div class="verPerfilExpulsado" v-b-modal="'modal-expulsionModal'" @click="expulsarUsuario(item.id, item.estado)"> <i class="bi bi-x-octagon" title="modificar o levantar expulsión vigente"></i></div>
             <div class="verPerfilExpulsado"  v-if="current_user.rol == 'Administrador'">
