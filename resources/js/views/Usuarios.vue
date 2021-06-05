@@ -21,11 +21,11 @@
         <div class="input-group-prepend">
           <div class="input-group-text">Ordenar por: </div>
         </div>
-        <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-          <option value="1">Nombre usuario <i class="bi bi-arrow-up"></i></option>
-          <option value="2">Nombre usuario <i class="bi bi-arrow-down"></i></option>
-          <option value="3">Más antiguo <i class="bi bi-arrow-up"></i></option>
-          <option value="4">Más reciente <i class="bi bi-arrow-down"></i></option>
+        <select class="form-control" id="ordernarPor" v-model="filters.orden" v-on:change="obtenerDatos">
+          <option value="1">Nombre usuario 🡹</option>
+          <option value="2">Nombre usuario 🡻</option>
+          <option value="3">Más antiguo 🡹</option>
+          <option value="4">Más reciente 🡻</option>
         </select>
       </div>
     </div>
@@ -95,10 +95,10 @@ import moment from 'moment'
         page: 1,
         ultima_pagina: null,
         pages: 1,
-        orden: 1,
         fondo: '',
         filters: {
           buscador: '',
+          orden: 1,
         },
         tarjeta: true,
       }
@@ -111,7 +111,7 @@ import moment from 'moment'
         this.loading = true
         axios.post('http://gamereviewsproject.herokuapp.com/api/get_all_users/?page='+ this.page, {
           params: {
-            orden: this.orden,
+            orden: this.filters.orden,
             filters: this.filters.buscador,
           }
         }).then(response =>{

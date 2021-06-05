@@ -21,12 +21,12 @@
           <div class="input-group-text">Ordenar por: </div>
         </div>
         <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-          <option value="1">Titulo <i class="bi bi-arrow-up"></i></option>
-          <option value="2">Titulo <i class="bi bi-arrow-down"></i></option>
-          <option value="3">Fecha de lanzamiento <i class="bi bi-arrow-up"></i></option>
-          <option value="4">Fecha de lanzamiento <i class="bi bi-arrow-down"></i></option>
-          <option value="5">Valoracion media <i class="bi bi-arrow-down"></i></option>
-          <option value="6">Valoracion media <i class="bi bi-arrow-up"></i></option>
+          <option value="1">Titulo 🡹</option>
+          <option value="2">Titulo 🡻</option>
+          <option value="3">Fecha de lanzamiento 🡹</option>
+          <option value="4">Fecha de lanzamiento 🡻</option>
+          <option value="5">Valoracion media 🡻</option>
+          <option value="6">Valoracion media 🡹</option>
         </select>
       </div>
     </div>
