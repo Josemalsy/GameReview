@@ -174,16 +174,16 @@ import moment from 'moment'
 }
 
 .boton {
-font-size: 28px;
-margin-top: -56px;
-justify-self: right;
+  font-size: 28px;
+  margin-top: -56px;
+  justify-self: right;
 }
 
 .boton i:hover{
-font-size: 28px;
-margin-top: -56px;
-justify-self: right;
-cursor: pointer;
+  font-size: 28px;
+  margin-top: -56px;
+  justify-self: right;
+  cursor: pointer;
 }
 
 .contentCard{
