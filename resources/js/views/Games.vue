@@ -150,7 +150,9 @@ import Swal from 'sweetalert2'
       checkUser(value){
         if(value){
           for (let index = 0; index < value.length; index++) {
+            console.log(value[index])
             if(value[index].id == this.current_user.id){
+
               return true
             }
             return false
