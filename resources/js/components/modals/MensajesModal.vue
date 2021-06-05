@@ -135,7 +135,7 @@ export default {
 
       let espacios
 
-      value ? espacios = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+)*$/.test(value.trim()) : espacios = false
+      value ? espacios = /(?!^ +$)^.*$/.test(value.trim()) : espacios = false
 
       if(value){
         espacios == true

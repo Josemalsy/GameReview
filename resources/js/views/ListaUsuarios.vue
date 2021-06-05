@@ -22,7 +22,7 @@
     </div>
 
     <div class="lista">
-      <div class="cabecera"><template v-if="filters.estado">Usuarios expulsados</template><template v-else>Usuarios activos PRUEBA</template></div>
+      <div class="cabecera"><template v-if="filters.estado">Usuarios expulsados</template><template v-else>Usuarios activos</template></div>
         <div class="cargando" v-if="loading"> <Loading/> </div>
       <div class="tabla" v-for="(item, index) in users" :key="index" v-else>
         <template >
