@@ -159,14 +159,18 @@ export default {
         confirmButtonText: 'Si, hazlo',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
+          console.log("entra")
+          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol', {
             params: {
               user_id: value,
               rol: 'Usuario'
             }
           }).then(response =>{
+            console.log(response)
             toastr.success('has devuelto a ' + nombre + ' al rol de Usuario');
             this.getUsers()
+          }).catch(error => {
+            console.log(error)
           })
         }
       })
