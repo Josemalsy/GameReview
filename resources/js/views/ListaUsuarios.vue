@@ -141,7 +141,8 @@ export default {
           axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
             params: {
               user_id: value,
-              rol: 'Moderador'
+              rol: 'Moderador',
+              method: POST
             }
           }).then((response => {
             toastr.success('has nombrado a ' + nombre + ' moderador');
