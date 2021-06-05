@@ -152,8 +152,20 @@ import Swal from 'sweetalert2'
           console.log(value.users)
           console.log(value.users.length)
           $.each(value.users, (index, value) => {
-            console.log(value)
+            console.log(value[index])
+            console.log(value[index].id)
             if(value == this.current_user.id){
+                          console.log("1")
+
+              return true
+            }
+                        if(value[index] == this.current_user.id){
+                          console.log("2")
+
+              return true
+            }
+                        if(value[index].id == this.current_user.id){
+                          console.log("3")
               return true
             }
           })
