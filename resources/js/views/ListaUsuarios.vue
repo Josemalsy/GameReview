@@ -128,6 +128,7 @@ export default {
       this.$bvModal.show("modal-expulsionModal")
     },
     nombrarModerador(value, nombre){
+      console.log(value)
       Swal.fire({
         title: "¿Quieres hacer a " + nombre + " moderador?",
         icon: 'warning',
