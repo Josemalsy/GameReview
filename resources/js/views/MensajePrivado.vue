@@ -86,6 +86,7 @@ export default {
       axios.get('http://gamereviewsproject.herokuapp.com/api/getMensajeById', {
         params: {
           mensaje_id: this.mensaje_id,
+          user_id: this.current_user.id
         }
       }).then(response => {
         this.mensaje = response.data[0];
@@ -131,7 +132,7 @@ export default {
           axios.get('http://gamereviewsproject.herokuapp.com/api/borrar_mensajes', {
             params: {
               mensaje_id: this.mensaje_id,
-              opcion: 2
+              opcion: this.opcion
             }
           }).then(response =>{
             toastr.success('Mensaje borrado');

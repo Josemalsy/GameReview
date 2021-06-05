@@ -107,13 +107,18 @@ class MensajeController extends Controller {
   }
 
   public function getMensajeById(Request $request){
-      return Mensaje::select('titulo','receptor_id','emisor_id','mensaje','created_at')->where('id', $request->mensaje_id)->with('emisor:id,name,avatar,created_at')->with('receptor:id,name')->get();
+
+    $mensaje = Mensaje::find($request->mensaje_id);
+    if($request->user_id == $mensaje->receptor_id){
+      $mensaje->leido = 'Si';
+      $mensaje->save();
+    }
+
+    return Mensaje::select('id','titulo','receptor_id','emisor_id','mensaje','created_at')->where('id', $request->mensaje_id)->with('emisor:id,name,avatar,created_at')->with('receptor:id,name')->get();
 
   }
 
   public function enviarMensaje(Request $request) {
-
-    var_dump($request->all());
 
     $request->validate([
         'titulo' => ['required','max:100'],
