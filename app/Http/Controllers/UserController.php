@@ -213,7 +213,6 @@ class UserController extends Controller
   }
 
   public function cambiarRol(Request $request){
-    dd($request->all());
     $user = User::find($request['params']['user_id']);
     if($request['params']['rol'] == 'Usuario'){
       $user->rol = $request['params']['rol'];
