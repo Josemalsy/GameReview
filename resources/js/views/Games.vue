@@ -52,7 +52,7 @@
               </template>
               <template v-if="current_user.email_verified_at">
                 <template v-if="current_user.id">
-                  <div class="cuadro" v-if="posesion == true" @click="eliminaPosesion(item.id)" title="eliminar juego de tu lista de adquiridos" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
+                  <div class="cuadro" v-if="checkUser(item.users) @click="eliminaPosesion(item.id)" title="eliminar juego de tu lista de adquiridos" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
                   <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego a tu lista de adquiridos"><i class="bi bi-heart"></i></div>
                 </template>
               </template>
@@ -152,14 +152,10 @@ import Swal from 'sweetalert2'
         this.obtenerDatos()
       },
       checkUser(value){
-        if(value){
-          $.each(value.users, (index, value) => {
-            if(value.id == this.current_user.id){
-              return true
-              this.posesion = true
-            }
-          })
-        }else{
+        if(value.some(data => data.id === this.current_user.id)){
+          return true
+        }else {
+          return false
         }
       },
       sendInfo(value){
