@@ -133,7 +133,7 @@ Route::get('user_list',[UserController::class, 'userList']);
 Route::get('getUnban',[UserController::class,'getUnban']);
 Route::post('actualizarUsuario',[UserController::class,'update']);
 Route::post('ban_user',[UserController::class, 'banUser']);
-Route::get('cambia_rol',[UserController::class, 'cambiarRol']);
+Route::post('cambia_rol',[UserController::class, 'cambiarRol']);
 
 
 
