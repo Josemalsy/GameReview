@@ -78,7 +78,7 @@
         </div>
       </div>
     </div>
-    <b-modal id="eligePlataforma" title="Second Modal" hide-footer ok-only>
+    <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only>
       <label for="observación">Elija plataforma</label>
       <select id="observacion" class="form-select mb-3" v-model="plataforma_id">
         <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
@@ -149,9 +149,9 @@ import Swal from 'sweetalert2'
       },
       checkUser(value){
         if(value){
-          console.log(value)
-          for (let index = 0; index < value.length; index++) {
-            if(value[index].id == this.current_user.id){
+          console.log(value.users)
+          for (let index = 0; index < value.users.length; index++) {
+            if(value.users[index].id == this.current_user.id){
               console.log("entra")
               return true
             }
