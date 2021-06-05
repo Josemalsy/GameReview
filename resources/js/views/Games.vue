@@ -88,7 +88,7 @@
       <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
         <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
       </select>
-      <button class="btn btn-success" type="submit" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
+      <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
     </b-modal>
     <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
   </div>
