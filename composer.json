@@ -6,6 +6,7 @@
         "framework",
         "laravel"
     ],
+    "post-install-cmd": [ "ln -sr storage/app/public public/storage" ],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",

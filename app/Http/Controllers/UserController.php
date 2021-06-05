@@ -40,6 +40,7 @@ class UserController extends Controller
 
   public function getUserById($id){
 
+    //Comprueba si existe o no el usuario solicitado. En caso negativo se lanza un error que se recogerá en cliente
     if(count(User::where('id',$id)->get()) == 0){
       trigger_error('error');
     }else {
@@ -49,6 +50,9 @@ class UserController extends Controller
   }
 
   public function userList(Request $request){
+
+    //Buscador -> busca por el nombre de usuario.
+    //Estado -> separa los expulsados de los no expulsados para mostrarlos en listas distintas.
 
     $buscador = $request->get('filters');
 
