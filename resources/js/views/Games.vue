@@ -149,11 +149,12 @@ import Swal from 'sweetalert2'
       },
       checkUser(value){
         if(value){
-          console.log(value.users)
-          console.log(value.users.length)
+            console.log(this.current_user.id)
           $.each(value.users, (index, value) => {
             console.log(value.id)
+            console.log(value.id == this.current_user.id)
             if(value.id == this.current_user.id){
+              console.log("entro")
               return true
             }
           })
