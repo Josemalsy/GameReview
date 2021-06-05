@@ -214,7 +214,6 @@ export default {
 					this.porcentajeBarra(this.game.valoracion_media)
 					this.loading = false
 				}).catch(error =>{
-					console.log("entro")
 					this.$router.push('/game_not_found');
 				});
 			},

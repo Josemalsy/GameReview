@@ -151,15 +151,21 @@ import Swal from 'sweetalert2'
         if(value){
           console.log(value.users)
           console.log(value.users.length)
-          for (let index = 0; index < value.users.length; index++) {
-            console.log(value.users[index])
-            console.log(value.users[index].id)
-            if(value.users[index].id == this.current_user.id){
-              console.log("entra")
+          $.each(value.users, (index, value) => {
+            console.log(value)
+            if(value == this.current_user.id){
               return true
             }
-            return false
-          }
+          })
+          // for (let i = 0; i < value.users.length; i++) {
+          //   console.log(value.users[i])
+          //   console.log(value.users[i].id)
+          //   if(value.users[i].id == this.current_user.id){
+          //     console.log("entra")
+          //     return true
+          //   }
+          //   return false
+          // }
         }else{
           return false
         }
