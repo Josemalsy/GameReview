@@ -137,7 +137,7 @@ export default {
         confirmButtonText: 'Si, hazlo',
       }).then((result) => {
         if(result.isConfirmed){
-          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol/', {
+          axios.post('http://gamereviewsproject.herokuapp.com/api/cambia_rol', {
             params: {
               user_id: value,
               rol: 'Moderador'
