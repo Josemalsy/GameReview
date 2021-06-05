@@ -88,6 +88,8 @@
     <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
   </div>
 
+  <template>{{checkUser}}</template>
+
   <nav class="paginate-bottom" aria-label="Page navigation example">
     <ul class="pagination" v-for="n in ultima_pagina">
       <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
@@ -149,24 +151,11 @@ import Swal from 'sweetalert2'
       },
       checkUser(value){
         if(value){
-            console.log(this.current_user.id)
           $.each(value.users, (index, value) => {
-            console.log(value.id)
-            console.log(value.id == this.current_user.id)
             if(value.id == this.current_user.id){
-              console.log("entro")
               return true
             }
           })
-          // for (let i = 0; i < value.users.length; i++) {
-          //   console.log(value.users[i])
-          //   console.log(value.users[i].id)
-          //   if(value.users[i].id == this.current_user.id){
-          //     console.log("entra")
-          //     return true
-          //   }
-          //   return false
-          // }
         }else{
           return false
         }
