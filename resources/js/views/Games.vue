@@ -148,10 +148,9 @@ import Swal from 'sweetalert2'
         this.obtenerDatos()
       },
       checkUser(value){
-        console.log(value)
         if(value){
           for (let index = 0; index < value.length; index++) {
-            console.log(value[index])
+            console.log("id de usuario " + value[index].id + "id del logueado" + this.current_user.id)
             if(value[index].id == this.current_user.id){
 
               return true
