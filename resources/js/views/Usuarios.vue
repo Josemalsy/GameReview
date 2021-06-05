@@ -108,13 +108,11 @@ import moment from 'moment'
     },
     methods: {
       obtenerDatos(){
-        console.log("orden: " + this.filters.orden)
-        console.log("buscador: " + this.filters.buscador)
         this.loading = true
-        axios.post('http://gamereviewsproject.herokuapp.com/api/get_all_users/?page='+ this.page, {
+        axios.post('http://gamereviewsproject.herokuapp.com/api/get_all_users/?page='+ this.page,this.filters, {
           params: {
-            orden: this.filters.orden,
             filters: this.filters.buscador,
+            orden: this.filters.orden,
           }
         }).then(response =>{
           this.lista_usuarios = response.data.data;

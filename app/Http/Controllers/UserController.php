@@ -18,10 +18,8 @@ class UserController extends Controller
 
   public function getAllUsers(Request $request){
 
-    dd($request->all());
-
-		$buscador = $request['params']['filters'];
-    $orden = $request['params']['orden'];
+		$buscador = $request->filters;
+    $orden = $request->orden;
 
 		$columna = 'name';
     $tipo_orden = 'ASC';
