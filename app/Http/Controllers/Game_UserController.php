@@ -15,6 +15,7 @@ class Game_UserController extends Controller
 		$formulario = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
 
 		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $formulario['params']['user_id']]);
+
 	}
 
 	public function delete_posesion(Request $request){

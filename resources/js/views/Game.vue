@@ -87,7 +87,7 @@
 							<div class="puntosPersonales">
 								<div class="personalRating">Base <p>{{item.juegoBase | roundValors}}H</p></div>
 								<div class="personalRating">Extras<p>{{item.juegoExtendido | roundValors}}H</p></div>
-								<div class="personalRating">100% <p>{{item.juegoTotal | roundValors}}H</p></div>
+								<div class="personalRating">100% <p>{{item.completadoTotal | roundValors}}H</p></div>
 								<div class="personalRating">Valoracion<p>{{item.puntuacion | roundValors}}%</p></div>
 							</div>
 						</div>
