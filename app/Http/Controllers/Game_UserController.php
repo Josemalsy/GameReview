@@ -12,10 +12,13 @@ use Illuminate\Support\Facades\DB;
 class Game_UserController extends Controller
 {
 	public function create_posesion(Request $request){
-		$formulario = ($request->all() == null ? json_decode($request->getContent(), true) : $request->all());
+		$request->validate([
+			'plataforma_id' =>['required']
+		],[
+			'plataforma_id.required' => 'Debes indicar la plataforma en la que tienes el juego'
+		]);
 
-		DB::table('game_user')->insert(['game_id' => $formulario['params']['game_id'],'plataforma_id' => $formulario['params']['plataforma_id'], 'user_id' => $formulario['params']['user_id']]);
-
+		DB::table('game_user')->insert(['game_id' => $request->game_id,'plataforma_id' => $request->plataforma_id, 'user_id' => $request->user_id]);
 	}
 
 	public function delete_posesion(Request $request){

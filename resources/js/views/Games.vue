@@ -78,12 +78,17 @@
         </div>
       </div>
     </div>
-    <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only>
+    <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only @hidden="cancelData">
+
+      <template v-if="validationErrors">
+        <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+      </template>
+
       <label for="observación">Elija plataforma</label>
-      <select id="observacion" class="form-select mb-3" v-model="plataforma_id">
+      <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
         <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
       </select>
-      <button class="btn btn-success" type="submit" @click="agregaPosesion(plataforma_id)">Agregar juego</button>
+      <button class="btn btn-success" type="submit" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
     </b-modal>
     <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
   </div>
@@ -120,7 +125,12 @@ import Swal from 'sweetalert2'
         },
         abrirModal: false,
         game_id: null,
-        plataforma_id: null,
+        validationErrors: null,
+        form: {
+          plataforma_id: null,
+          user_id: this.current_user.id,
+          game_id: null,
+        }
       }
     },
     mounted(){
@@ -176,15 +186,15 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, agregalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion', {
-              params: {
-                plataforma_id: value,
-                game_id: this.game_id,
-                user_id: this.current_user.id
-              }
+            this.form.game_id = this.game_id
+            axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion',this.form {
             }).then(response =>{
               toastr.success('has adquirido el juego!');
               this.obtenerDatos()
+            }).catch(error => {
+              if (error.response.status == 422){
+                this.validationErrors = error.response.data.errors;
+              }
             });
           }
         })
@@ -257,6 +267,9 @@ import Swal from 'sweetalert2'
             });
           }
         })
+      },
+      cancelData(){
+        this.validationErrors = null
       }
     },
     filters: {
@@ -268,6 +281,11 @@ import Swal from 'sweetalert2'
         value = parseFloat(value).toFixed()
         return value;
       },
+      borraCaracteresEspeciales(value){
+        for(let i = 0; i <= value.length;i++){
+          return value[i]
+        }
+      }
     }
   }
 </script>
