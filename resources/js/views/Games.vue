@@ -187,7 +187,7 @@ import Swal from 'sweetalert2'
         }).then((result) => {
           if(result.isConfirmed){
             this.form.game_id = this.game_id
-            axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion',this.form {
+            axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion',this.form, {
             }).then(response =>{
               toastr.success('has adquirido el juego!');
               this.obtenerDatos()
