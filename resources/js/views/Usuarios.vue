@@ -333,7 +333,7 @@ span {
 .page-link:hover {
   background: #002855;
   color: white;
-
+  cursor: pointer;
 }
 
 .table {

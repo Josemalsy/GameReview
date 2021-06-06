@@ -25,7 +25,7 @@
             </div>
             <div class="infoMensaje" >
               <div class="titulo"><router-link :to="{ name: 'leer mensaje', query: {mensaje_id: item.id, conversacion_id: item.conversacion_id, opcion: opcion} }" style="color:black">{{item.titulo}}</router-link></div>
-              <div class="autor"><template v-if="opcion == 1">{{item.emisor.name}}</template><template v-else>{{item.receptor.name}}</template> ({{item.created_at | formatDate}})</div>
+              <div class="autor"><template v-if="opcion == 1"><a class="perfilUser" :href="'usuario/'+item.emisor_id">{{item.emisor.name}} </a></template><template v-else><a :href="'usuario/'+item.receptor_id">{{item.receptor.name}}</a></template> ({{item.created_at | formatDate}})</div>
             </div>
             <div class="checkbox"><input type="checkbox" :value=item.id v-model="mensajesSeleccionados"></div>
           </template>
@@ -296,6 +296,11 @@ export default {
     flex-flow: column wrap;
     font-weight: bold;
     padding: 5px 0 0 10px;
+  }
+
+  .perfilUser {
+    text-decoration: none;
+    color: black;
   }
 
   .titulo {

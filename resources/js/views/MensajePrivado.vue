@@ -27,7 +27,7 @@
           <div class="mensaje">
             <div class="usuario">
               <img class="imagen" :src="'../storage/' + mensaje.emisor.avatar" alt="Card image">
-              <span class="nombre">{{mensaje.emisor.name}}</span>
+              <span class="nombre"><a :href="'usuario/'+mensaje.emisor.id"> {{mensaje.emisor.name}}</a></span>
               <span class="registro">Registrado: <p>{{mensaje.emisor.created_at | registro}}</p></span>
             </div>
 
@@ -45,7 +45,7 @@
           <div class="subContenedor" v-if="!loadingConversacion">
             <div class="conversacion" v-for="(item, index) in conversacion.mensaje" :key="index">
               <div class="arriba">
-                <div class="conversacionfechaTitulo"> {{item.created_at | formatDate}} - {{item.emisor.name}} </div>
+                <div class="conversacionfechaTitulo"> {{item.created_at | formatDate}} - <a :href="'usuario/'+item.emisor_id">{{item.emisor.name}} </a> </div>
               </div>
               <div class="textoMensaje" v-html="item.mensaje"></div>
             </div>
@@ -255,6 +255,16 @@ export default {
     order: 0;
   }
 
+  a{
+    text-decoration: none;
+    color: black;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: black;
+  }
+
   .registro {
     order: 1;
   }
@@ -286,11 +296,25 @@ export default {
     width: 100%;
   }
 
-  .fechaTitulo, .conversacionfechaTitulo {
+  .fechaTitulo {
     flex: 10;
     align-items: center;
     display: flex;
     padding-left: 10px;
+  }
+
+  .conversacionfechaTitulo {
+    align-items: center;
+    display: flex;
+    padding-left: 10px;
+    flex: 1;
+  }
+
+  .conversacionfechaTitulo a{
+    flex: 1;
+    text-decoration: none;
+    color: black;
+    margin-left: 3px;
   }
 
   .botonBorrar {
