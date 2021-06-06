@@ -27,7 +27,7 @@
           <div class="mensaje">
             <div class="usuario">
               <img class="imagen" :src="'../storage/' + mensaje.emisor.avatar" alt="Card image">
-              <span class="nombre"><a :href="'usuario/'+mensaje.emisor.id"> {{mensaje.emisor.name}}</a></span>
+              <span class="nombre"><a :href="'/usuario/'+mensaje.emisor.id"> {{mensaje.emisor.name}}</a></span>
               <span class="registro">Registrado: <p>{{mensaje.emisor.created_at | registro}}</p></span>
             </div>
 
@@ -45,7 +45,7 @@
           <div class="subContenedor" v-if="!loadingConversacion">
             <div class="conversacion" v-for="(item, index) in conversacion.mensaje" :key="index">
               <div class="arriba">
-                <div class="conversacionfechaTitulo"> {{item.created_at | formatDate}} - <a :href="'usuario/'+item.emisor_id">{{item.emisor.name}} </a> </div>
+                <div class="conversacionfechaTitulo"> {{item.created_at | formatDate}} - <a :href="'/usuario/'+item.emisor_id">{{item.emisor.name}} </a> </div>
               </div>
               <div class="textoMensaje" v-html="item.mensaje"></div>
             </div>
