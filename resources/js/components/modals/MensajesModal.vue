@@ -79,11 +79,15 @@ export default {
         this.getDatosUsuarios()
       if( this.tituloModal == 'Responder Mensaje'){
         this.form.titulo = this.tituloMensaje
-        this.form.receptor_id = this.receptor_id
         this.form.conversacion_id = this.conversacion_id
         this.checkDestino = true
         this.checkTitulo = true
         this.checkLongitudTitulo = true
+        if(this.opcion == 1 ){
+          this.form.receptor_id = this.emisor_id
+        }else {
+          this.form.receptor_id = this.receptor_id
+        }
       } else if( this.tituloModal == 'Mandar mensaje'){
         this.checkDestino = true
         this.form.receptor_id = this.receptor_id
@@ -113,7 +117,6 @@ export default {
           });
 
         } else {
-          this.form.receptor_id = this.receptor_id
           this.form.conversacion_id = this.conversacion_id
           axios.post('http://gamereviewsproject.herokuapp.com/api/responder_mensaje', this.form).then(response => {
             this.$refs["modal"].hide()

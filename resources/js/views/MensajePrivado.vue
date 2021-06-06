@@ -18,7 +18,7 @@
           </template>
           <template v-else>
             <button class="responderMensaje" v-b-modal="'modal-enviarMensaje'"> Responder
-            <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.receptor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
+            <modal-enviarMensaje :current_user="current_user" :tituloModal="'Responder Mensaje'" :tituloMensaje="mensaje.titulo" :emisor_id="mensaje.emisor_id" :receptor_id="mensaje.receptor_id" :nombreDestino="mensaje.receptor.name", :conversacion_id="conversacion_id" :opcion="opcion" /></button>
           </template>
         </template>
         <template v-else>
