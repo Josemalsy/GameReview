@@ -1,6 +1,6 @@
 <template>
   <div class="contenedor">
-    <div class="cabecera">Mensajes privados Jojo</div>
+    <div class="cabecera">Mensajes privados</div>
 
     <div class="menu">
 
