@@ -4,7 +4,7 @@
 <div class="perfil" v-else>
 
   <div class="comentarios">
-    <div class="botones" v-if="current_user.id == id_user || current_user.rol == 'Administrador'" >
+    <div class="botones" v-if="current_user.id == id_user || current_user.rol != 'Usuario'" >
       <button class="btn btn-primary primero" v-model="busqueda" @click="ObtenerDatosUserReview(1)"> Todas las reseñas</button>
       <button class="btn" style="background:#C0E6ED" v-model="busqueda" @click="ObtenerDatosUserReview(2)"> Reseñas aceptadas</button>
       <button class="btn tercero" style="background:#D7A86C" v-model="busqueda" @click="ObtenerDatosUserReview(3)"> Reseñas pendientes</button>

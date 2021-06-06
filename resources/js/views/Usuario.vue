@@ -15,8 +15,8 @@
 							<p><div class="editar-Perfil" v-b-modal="'modal-enviarMensaje'"> Mensaje privado <modal-enviarMensaje :current_user="current_user" :nombreDestino=usuario.name :receptor_id=id_user :tituloModal="'Mandar mensaje'" /></div></p>
 							<p><div class="editar-Perfil"><router-link :to="{ name: 'reviews', query: {user_id:id_user}}">Mostrar reseñas </router-link> </div></p>
 							<div class="editar-Perfil"> <router-link :to="{ name: 'juegosPersonales', query: {user_id:id_user}}">Lista de juegos </router-link> </div>
-							<p><div class="editar-Perfil" style="background-color: red" v-if="current_user.rol == 'Administrador' && usuario.rol == 'Usuario'" v-b-modal="'modal-expulsionModal'"><modal-expulsionModal :user_id="usuario.id" :estado="usuario.estado" />Expulsar usuario </div></p>
-							<div class="editar-Perfil" style="background-color: red" v-b-modal="'modal-historialExpulsiones'" v-if="current_user.rol == 'Administrador' || current_user.id == id_user"> Historial de expulsiones <modal-historialExpulsiones :user_id="id_user"/> </div>
+							<p><div class="editar-Perfil" style="background-color: red" v-if="current_user.rol != 'Usuario' && usuario.rol == 'Usuario'" v-b-modal="'modal-expulsionModal'"><modal-expulsionModal :user_id="usuario.id" :estado="usuario.estado" />Expulsar usuario </div></p>
+							<div class="editar-Perfil" style="background-color: red" v-b-modal="'modal-historialExpulsiones'" v-if="current_user.rol != 'Usuario' || current_user.id == id_user"> Historial de expulsiones <modal-historialExpulsiones :user_id="id_user"/> </div>
 					</template>
 					<template v-else>
 						<div class="editar-Perfil" style="background-color: #2B4562"> Valida tu email para ver las reseñas y juegos de este usuario </div>
