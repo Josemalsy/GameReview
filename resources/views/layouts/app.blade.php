@@ -33,6 +33,7 @@
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
         <img class="logotipo" src='{{secure_asset("storage/logos/Logo.png")}}'>
+        <p style="font-size: 10px" >José Manuel Muñoz Viúdez - I.E.S Trassierra </p>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
