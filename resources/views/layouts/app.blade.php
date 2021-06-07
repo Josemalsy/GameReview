@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
 
 	<link href="{{ secure_asset('css/app.css') }}" rel="stylesheet">
-	<link href="{{ secure_asset('css/sidebar.css') }}" rel="stylesheet">
+	<link href="{{ secure_asset('css/header.css') }}" rel="stylesheet">
   <!-- CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
@@ -33,7 +33,7 @@
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
         <img class="logotipo" src='{{secure_asset("storage/logos/Logo.png")}}'>
-        <p class="acerca-de">José Manuel Muñoz Viúdez - I.E.S Trassierra </p>
+        <p class="acerca">José Manuel Muñoz Viúdez - I.E.S Trassierra </p>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="navbar-toggler-icon"></span>
