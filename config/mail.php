@@ -33,6 +33,8 @@ return [
     |
     */
 
+    //ENVIAR CON MAILGUN
+
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
@@ -44,6 +46,21 @@ return [
             'timeout' => null,
             'auth_mode' => null,
         ],
+
+    //ENVIAR CON MAILTRAP
+
+    // 'mailers' => [
+    //     'smtp' => [
+    //         'transport' => 'smtp',
+    //         'host' => 'smtp.mailtrap.io',
+    //         'port' => 2525,
+    //         'encryption' => 'tls'
+    //         'username' => '62f46aada33732',
+    //         'password' => 'ee85851e848bfe',
+    //         'timeout' => null,
+    //         'auth_mode' => null,
+    //     ],
+
 
         'ses' => [
             'transport' => 'ses',

@@ -28,9 +28,6 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 |
 */
 
-//SI LARAVEL DEJA DE CREAR RUTAS SOLUCION -> PHP ARTISAN ROUTE:CACHE
-
-
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
