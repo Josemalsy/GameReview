@@ -17,7 +17,7 @@ class GameController extends Controller
 
   public function index(Request $request) {
 
-    dd(Auth::user()->id);
+    dd(auth()->user()->id);
 
 		$buscador = $request->get('filters');
     $orden = $request->get('orden');
