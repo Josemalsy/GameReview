@@ -15,12 +15,12 @@
 				<div class="send-review" style="background-color: #2B4562;"> Valida tu email para poder escribir reseñas</div>
 			</template>
 			<template v-if="avisoRechazo"><span class="aviso" >Ya se te rechazó una reseña. La acumulación de rechazos puede provocar la expulsión.</span></template>
-				<div class="plataformas"><span class="etiqueta" v-for="(item,index) in game.plataformas" :style="{background: estableceFondo(item.fabricante)}">{{item.nombre}}</span></div>
+				<div class="plataformas"><span class="etiqueta" v-for="(item,index) in game.plataformas" :key="index" :style="{background: estableceFondo(item.fabricante)}">{{item.nombre}}</span></div>
 		</div>
 		<div class="principal">
 			<div class="cabecera">
 				<div class="juego-info">
-					<div class="titulo">{{game.titulo}}</div> <div class="desarrolladora">{{game.desarrolladora}} </div> <div class="genero"><span v-for="(item,index) in game.generos"> {{item.nombre + ",&nbsp"}} </span></div>
+					<div class="titulo">{{game.titulo}}</div> <div class="desarrolladora">{{game.desarrolladora}} </div> <div class="genero"><span v-for="(item,index) in game.generos" :key="index"> {{item.nombre + ",&nbsp"}} </span></div>
 				</div>
 			</div>
 			<div class="juego-stats">
@@ -71,12 +71,12 @@
 		<template v-if="reviews">
 			<div class="comentarios">
 				<nav class="paginate-bottom" aria-label="Page navigation example">
-					<ul class="pagination" v-for="n in ultima_pagina">
-						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+					<ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
 					</ul>
 				</nav>
 				<div class="cargando" v-if="loadingComments"> <Loading/> </div>
-				<div class="comment-box" v-for="item in reviewsList">
+				<div class="comment-box" v-for="(item,index) in reviewsList" :key="index">
 					<div class="lateralComment">
 						<div class="nick"> <a :href="'/usuario/'+item.users.id"> {{item.users.name}} </a></div>
 						<div class="avatar"><img class="caratula" :src="'../storage/'+ item.users.avatar" alt="Card image capaaaa"></div>
@@ -95,8 +95,8 @@
 					</div>
 				</div>
 				<nav class="paginate-bottom" aria-label="Page navigation example">
-					<ul class="pagination" v-for="n in ultima_pagina">
-						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+					<ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
 					</ul>
 				</nav>
 			</div>

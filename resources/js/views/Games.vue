@@ -34,8 +34,8 @@
   </div>
 
   <nav class="paginate-bottom" aria-label="Page navigation example">
-    <ul class="pagination" v-for="n in ultima_pagina">
-      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+    <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
     </ul>
   </nav>
 
@@ -86,7 +86,7 @@
 
       <label for="observación">Elija plataforma</label>
       <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
-        <option v-for="plataforma in listaPlataformas" :value="plataforma.id">{{plataforma.nombre}}</option>
+        <option v-for="(plataforma,index) in listaPlataformas" :value="plataforma.id" :key="index">{{plataforma.nombre}}</option>
       </select>
       <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
     </b-modal>
@@ -95,8 +95,8 @@
 
 
   <nav class="paginate-bottom" aria-label="Page navigation example">
-    <ul class="pagination" v-for="n in ultima_pagina">
-      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+    <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
     </ul>
   </nav>
 
