@@ -34,8 +34,8 @@
 
   <div class="top">
     <nav class="paginate-bottom" aria-label="Page navigation example">
-      <ul class="pagination" v-for="n in ultima_pagina">
-        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
       </ul>
     </nav>
 
@@ -53,7 +53,7 @@
         <div class="titulo">
           <div class="titDes">
             <div class="span">
-              <span class="span-title"> <a :href="'usuario/'+item.id">{{item.name}} </a></span></span>
+              <span class="span-title"> <a :href="'usuario/'+item.id">{{item.name}} </a></span>
               <span class="span-valor"><i class="bi bi-clipboard-data" title="valoraciones realizadas"></i> {{item.reviews_count}}
                 <i class="bi bi-controller" title="juegos adquiridos"></i> {{item.games_count}}
               </span>
@@ -75,8 +75,8 @@
 
 
     <nav class="paginate-bottom" aria-label="Page navigation example">
-      <ul class="pagination" v-for="n in ultima_pagina">
-        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
+      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
       </ul>
     </nav>
 

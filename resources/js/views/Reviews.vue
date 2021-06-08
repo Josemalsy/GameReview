@@ -5,10 +5,10 @@
 
   <div class="comentarios">
     <div class="botones" v-if="current_user.id == id_user || current_user.rol != 'Usuario'" >
-      <button class="btn btn-primary primero" v-model="busqueda" @click="ObtenerDatosUserReview(1)"> Todas las reseñas</button>
-      <button class="btn" style="background:#C0E6ED" v-model="busqueda" @click="ObtenerDatosUserReview(2)"> Reseñas aceptadas</button>
-      <button class="btn tercero" style="background:#D7A86C" v-model="busqueda" @click="ObtenerDatosUserReview(3)"> Reseñas pendientes</button>
-      <button class="btn" style="background:#D2515D" v-model="busqueda" @click="ObtenerDatosUserReview(4)"> Reseñas rechazadas</button>
+      <button class="btn btn-primary primero"  @click="ObtenerDatosUserReview(1)"> Todas las reseñas</button>
+      <button class="btn" style="background:#C0E6ED"  @click="ObtenerDatosUserReview(2)"> Reseñas aceptadas</button>
+      <button class="btn tercero" style="background:#D7A86C"  @click="ObtenerDatosUserReview(3)"> Reseñas pendientes</button>
+      <button class="btn" style="background:#D2515D"  @click="ObtenerDatosUserReview(4)"> Reseñas rechazadas</button>
     </div>
 
       <div class="comment-box" v-for="(item,index) in reviewsList" :key="index" v-if="vacio == false">
@@ -227,7 +227,6 @@ export default {
 
 .observaciones {
 	background: #C0E6ED;
-	padding: ;
 	margin: 20px;
 	padding: 10px;
 }
@@ -281,7 +280,7 @@ export default {
 	flex-flow: row wrap;
 	border-bottom: 1px solid white;
 }
-.nick, {
+.nick {
 	flex:1;
 }
 

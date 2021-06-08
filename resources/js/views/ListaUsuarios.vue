@@ -30,10 +30,10 @@
             <div class="nombre-user"><a :href="'/usuario/'+item.id" title="ver perfil">{{item.name}} </a></div>
             <div class="verHistorial" v-b-modal.historialExpulsiones @click="verHistorial(item.id)"> <i class="bi bi-clipboard-x" title="historial de expulsiones"></i> </div>
             <template v-if="item.rol != 'Usuario'">
-              <div class="verPerfil"><i class="bi bi-star" title="No puedes expulsar a un moderador/administrador"></i></a></div>
+              <div class="verPerfil"><i class="bi bi-star" title="No puedes expulsar a un moderador/administrador"></i></div>
             </template>
             <template v-else>
-              <div class="verPerfil" style="color: red;" v-b-modal="'modal-expulsionModal'" @click="expulsarUsuario(item.id, item.estado)"><i class="bi bi-x-octagon" title="expulsar usuario"></i></a></div>
+              <div class="verPerfil" style="color: red;" v-b-modal="'modal-expulsionModal'" @click="expulsarUsuario(item.id, item.estado)"><i class="bi bi-x-octagon" title="expulsar usuario"></i></div>
             </template>
             <template v-if="current_user.rol == 'Administrador'">
               <template v-if="item.rol != 'Administrador'">
