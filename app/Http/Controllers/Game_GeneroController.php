@@ -22,6 +22,7 @@ class Game_GeneroController extends Controller
 
 	public function getUserGenero(Request $request){
 
+		//Esto devuelve las estadisticas de los generos de los juegos que cada usuario ha jugado
 		return DB::select("select count(game_genero.genero_id) as cantidad,generos.nombre from games, game_user, game_genero, generos where generos.id = game_genero.genero_id AND game_genero.game_id = games.id and games.id = game_user.game_id and game_user.user_id = $request->user_id group by game_genero.genero_id, generos.nombre");
 	}
 }

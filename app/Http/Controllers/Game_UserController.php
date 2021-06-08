@@ -27,13 +27,13 @@ class Game_UserController extends Controller
 	}
 
 	public function getJuegosSinReview(Request $request) {
-		$juego_id = $request->juego_id;
-
+		//Devuelve la lista de juegos de los que no hizo review el usuario
 		return DB::SELECT("SELECT game_user.game_id, game_user.user_id, games.titulo, plataformas.nombre FROM game_user,plataformas, games where user_id = $request->user_id and game_user.game_id = games.id and game_user.plataforma_id = plataformas.id and game_user.game_id NOT IN (SELECT reviews.game_id from reviews)  ");
 	}
 
 	public function getListaJuegos(Request $request){
 
+		//Devuelve la lista de juegos de los que SI hizo review el usuario
 
 		return DB::SELECT("SELECT reviews.game_id, reviews.juegoBase, reviews.juegoExtendido,reviews.completadoTotal, reviews.puntuacion, games.titulo FROM reviews, games where user_id = $request->user_id and reviews.game_id = games.id and reviews.game_id IN (SELECT game_user.game_id from game_user) ORDER BY `reviews`.`game_id` ASC
 		");

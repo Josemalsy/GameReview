@@ -10,11 +10,14 @@ use App\Models\Game_Genero;
 use App\Models\Game_User;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
 
   public function index(Request $request) {
+
+    dd(Auth::user()->id);
 
 		$buscador = $request->get('filters');
     $orden = $request->get('orden');
