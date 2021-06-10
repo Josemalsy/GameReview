@@ -147,8 +147,6 @@ import moment from 'moment'
 
 
 <style scoped>
-@import url(//db.onlinewebfonts.com/c/27c2c7778fded35435ac794cd07a3657?family=FROSTBITE+Wide);
-
 
 .contenedor{
 	display: flex;
@@ -269,9 +267,6 @@ span {
 .span-title {
   flex: 2;
   font-size: 20px;
-  font-family: 'FROSTBITE Narrow', sans-serif;
-  font-family: 'FROSTBITE Wide', sans-serif;
-
 }
 
 .span-title a{
