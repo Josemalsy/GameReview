@@ -18,7 +18,7 @@
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+  <link href="//db.onlinewebfonts.com/c/27c2c7778fded35435ac794cd07a3657?family=FROSTBITE+Wide" rel="stylesheet" type="text/css"/>
 	<!-- Styles -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
 
