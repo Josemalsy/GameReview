@@ -390,8 +390,12 @@ import moment from 'moment'
     justify-self: left;
   }
 
+  .titulo {
+    font-size:15px;
+  }
+
   .central {
-    align-items: baseline;
+    font-size: 13px;
   }
 
   .busqueda {

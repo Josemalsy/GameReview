@@ -58,9 +58,9 @@
             <div class="texto">
               <div class="central-text">Juego base: </div>
                 <hr class="">
-              <div class="central-text">Juego con extras: </div>
+              <div class="central-text">Juego + extras: </div>
                 <hr class="">
-              <div class="central-text">Completado 100% </div>
+              <div class="central-text">Superado 100% </div>
             </div>
             <div class="respuesta">
               <div class="central-respuesta"> {{item.juegoBase_media | roundValors }} H</div>
@@ -543,12 +543,12 @@ import Swal from 'sweetalert2'
     width: 100%;
   }
 
-  .span-title {
+  .titulo {
     font-size:15px;
   }
 
   .central {
-    font-size: 14px;
+    font-size: 13px;
   }
 
 
