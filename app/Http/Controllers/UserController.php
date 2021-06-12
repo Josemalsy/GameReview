@@ -124,7 +124,7 @@ class UserController extends Controller
         ]
       );
     }
-    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 'public') : 'fotos/indice.png';
+    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 's3') : 'fotos/indice.png';
 
 
     $user->name = $request->name;
