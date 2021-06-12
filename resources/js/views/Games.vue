@@ -367,7 +367,7 @@ import Swal from 'sweetalert2'
 	justify-content: flex-start;
   background: #C0E6ED;
   color: black;
-  height: 290px;
+  height: 292px;
 }
 
 .izquierda {
