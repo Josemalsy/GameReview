@@ -59,6 +59,7 @@
                 @if(Auth::user()->avatar)
                 @php $avatar =  Auth::user()->avatar @endphp
                   <img src='{{secure_asset("storage/$avatar")}}'>
+                  <img src="https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com" + $avatar>
                     @else
                       <img src='{{secure_asset("storage/fotos/indice.png")}}'>
                     @endif
