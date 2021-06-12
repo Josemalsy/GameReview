@@ -33,6 +33,17 @@
     <template v-if="vacio == true">
       <div id="sin-datos" class="observaciones">No hay datos disponible</div>
     </template>
+
+	<div class="paginas">
+    <div class="nombrePagina">Páginas </div>
+    <nav class="paginate-bottom" aria-label="Page navigation example">
+      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
   </div>
 </div>
 </template>
@@ -254,6 +265,46 @@ export default {
 	color: black;
 	text-decoration: none;
 }
+
+.paginas {
+	display: flex;
+	height: auto;
+	margin-top: 10px;
+	flex-flow: row wrap;
+  padding: 0px 20px;
+	width: 90%;
+	background: #0077B6;
+	color: white;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1em/1em;
+}
+
+.nombrePagina {
+  font-size:35px;
+}
+
+.paginate-bottom{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-link {
+  background: #023e7d;
+  color: white;
+
+}
+
+.page-link:hover {
+  background: #002855;
+  color: white;
+  cursor: pointer;
+}
+
+
+
 
 @media (max-width: 700px) {
 	.perfil {
