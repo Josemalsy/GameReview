@@ -125,7 +125,7 @@ export default {
         this.generos = this.game.generos
         this.form.desarrolladora = this.game.desarrolladora
         this.plataformas = this.game.plataformas
-        this.imagenCargada = '/../storage/' +  this.game.imagen
+        this.imagenCargada = 'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/' +  this.game.imagen
         this.form.lanzamiento = this.game.lanzamiento
         this.form.id = this.game_id
       });

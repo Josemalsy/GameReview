@@ -7,7 +7,7 @@
     <li class="errorServ" v-if="validationCurrentPasssword"> {{validationCurrentPasssword}}</li>
         <div class="form-row">
           <div class="imagen">
-            <img class="caratula" :src="'/../storage/'+ form.avatar" v-if="caratula">
+            <img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com'+ form.avatar" v-if="caratula">
             <img class="caratula" :src="imagen" v-if="!caratula">
           </div>
           <div class="form-group col-md-12">

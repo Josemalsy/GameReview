@@ -46,7 +46,7 @@
     <div class="contentCard">
       <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
         <div class="izquierda">
-          <img class="caratula" :src="'../storage/'+ item.imagen" alt="Card image">
+          <img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.imagen" alt="Card image">
           <div class="ver-juego"><div><button class="btn btn-success"><a class="juegoId" :href="'game/'+item.id"> Visitar juego </a></button></div></div>
         </div>
         <div class="centro">
@@ -367,7 +367,7 @@ import Swal from 'sweetalert2'
 	justify-content: flex-start;
   background: #C0E6ED;
   color: black;
-  height: 270px;
+  height: 290px;
 }
 
 .izquierda {

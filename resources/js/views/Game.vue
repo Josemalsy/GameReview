@@ -4,7 +4,7 @@
 
 		<div class="izqda">
 			<div class="caratula">
-				<img class="imagen" :src="'../storage/'+ game.imagen" alt="Card image">
+				<img class="imagen" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ game.imagen" alt="Card image">
 			</div>
 			<template v-if="current_user.email_verified_at">
 				<div class="send-review" style="background-color: #FF4500;" v-if="!current_user"> Logueate para enviar tu review <modal-review /></div>

@@ -42,7 +42,7 @@
     <div class="contentCard">
       <div class="tarjeta" v-for="(item,index) in lista_usuarios" :key="index">
         <div class="izquierda">
-          <img class="caratula" :src="'../storage/'+ item.avatar" alt="Card image capa">
+          <img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.avatar" alt="Card image capa">
           <div class="expulsion" v-if="item.estado == 'Expulsado'">
             Expulsado
           </div>

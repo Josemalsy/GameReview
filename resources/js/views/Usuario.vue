@@ -6,7 +6,7 @@
 			<div class="principal">
 				<div class="contenedor">
 					<div class="columna-avatar">
-						<img class="avatar" :src="'../storage/'+usuario.avatar" alt="Card image">
+						<img class="avatar" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+usuario.avatar" alt="Card image">
 						<div class="expulsion" v-if="usuario.estado == 'Expulsado'">
 							Expulsado hasta el {{usuario.fin_expulsion | formatDate}}
 						</div>
