@@ -157,6 +157,7 @@ import moment from 'moment'
 
 
 <style scoped>
+@import url(http://fonts.googleapis.com/css?family=Share+Tech);
 
 .contenedor{
 	display: flex;
