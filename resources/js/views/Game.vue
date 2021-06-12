@@ -589,6 +589,7 @@ export default {
 	width: 100%;
 	display:flex;
 	flex-flow: column wrap;
+	align-items:center;
 }
 
 .puntuaciones{
@@ -643,6 +644,8 @@ export default {
 .paginate-bottom{
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+
 }
 
 .page-link {
