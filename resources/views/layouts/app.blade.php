@@ -57,11 +57,11 @@
               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 @if(Auth::user()->avatar)
-                @php $avatar =  Auth::user()->avatar @endphp
-                  <img src='{{secure_asset("storage/$avatar")}}'>
-                  <img src="https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com" . $avatar>
+                @php $avatar = 'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'.Auth::user()->avatar @endphp
+                  <img src="{{$avatar}}">
                     @else
-                      <img src='{{secure_asset("storage/fotos/indice.png")}}'>
+                      @php $avatar = 'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/fotos/indice.png'  @endphp
+                      <img src="{{$avatar}}">
                     @endif
                     {{ Auth::user()->name }}
                 </a>
