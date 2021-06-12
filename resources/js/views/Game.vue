@@ -70,11 +70,6 @@
 		</div>
 		<template v-if="reviews">
 			<div class="comentarios">
-				<nav class="paginate-bottom" aria-label="Page navigation example">
-					<ul class="pagination" v-for="n in ultima_pagina">
-						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
-					</ul>
-				</nav>
 				<div class="cargando" v-if="loadingComments"> <Loading/> </div>
 				<template v-if="reviewsList[0]">
 					<div class="comment-box" v-for="item in reviewsList">
@@ -628,6 +623,21 @@ export default {
 	width: 100%;
 	height: auto;
 	margin: 10px 10px 10px 0;
+}
+
+.paginas {
+	display: flex;
+	height: auto;
+	margin-top: 10px;
+	flex-flow: row wrap;
+  padding: 0px 20px;
+	width: 90%;
+	background: #0077B6;
+	color: white;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1em/1em;
 }
 
 .paginate-bottom{
