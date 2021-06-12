@@ -76,29 +76,37 @@
 					</ul>
 				</nav>
 				<div class="cargando" v-if="loadingComments"> <Loading/> </div>
-				<div class="comment-box" v-for="item in reviewsList">
-					<div class="lateralComment">
-						<div class="nick"> <a :href="'/usuario/'+item.users.id"> {{item.users.name}} </a></div>
-						<div class="avatar"><img class="caratula" :src="'../storage/'+ item.users.avatar" alt="Card image capaaaa"></div>
-					</div>
-					<div class="comment">
-						<div class="comment-header">
-							<div class="fechaEscrito"> Escrito el: {{item.created_at | formatDate}}</div>
-							<div class="puntosPersonales">
-								<div class="personalRating">Base <p>{{item.juegoBase | roundValors}}H</p></div>
-								<div class="personalRating">Extras<p>{{item.juegoExtendido | roundValors}}H</p></div>
-								<div class="personalRating">100% <p>{{item.completadoTotal | roundValors}}H</p></div>
-								<div class="personalRating">Valoracion<p>{{item.puntuacion | roundValors}}%</p></div>
-							</div>
+				<template v-if="reviewsList[0]">
+					<div class="comment-box" v-for="item in reviewsList">
+						<div class="lateralComment">
+							<div class="nick"> <a :href="'/usuario/'+item.users.id"> {{item.users.name}} </a></div>
+							<div class="avatar"><img class="caratula" :src="'../storage/'+ item.users.avatar" alt="Card image capaaaa"></div>
 						</div>
-						<div class="comment-message" v-html="item.mensaje"></div>
+						<div class="comment">
+							<div class="comment-header">
+								<div class="fechaEscrito"> Escrito el: {{item.created_at | formatDate}}</div>
+								<div class="puntosPersonales">
+									<div class="personalRating">Base <p>{{item.juegoBase | roundValors}}H</p></div>
+									<div class="personalRating">Extras<p>{{item.juegoExtendido | roundValors}}H</p></div>
+									<div class="personalRating">100% <p>{{item.completadoTotal | roundValors}}H</p></div>
+									<div class="personalRating">Valoracion<p>{{item.puntuacion | roundValors}}%</p></div>
+								</div>
+							</div>
+							<div class="comment-message" v-html="item.mensaje"></div>
+						</div>
 					</div>
-				</div>
-				<nav class="paginate-bottom" aria-label="Page navigation example">
-					<ul class="pagination" v-for="n in ultima_pagina">
-						<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></span></li>
-					</ul>
-				</nav>
+					<div class="paginas">
+						<div class="nombrePagina">Páginas </div>
+						<nav class="paginate-bottom" aria-label="Page navigation example">
+							<ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+								<li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
+							</ul>
+						</nav>
+					</div>
+				</template>
+				<template v-else>
+					<div class="infoMensaje">No hay reviews realizadas</div>
+				</template>
 			</div>
 		</template>
 		</div>
@@ -731,6 +739,16 @@ export default {
   background: #002855;
   color: white;
 }
+
+.infoMensaje {
+	background: #C0E6ED;
+	color: black;
+	align-self: center;
+	width:100%;
+	padding: 20px;
+	font-size: 20px;
+}
+
 
 .scatter-grafico {
 	width: 100%;
