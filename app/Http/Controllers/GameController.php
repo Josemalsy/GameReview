@@ -76,7 +76,7 @@ class GameController extends Controller
       ]);
 
 
-    $imagenEnlace = request()->file('imagen')->store('caratulas', 's3');
+    $imagenEnlace = request()->file('imagen')->store('caratulas', ['disk' => 's3', 'visibility' => 'public']);
     $array_plataformas = json_decode($request->plataformas, true);
     $array_generos = json_decode($request->generos, true);
 
@@ -152,7 +152,7 @@ class GameController extends Controller
     $game->desarrolladora = $request->desarrolladora;
     $game->lanzamiento = $request->lanzamiento;
     if(!empty(request()->file('imagen'))){
-      $imagenEnlace = request()->file('imagen')->store('caratulas', 's3');
+      $imagenEnlace = request()->file('imagen')->store('caratulas', ['disk' => 's3', 'visibility' => 'public']);
       $game->imagen = $imagenEnlace;
     }
 

@@ -92,7 +92,7 @@ class RegisterController extends Controller
 	protected function create(array $data)
 	{
 
-		$imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', 's3') : 'fotos/indice.png';
+		$imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', ['disk' => 's3', 'visibility' => 'public']) : 'fotos/indice.png';
 
 		$data['confirmation_code'] = Str::random(25);
 
