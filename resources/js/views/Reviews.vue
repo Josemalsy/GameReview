@@ -14,7 +14,7 @@
       <div class="comment-box" v-for="(item,index) in reviewsList" :key="index" v-if="vacio == false">
         <div class="lateralComment" :style="{background: estableceFondo(item.estado) + '!important'}">
           <div class="nick"> <a :href="'/game/'+ item.games.id"> {{item.games.titulo}} </a></div>
-          <div class="caratula"><img class="caratula" :src="'/../storage/'+ item.games.imagen" alt=""></div>
+          <div class="caratula"><img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.games.imagen" alt=""></div>
         </div>
         <div class="comment">
           <div class="comment-header">

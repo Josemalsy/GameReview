@@ -26,7 +26,7 @@
         </template>
           <div class="mensaje">
             <div class="usuario">
-              <img class="imagen" :src="'../storage/' + mensaje.emisor.avatar" alt="Card image">
+              <img class="imagen" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/' + mensaje.emisor.avatar" alt="Card image">
               <span class="nombre"><a :href="'/usuario/'+mensaje.emisor.id"> {{mensaje.emisor.name}}</a></span>
               <span class="registro">Registrado: <p>{{mensaje.emisor.created_at | registro}}</p></span>
             </div>

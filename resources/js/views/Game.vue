@@ -75,7 +75,7 @@
 					<div class="comment-box" v-for="item in reviewsList">
 						<div class="lateralComment">
 							<div class="nick"> <a :href="'/usuario/'+item.users.id"> {{item.users.name}} </a></div>
-							<div class="avatar"><img class="caratula" :src="'../storage/'+ item.users.avatar" alt="Card image capaaaa"></div>
+							<div class="avatar"><img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.users.avatar" alt="Card image capaaaa"></div>
 						</div>
 						<div class="comment">
 							<div class="comment-header">
