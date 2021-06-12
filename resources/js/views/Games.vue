@@ -160,7 +160,7 @@ import Swal from 'sweetalert2'
         page: this.page
         }
         this.loading =  true,
-        axios.get('http://gamereviewsproject.herokuapp.com/api/juegos/?page='+ this.page, {
+        axios.get('htttps://gamereviewsproject.herokuapp.com/api/juegos/?page='+ this.page, {
           params: {
             orden: this.orden,
             filters: this.filters.buscador,
@@ -185,7 +185,7 @@ import Swal from 'sweetalert2'
       },
       sendInfo(value){
         this.game_id = value
-        axios.get('http://gamereviewsproject.herokuapp.com/api/getPlataformasById',{
+        axios.get('htttps://gamereviewsproject.herokuapp.com/api/getPlataformasById',{
           params: {
             game_id: value,
           }
@@ -204,7 +204,7 @@ import Swal from 'sweetalert2'
         }).then((result) => {
           if(result.isConfirmed){
             this.form.game_id = this.game_id
-            axios.post('http://gamereviewsproject.herokuapp.com/api/game_user/create_posesion',this.form, {
+            axios.post('htttps://gamereviewsproject.herokuapp.com/api/game_user/create_posesion',this.form, {
             }).then(response =>{
               toastr.success('has adquirido el juego!');
               this.obtenerDatos()
@@ -226,7 +226,7 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, eliminalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('http://gamereviewsproject.herokuapp.com/api/game_user/delete_posesion', {
+            axios.delete('htttps://gamereviewsproject.herokuapp.com/api/game_user/delete_posesion', {
               params: {
                 game_id: value,
                 user_id: this.current_user.id
@@ -274,7 +274,7 @@ import Swal from 'sweetalert2'
           confirmButtonText: 'Si, eliminalo',
         }).then((result) => {
           if(result.isConfirmed){
-            axios.delete('http://gamereviewsproject.herokuapp.com/api/juego/delete_game', {
+            axios.delete('htttps://gamereviewsproject.herokuapp.com/api/juego/delete_game', {
               params: {
                 game_id: value
               }
