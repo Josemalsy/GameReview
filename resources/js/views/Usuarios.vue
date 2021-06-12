@@ -234,6 +234,7 @@ import moment from 'moment'
   color: black;
   margin-top: 58px;
   background: #C0E6ED;
+  height: 270px;
 }
 
 .izquierda {
