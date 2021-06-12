@@ -54,9 +54,9 @@
           </div>
           <div class="central">
             <div class="texto">
-              <div class="central-text">Juegos adquiridos: </div>
+              <div class="central-text">Juegos</div>
                 <hr class="">
-              <div class="central-text">Reviews realizadas: </div>
+              <div class="central-text">Reviews </div>
                 <hr class="">
               <div class="central-text">Ultimo juego: </div>
             </div>
