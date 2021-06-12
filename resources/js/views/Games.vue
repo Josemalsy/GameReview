@@ -312,7 +312,7 @@ import Swal from 'sweetalert2'
 
 
 <style scoped>
-
+@import url(http://fonts.googleapis.com/css?family=Audiowide);
 .filtros {
   margin: 30px 120px 25px 0;
 }
