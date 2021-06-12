@@ -641,6 +641,11 @@ export default {
   border-radius: 1em/1em;
 }
 
+.nombrePagina {
+  font-size:30px;
+}
+
+
 .paginate-bottom{
   display: flex;
   justify-content: center;
