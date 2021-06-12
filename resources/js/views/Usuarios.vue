@@ -3,7 +3,14 @@
 
 <div class="contenedor" v-else>
 
-  <div class="form-row align-items-center filtros">
+		<div class="separacion">
+			<span class="separador" @click="muestraOpciones">
+				<template v-if="!opciones"> Mostrar opciones de busqueda </template>
+				<template v-else> Ocultar opciones de busqueda</template>
+			</span>
+		</div>
+
+  <div class="form-row align-items-center filtros" v-if="opciones">
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
@@ -31,54 +38,56 @@
     </div>
   </div>
 
-
-  <div class="top">
-    <nav class="paginate-bottom" aria-label="Page navigation example">
-      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
-        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
-      </ul>
-    </nav>
-
-
-  </div>
   <template>
     <div class="contentCard">
       <div class="tarjeta" v-for="(item,index) in lista_usuarios" :key="index">
         <div class="izquierda">
-          <img class="caratula" :src="'../storage/'+ item.avatar" alt="Card image capaaaa">
+          <img class="caratula" :src="'../storage/'+ item.avatar" alt="Card image capa">
           <div class="expulsion" v-if="item.estado == 'Expulsado'">
             Expulsado
           </div>
+          <div class="membresia"><div>Miembro desde: {{item.created_at | formatDate}}</div></div>
         </div>
-        <div class="titulo">
-          <div class="titDes">
-            <div class="span">
-              <span class="span-title"> <a :href="'usuario/'+item.id">{{item.name}} </a></span>
-              <span class="span-valor"><i class="bi bi-clipboard-data" title="valoraciones realizadas"></i> {{item.reviews_count}}
-                <i class="bi bi-controller" title="juegos adquiridos"></i> {{item.games_count}}
-              </span>
+        <div class="centro">
+          <div class="cabecera">
+            <div class="nombre">{{item.name}}</div>
+          </div>
+          <div class="central">
+            <div class="texto">
+              <div class="central-text">Juegos adquiridos: </div>
+                <hr class="">
+              <div class="central-text">Reviews realizadas: </div>
+                <hr class="">
+              <div class="central-text">Ultimo juego: </div>
             </div>
-            <div class="duracion">
-              Último juego adquirido:
-              <p class="tituloJuego" v-if="item.games.length > 0"> {{item.games[item.games.length -1].titulo}} </p>
-              <p v-else> -- </p>
+            <div class="respuesta">
+              <div class="central-respuesta">{{item.games_count}}</div>
+                <hr class="">
+              <div class="central-respuesta">{{item.reviews_count}}</div>
+                <hr class="">
+              <div class="central-respuesta" v-if="item.games.length > 0">{{item.games[item.games.length -1].titulo}}</div>
+              <div class="central-respuesta" v-else>Sin datos</div>
             </div>
           </div>
-          <div class="membresia">
-            Miembro desde: {{item.created_at | formatDate}}
-          </div>
+          <div class="ver-perfil"> <button class="btn btn-success"> <a :href="'usuario/'+item.id"> visitar perfil</a>  </button>  </div>
         </div>
       </div>
     </div>
   </template>
 
-
-
+	<div class="paginas">
+    <div class="nombrePagina">Páginas </div>
     <nav class="paginate-bottom" aria-label="Page navigation example">
       <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
         <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
       </ul>
     </nav>
+
+  </div>
+
+
+</div>
+
 
 </div>
 
@@ -101,6 +110,7 @@ import moment from 'moment'
           orden: 1,
         },
         tarjeta: true,
+        opciones: false,
       }
     },
     mounted(){
@@ -122,8 +132,8 @@ import moment from 'moment'
           this.loading = false
         });
       },
-      alterTableCard(){
-        this.tarjeta = !this.tarjeta;
+      muestraOpciones(){
+        this.opciones = !this.opciones;
       },
       changePage( page ) {
         this.page = (page <= 0 || page > this.pages) ? this.page : page
@@ -156,8 +166,26 @@ import moment from 'moment'
   width: 100%;
 }
 
+.separacion{
+	width: 80%;
+	height: auto;
+	background: #468faf;
+	margin-top: 15px;
+	display:flex;
+	flex-flow: column;
+	color: white;
+	font-size: 14px;
+  border-radius: 1em/1em;
+	text-align: center;
+  align-self:center;
+}
+
+.separacion:hover{
+	cursor:pointer;
+}
+
 .filtros {
-  margin: 30px 0 25px 0;
+  margin: 30px 120px 25px 0;
   justify-content: center;
 }
 
@@ -197,13 +225,14 @@ import moment from 'moment'
 .tarjeta {
 	width: 45%;
 	margin: 10px 0 30px 0;
-  height: 200px;
+  height: auto;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: flex-start;
   background: #023e8a;
-  color: silver;
-  box-shadow: 16px 16px #03045e;
+  color: black;
+  margin-top: 58px;
+  background: #C0E6ED;
 }
 
 .izquierda {
@@ -212,6 +241,7 @@ import moment from 'moment'
   flex: 1;
   height: 100%;
   display:flex;
+  border-right: 1px solid white;
 }
 
 .expulsion{
@@ -223,80 +253,80 @@ import moment from 'moment'
   color: red;
 }
 
-.opcion {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  align-self:center;
-}
-
 .caratula {
 	height: 80%;
 	width: 100%;
   padding: 10px;
-
+  margin-top: -40px;
+  border-radius: 50%;
 }
 
-.titulo {
-  width: 80%;
-  height: 100%;
-  text-align: center;
-  display:flex;
-  font-size: 20px;
-  flex-flow: column;
+
+.centro {
+  flex-flow: column wrap;
+  display: flex;
   flex: 3;
 }
 
-.titDes{
-  display: flex;
-  flex-flow: column wrap;
-  width: 100%;
-  flex: 10;
+.paginas {
+	display: flex;
+	height: auto;
+	margin-top: 10px;
+	flex-flow: row wrap;
+  padding: 0px 20px;
+	width: 90%;
+	background: #0077B6;
+	color: white;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1em/1em;
 }
 
-.span {
+.nombrePagina {
+  font-size:35px;
+}
+
+.nombre {
+  display:flex;
+  text-align: left;
+  font-size: 24px;
+  padding: 0px 20px;
+  flex: 1;
+  font-family: "Share Tech", sans-serif;
+  background: #074680;
+  color: white;
+}
+
+.central {
   display: flex;
   flex-flow: row wrap;
-  width: 100%;
-  min-height: 25%;
+  margin: 10px 20px 0 20px;
+  flex: 2;
+  align-items: center;
 }
 
-span {
+.texto{
   flex: 1;
 }
-.span-title {
-  flex: 2;
-  font-size: 20px;
+
+.central-text {
+/*  border-bottom: 1px solid white; */
 }
 
-.span-title a{
-  color: silver;
+.respuesta {
+  flex: 1;
+  text-align: right;
 }
 
-.span-valor {
-  flex: revert;
-  text-align: end;
-  margin-right: 3px;
-  font-size: 20px;
-  height: 100%;
-  border-radius: 10%;
+.central-respuesta {
+/*  border-bottom: 1px solid white; */
 }
 
-
-.duracion {
-  width: auto;
-  height: auto;
-  display:flex;
-  flex-flow: column;
-  font-size: 16px;
-  background: #0077b6;
-  margin-top: 3px;
+.ver-perfil, .ver-perfil a {
   align-self: center;
-  padding: 0 10px;
-}
-
-.duracion p {
-  font-size: 16px;
+  color: white;
+  text-decoration: none;
 }
 
 .membresia{
@@ -305,23 +335,15 @@ span {
   text-align: center;
   align-self:end;
   font-size: 14px;
-  margin: 0 5px;
+  margin: auto;
+  align-items:flex-end;
   flex: 1;
-}
-
-.tipos {
-  display:flex;
-  align-items: space-around;
-}
-
-.tiempos {
-  display:flex;
-  align-items: space-around;
 }
 
 .paginate-bottom{
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .page-link {
@@ -335,15 +357,6 @@ span {
   color: white;
   cursor: pointer;
 }
-
-.table {
-  text-align: center;
-  width: 50%;
-  font-size: 15px;
-  margin: 25px 25px 25px 0;
-  align-self: center;
-}
-
 
 @media (max-width: 1300px){
   .contenedor{
@@ -366,7 +379,6 @@ span {
   }
 }
 
-
 @media (max-width: 650px){
   .filtros{
     width: 100%;
@@ -376,6 +388,10 @@ span {
 
   .boton{
     justify-self: left;
+  }
+
+  .central {
+    align-items: baseline;
   }
 
   .busqueda {

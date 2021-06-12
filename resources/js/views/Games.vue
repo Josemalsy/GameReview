@@ -1,8 +1,17 @@
 <template>
 	<div class="cargando" v-if="loading"> <Loading/> </div>
 
+
 <div class="contenedor" v-else>
-  <div class="form-row align-items-center filtros">
+
+  <div class="separacion">
+    <span class="separador" @click="muestraOpciones">
+      <template v-if="!opciones"> Mostrar opciones de busqueda </template>
+      <template v-else> Ocultar opciones de busqueda</template>
+    </span>
+  </div>
+
+  <div class="form-row align-items-center filtros" v-if="opciones">
     <div class="col-auto">
       <div class="input-group mb-2">
         <div class="input-group-prepend">
@@ -33,18 +42,35 @@
 
   </div>
 
-  <nav class="paginate-bottom" aria-label="Page navigation example">
-    <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
-      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
-    </ul>
-  </nav>
-
-  <div class="contentCard">
-    <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
-      <div class="izquierda">
-        <img class="caratula" :src="'../storage/'+ item.imagen" alt="Card image">
-        <div class="opciones">
-          <div class="opcion">
+  <template>
+    <div class="contentCard">
+      <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
+        <div class="izquierda">
+          <img class="caratula" :src="'../storage/'+ item.imagen" alt="Card image">
+          <div class="ver-juego"><div><button class="btn btn-success"><a class="juegoId" :href="'game/'+item.id"> Visitar juego </a></button></div></div>
+        </div>
+        <div class="centro">
+          <div class="cabecera">
+            <div class="titulo">{{item.titulo}}</div>
+            <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
+          </div>
+          <div class="central">
+            <div class="texto">
+              <div class="central-text">Juego base: </div>
+                <hr class="">
+              <div class="central-text">Juego con extras: </div>
+                <hr class="">
+              <div class="central-text">Completado 100% </div>
+            </div>
+            <div class="respuesta">
+              <div class="central-respuesta"> {{item.juegoBase_media | roundValors }} H</div>
+                <hr class="">
+              <div class="central-respuesta"> {{ item.juegoExtendido_media | roundValors}} H</div>
+                <hr class="">
+              <div class="central-respuesta">{{ item.completado_total_media | roundValors}} H</div>
+            </div>
+          </div>
+          <div class="opciones">
             <template v-if="current_user != false">
               <template v-if="current_user.rol == 'Administrador'">
                 <div class="cuadro"  title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
@@ -63,42 +89,32 @@
           </div>
         </div>
       </div>
-      <div class="titulo">
-        <div class="titDes">
-          <div class="span">
-            <span class="span-title"> <a class="juegoId" :href="'game/'+item.id">{{item.titulo}} </a></span>
-            <span class="span-des">{{item.desarrolladora}}</span>
-            <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
-          </div>
-          <div class="duracion">
-            <span class="tiempo">Base <p>{{item.juegoBase_media | roundValors }}H</p></span>
-            <span class="tiempo">Extras <p>{{ item.juegoExtendido_media | roundValors}}H</p></span>
-            <span class="tiempo">100% <p>{{ item.completado_total_media | roundValors}}H</p></span>
-          </div>
-        </div>
-      </div>
+      <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only @hidden="cancelData">
+
+        <template v-if="validationErrors">
+          <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+        </template>
+
+        <label for="observación">Elija plataforma</label>
+        <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
+          <option v-for="(plataforma,index) in listaPlataformas" :value="plataforma.id" :key="index">{{plataforma.nombre}}</option>
+        </select>
+        <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
+      </b-modal>
+      <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
     </div>
-    <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only @hidden="cancelData">
+  </template>
 
-      <template v-if="validationErrors">
-        <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
-      </template>
 
-      <label for="observación">Elija plataforma</label>
-      <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
-        <option v-for="(plataforma,index) in listaPlataformas" :value="plataforma.id" :key="index">{{plataforma.nombre}}</option>
-      </select>
-      <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
-    </b-modal>
-    <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
+	<div class="paginas">
+    <div class="nombrePagina">Páginas </div>
+    <nav class="paginate-bottom" aria-label="Page navigation example">
+      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
+      </ul>
+    </nav>
+
   </div>
-
-
-  <nav class="paginate-bottom" aria-label="Page navigation example">
-    <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
-      <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
-    </ul>
-  </nav>
 
 </div>
 
@@ -130,7 +146,8 @@ import Swal from 'sweetalert2'
           plataforma_id: null,
           user_id: this.current_user.id,
           game_id: null,
-        }
+        },
+        opciones: false,
       }
     },
     mounted(){
@@ -223,7 +240,7 @@ import Swal from 'sweetalert2'
       },
       estableceFondo(value){
         if(value == ''){
-          return '#E9ECEF';
+          return '#3b3b3b';
         }else if(value < 35){
           return "#ff0000"
         }else if(value < 50){
@@ -268,6 +285,9 @@ import Swal from 'sweetalert2'
           }
         })
       },
+      muestraOpciones(){
+        this.opciones = !this.opciones;
+      },
       cancelData(){
         this.validationErrors = null
       }
@@ -294,9 +314,8 @@ import Swal from 'sweetalert2'
 <style scoped>
 
 .filtros {
-  margin: 30px 0 25px 0;
+  margin: 30px 120px 25px 0;
 }
-
 
 .contenedor{
 	display: flex;
@@ -308,12 +327,32 @@ import Swal from 'sweetalert2'
   margin: 0;
 }
 
+
+.separacion{
+	width: 80%;
+	height: auto;
+	background: #468faf;
+	margin-top: 15px;
+	display:flex;
+	flex-flow: column;
+	color: white;
+	font-size: 14px;
+  border-radius: 1em/1em;
+	text-align: center;
+  align-self:center;
+}
+
+.separacion:hover{
+	cursor:pointer;
+}
+
+
 .page-link:hover {
   cursor: pointer;
 }
 
 .contentCard{
-  margin: 0 20px;
+  margin: 20px 20px;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
@@ -323,26 +362,39 @@ import Swal from 'sweetalert2'
 .tarjeta {
 	width: 45%;
 	margin: 10px 0 30px 0;
-  height: 200px;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: flex-start;
-  background: #023e8a;
-  color: silver;
-  box-shadow: 16px 16px #03045e;
+  background: #C0E6ED;
+  color: black;
 }
 
 .izquierda {
+  display:flex;
   flex-flow: column;
   align-self: flex-end;
   flex: 1;
   height: 100%;
-  display:flex;
+  border-right: 1px solid white;
+  justify-content: flex-end;
 }
 
+.ver-juego, .ver-juego a {
+  align-self: center;
+  color: white;
+  text-decoration: none;
+}
+
+
 .opciones{
-  display:flex;
-  height: 20%;
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 23px;
+  justify-content: space-around;
+}
+
+.cuadro:hover {
+  cursor: pointer;
 }
 
 .opcion {
@@ -353,64 +405,49 @@ import Swal from 'sweetalert2'
   width: 100%;
 }
 
-.cuadro:hover {
-  cursor: pointer;
-}
-
-.cuadro {
-  width: 50px;
-  height: 100%;
-}
-
 .caratula {
-	height: 80%;
+	height: 100%;
 	width: 100%;
-  background: #023e8a;
   padding: 10px;
+}
 
+.cabecera {
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .titulo {
   flex: 3;
   height: 100%;
-  text-align: center;
   display:flex;
+
 }
 
-.titDes{
-  display: flex;
+.centro{
   flex-flow: column wrap;
-  width: 100%;
-  height: 100%;
-  margin-left: 5px;
-}
-
-.span{
   display: flex;
-  flex-flow: row wrap;
-  width: 100%;
+  flex: 3;
 }
 
-.span-title, .span-des{
-  background: #01497c;
-  margin-right: 5px;
+.titulo {
+  display:flex;
+  text-align: left;
+  font-size: 24px;
+  padding: 0px 20px;
+  flex: 1;
+  font-family: "Audiowide", sans-serif;
+  background: #074680;
+  color: white;
+
 }
 
-.tiempo{
-  background: #2a6f97;
-}
-
-span {
+.texto {
   flex: 1;
 }
 
-.span-title {
-  flex: 2;
-}
-
-.span-title a{
-  flex: 2;
-  color: silver;
+.respuesta {
+  flex: 1;
+  text-align: right;
 }
 
 .span-valor {
@@ -418,44 +455,56 @@ span {
   text-align: end;
   font-size: 20px;
   height: max-content;
-  color: black;
+  color: white;
+
 }
 
-.duracion {
-  width: auto;
-  height: auto;
-  display:flex;
-  flex-flow: row;
-  font-size: 20px;
-  margin: 25px;
+.central {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 10px 20px 0 20px;
+  flex: 2;
+  align-items: center;
 }
 
-.tiempo {
-  display:flex;
-  flex-flow: column;
-  margin: 0px 5px;
+.paginas {
+	display: flex;
+	height: auto;
+	margin-top: 10px;
+	flex-flow: row wrap;
+  padding: 0px 20px;
+	width: 90%;
+	background: #0077B6;
+	color: white;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1em/1em;
 }
+
+.nombrePagina {
+  font-size:35px;
+}
+
 
 .paginate-bottom{
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .page-link {
   background: #023e7d;
   color: white;
-}
 
-.etc {
-  align-self: end;
-  margin: 0 10px;
 }
 
 .page-link:hover {
   background: #002855;
   color: white;
-
+  cursor: pointer;
 }
+
 
 @media (max-width: 1500px){
   .contenedor{
@@ -489,8 +538,17 @@ span {
 
 
 @media (max-width: 650px){
+
   .filtros{
     width: 100%;
+  }
+
+  .span-title {
+    font-size:15px;
+  }
+
+  .central {
+    font-size: 14px;
   }
 
 
