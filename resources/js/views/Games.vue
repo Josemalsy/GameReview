@@ -456,7 +456,7 @@ import Swal from 'sweetalert2'
   text-align: end;
   font-size: 20px;
   height: max-content;
-  color: white;
+  color: black;
 
 }
 
