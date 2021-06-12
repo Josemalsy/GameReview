@@ -43,14 +43,14 @@ return [
         ],
 
         's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-        ],
+					'driver' => 's3',
+					'key' => 'AKIAZ5XOWHZF53ZCO37T',
+					'secret' => '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',
+					'region' => 'eu-west-3',
+					'bucket' => 'gamereviewsprojectdaw',
+					'url' => env('AWS_URL'),
+					'endpoint' => env('AWS_ENDPOINT'),
+				],
 
     ],
 
