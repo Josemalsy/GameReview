@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <b-modal id="observaciones" title="Second Modal" hide-footer ok-only>
+    <b-modal id="observaciones" title="Elija motivo" hide-footer ok-only>
 
       <template v-if="validationErrors">
         <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>

@@ -3,7 +3,7 @@
 
     <div class="boton">
       <button class="btn sex-users" @click="getStatsSexUsers">
-        <template v-if="!sexoUserMostrar">Mostrar gráfico de usuarios por sexo</template><template v-else> Ocultar gráfico de usuarios por sexo</template>
+        <template v-if="!sexoUserMostrar">Mostrar gráfico de usuarios por sexo</template><template v-else> Ocultar gráfico</template>
       </button>
 
       <template v-if="sexoUserMostrar && loading.loadingSexoUsers == false">
@@ -13,7 +13,7 @@
 
     <div class="boton">
       <button class="btn game-plataforma" @click="getStatsGamePlataformas">
-        <template v-if="!gamePlataformasMostrar">Mostrar gráfico de juegos por plataforma</template><template v-else> Ocultar gráfico de juegos por plataforma</template>
+        <template v-if="!gamePlataformasMostrar">Mostrar gráfico de juegos por plataforma jugados por nuestros usuarios</template><template v-else> Ocultar gráfico</template>
       </button>
 
       <template v-if="gamePlataformasMostrar && loading.loadingGamePlataformas == false">
@@ -23,7 +23,7 @@
 
     <div class="boton">
       <button class="btn game-fabricante" @click="getStatsGameFabricante">
-        <template v-if="!gameFabricanteMostrar">Mostrar gráfico de juegos por fabricante</template><template v-else> Ocultar gráfico de juegos por fabricante</template>
+        <template v-if="!gameFabricanteMostrar">Mostrar gráfico de juegos por fabricante jugados por nuestros usuarios</template><template v-else> Ocultar gráfico</template>
       </button>
 
       <template v-if="gameFabricanteMostrar && loading.loadingGameFabricante == false">
@@ -33,7 +33,7 @@
 
     <div class="boton">
       <button class="btn game-genero" @click="getStatsGameGenero">
-        <template v-if="!gameGeneroMostrar">Mostrar gráfico de juegos por género</template><template v-else> Ocultar gráfico de juegos por género</template>
+        <template v-if="!gameGeneroMostrar">Mostrar gráfico de juegos por género jugados por nuestros usuarios</template><template v-else> Ocultar gráfico de juegos por género</template>
       </button>
 
       <template v-if="gameGeneroMostrar && loading.loadingGameGenero == false">

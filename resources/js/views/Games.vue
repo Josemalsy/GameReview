@@ -373,7 +373,6 @@ import Swal from 'sweetalert2'
 .izquierda {
   display:flex;
   flex-flow: column;
-  align-self: flex-end;
   flex: 1;
   height: 100%;
   border-right: 1px solid white;
