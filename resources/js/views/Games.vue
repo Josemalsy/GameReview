@@ -507,37 +507,6 @@ import Swal from 'sweetalert2'
 }
 
 
-@media (max-width: 1500px){
-  .contenedor{
-    align-self: center;
-    margin: 0;
-  }
-
-  .tarjeta {
-    width: 100%;
-    height: auto;
-    font-size: 10px;
-  }
-
-  .izquierda {
-    width: 15%;
-  }
-
-  span {
-    font-size: 15px;
-  }
-
-  .span{
-    font-size: 13px;
-  }
-
-  .span-valor{
-    font-size: 16px;
-  }
-
-}
-
-
 @media (max-width: 650px){
 
   .filtros{
