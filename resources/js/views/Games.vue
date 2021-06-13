@@ -507,7 +507,7 @@ import Swal from 'sweetalert2'
 }
 
 
-@media (max-width: 1500px){
+@media (max-width: 1300px){
   .contenedor{
     align-self: center;
     margin: 0;
@@ -515,13 +515,17 @@ import Swal from 'sweetalert2'
 
   .tarjeta {
     width: 100%;
-    height: auto;
+    font-size: 14px;
   }
 
-  .izquierda {
-    width: 15%;
+  .izquierda{
+    width: 30%;
   }
 
+  .titulo{
+    width: 70%;
+    flex-flow: column wrap;
+  }
 }
 
 
