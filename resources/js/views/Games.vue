@@ -507,6 +507,24 @@ import Swal from 'sweetalert2'
 }
 
 
+@media (max-width: 1500px){
+  .contenedor{
+    align-self: center;
+    margin: 0;
+  }
+
+  .tarjeta {
+    width: 100%;
+    height: auto;
+  }
+
+  .izquierda {
+    width: 15%;
+  }
+
+}
+
+
 @media (max-width: 650px){
 
   .filtros{
