@@ -3,12 +3,14 @@
 
 <div class="contenedor" v-else>
 
-		<div class="separacion">
-			<span class="separador" @click="muestraOpciones">
-				<template v-if="!opciones"> Mostrar opciones de busqueda </template>
-				<template v-else> Ocultar opciones de busqueda</template>
-			</span>
-		</div>
+    <div class="barra">
+      <div class="separacion">
+        <span class="separador" @click="muestraOpciones">
+          <template v-if="!opciones"> Mostrar opciones de busqueda </template>
+          <template v-else> Ocultar opciones de busqueda</template>
+        </span>
+      </div>
+    </div>
 
   <div class="form-row align-items-center filtros" v-if="opciones">
     <div class="col-auto">
