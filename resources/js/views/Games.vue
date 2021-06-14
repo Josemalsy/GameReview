@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="col-auto mt-5">
+      <div class="col-auto">
         <div class="input-group mb-2">
           <div class="input-group-prepend">
             <div class="input-group-text">Ordenar por: </div>
