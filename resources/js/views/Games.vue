@@ -530,7 +530,7 @@ import Swal from 'sweetalert2'
 
   .filtros{
     width: 100%;
-    display: block;
+    display: flex;
   }
 
 
@@ -549,7 +549,7 @@ import Swal from 'sweetalert2'
 
   .filtros{
     width: 100%;
-    display: block;
+    display: flex;
   }
 
   .titulo {
