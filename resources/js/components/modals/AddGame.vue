@@ -286,6 +286,8 @@ export default {
       this.checkPlataforma = null
       this.validationErrors = null
       this.errorPlataformasGeneros = null
+      this.plataformas = null
+      this.generos = null
     },
   },
   filters: {
