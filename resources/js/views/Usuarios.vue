@@ -195,7 +195,7 @@ import moment from 'moment'
 }
 
 .filtros {
-  margin: 30px 120px 25px 0;
+  margin: 30px 0 25px 0;
   display:flex;
   justify-content: center;
 }
