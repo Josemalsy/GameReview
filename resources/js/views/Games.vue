@@ -2,121 +2,123 @@
 	<div class="cargando" v-if="loading"> <Loading/> </div>
 
 
-<div class="contenedor" v-else>
+  <div class="contenedor" v-else>
 
-  <div class="separacion">
-    <span class="separador" @click="muestraOpciones">
-      <template v-if="!opciones"> Mostrar opciones de busqueda </template>
-      <template v-else> Ocultar opciones de busqueda</template>
-    </span>
-  </div>
-
-  <div class="form-row align-items-center filtros" v-if="opciones">
-    <div class="col-auto">
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Buscar por titulo </div>
-        </div>
-        <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
-        <div class="input-group-append">
-          <button type="button" class="btn btn-success" @click="obtenerDatos">Filtrar</button>
-        </div>
+    <div class="barra">
+      <div class="separacion">
+        <span class="separador" @click="muestraOpciones">
+          <template v-if="!opciones"> Mostrar opciones de busqueda </template>
+          <template v-else> Ocultar opciones de busqueda</template>
+        </span>
       </div>
     </div>
 
-    <div class="col-auto">
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">Ordenar por: </div>
+    <div class="form-row align-items-center filtros" v-if="opciones">
+      <div class="col-auto">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Buscar por titulo </div>
+          </div>
+          <input type="text" placeholder="Introduce tu búsqueda" id="busqueda" @keypress.prevent.enter="obtenerDatos" class="form-control" v-model="filters.buscador">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-success" @click="obtenerDatos">Filtrar</button>
+          </div>
         </div>
-        <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
-          <option value="1">Titulo 🡹</option>
-          <option value="2">Titulo 🡻</option>
-          <option value="3">Fecha de lanzamiento 🡹</option>
-          <option value="4">Fecha de lanzamiento 🡻</option>
-          <option value="5">Valoracion media 🡻</option>
-          <option value="6">Valoracion media 🡹</option>
-        </select>
       </div>
+
+      <div class="col-auto mt-5">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Ordenar por: </div>
+          </div>
+          <select class="form-control" id="ordernarPor" v-model="orden" v-on:change="obtenerDatos">
+            <option value="1">Titulo 🡹</option>
+            <option value="2">Titulo 🡻</option>
+            <option value="3">Fecha de lanzamiento 🡹</option>
+            <option value="4">Fecha de lanzamiento 🡻</option>
+            <option value="5">Valoracion media 🡻</option>
+            <option value="6">Valoracion media 🡹</option>
+          </select>
+        </div>
+      </div>
+
     </div>
 
-  </div>
-
-  <template>
-    <div class="contentCard">
-      <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
-        <div class="izquierda">
-          <img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.imagen" alt="Card image">
-          <div class="ver-juego"><div><button class="btn btn-success"><a class="juegoId" :href="'game/'+item.id"> Visitar juego </a></button></div></div>
-        </div>
-        <div class="centro">
-          <div class="cabecera">
-            <div class="titulo">{{item.titulo}}</div>
-            <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
+    <template>
+      <div class="contentCard">
+        <div class="tarjeta" v-for="(item,index) in lista_juegos" :key="index">
+          <div class="izquierda">
+            <img class="caratula" :src="'https://gamereviewsprojectdaw.s3.eu-west-3.amazonaws.com/'+ item.imagen" alt="Card image">
+            <div class="ver-juego"><div><button class="btn btn-success"><a class="juegoId" :href="'game/'+item.id"> Visitar juego </a></button></div></div>
           </div>
-          <div class="central">
-            <div class="texto">
-              <div class="central-text">Juego base: </div>
-                <hr class="">
-              <div class="central-text">Juego + extras: </div>
-                <hr class="">
-              <div class="central-text">Superado 100% </div>
+          <div class="centro">
+            <div class="cabecera">
+              <div class="titulo">{{item.titulo}}</div>
+              <span class="span-valor" :style="{background: estableceFondo(item.valoracion_media)}"><i class="bi bi-clipboard-data" title="valoracion"></i> {{item.valoracion_media | roundValors}}% </span>
             </div>
-            <div class="respuesta">
-              <div class="central-respuesta"> {{item.juegoBase_media | roundValors }} H</div>
-                <hr class="">
-              <div class="central-respuesta"> {{ item.juegoExtendido_media | roundValors}} H</div>
-                <hr class="">
-              <div class="central-respuesta">{{ item.completado_total_media | roundValors}} H</div>
+            <div class="central">
+              <div class="texto">
+                <div class="central-text">Juego base: </div>
+                  <hr class="">
+                <div class="central-text">Juego + extras: </div>
+                  <hr class="">
+                <div class="central-text">Superado 100% </div>
+              </div>
+              <div class="respuesta">
+                <div class="central-respuesta"> {{item.juegoBase_media | roundValors }} H</div>
+                  <hr class="">
+                <div class="central-respuesta"> {{ item.juegoExtendido_media | roundValors}} H</div>
+                  <hr class="">
+                <div class="central-respuesta">{{ item.completado_total_media | roundValors}} H</div>
+              </div>
             </div>
-          </div>
-          <div class="opciones">
-            <template v-if="current_user != false">
-              <template v-if="current_user.rol == 'Administrador'">
-                <div class="cuadro"  title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
-                <div class="cuadro"  title="eliminar juego" @click="eliminarJuego(item.id)"><i class="bi bi-trash"></i> </div>
-              </template>
-              <template v-if="current_user.email_verified_at">
-                <template v-if="current_user.id">
-                  <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego de tu lista de adquiridos" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
-                  <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego a tu lista de adquiridos"><i class="bi bi-heart"></i></div>
+            <div class="opciones">
+              <template v-if="current_user != false">
+                <template v-if="current_user.rol == 'Administrador'">
+                  <div class="cuadro"  title="editar juego" @click="editarJuego(item.id)"><i class="bi bi-pencil"></i> </div>
+                  <div class="cuadro"  title="eliminar juego" @click="eliminarJuego(item.id)"><i class="bi bi-trash"></i> </div>
+                </template>
+                <template v-if="current_user.email_verified_at">
+                  <template v-if="current_user.id">
+                    <div class="cuadro" v-if="checkUser(item.users)" @click="eliminaPosesion(item.id)" title="eliminar juego de tu lista de adquiridos" ><i class="bi bi-heart-fill" style="color:red;"></i></div>
+                    <div class="cuadro" v-b-modal.eligePlataforma v-else @click="sendInfo(item.id)" title="agregar juego a tu lista de adquiridos"><i class="bi bi-heart"></i></div>
+                  </template>
+                </template>
+                <template v-else>
+                  <small>Valida tu email para agregar este juego a tu lista</small>
                 </template>
               </template>
-              <template v-else>
-                <small>Valida tu email para agregar este juego a tu lista</small>
-              </template>
-            </template>
+            </div>
           </div>
         </div>
+        <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only @hidden="cancelData">
+
+          <template v-if="validationErrors">
+            <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
+          </template>
+
+          <label for="observación">Elija plataforma</label>
+          <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
+            <option v-for="(plataforma,index) in listaPlataformas" :value="plataforma.id" :key="index">{{plataforma.nombre}}</option>
+          </select>
+          <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
+        </b-modal>
+        <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
       </div>
-      <b-modal id="eligePlataforma" title="Plataforma en la que jugaste" hide-footer ok-only @hidden="cancelData">
+    </template>
 
-        <template v-if="validationErrors">
-          <li v-for="(item, index) in validationErrors" :key="index" class="errorServ">{{item | borraCaracteresEspeciales }}</li>
-        </template>
 
-        <label for="observación">Elija plataforma</label>
-        <select id="observacion" class="form-select mb-3" v-model="form.plataforma_id">
-          <option v-for="(plataforma,index) in listaPlataformas" :value="plataforma.id" :key="index">{{plataforma.nombre}}</option>
-        </select>
-        <button class="btn btn-success" type="submit" v-if="form.plataforma_id" @click="agregaPosesion(form.plataforma_id)">Agregar juego</button>
-      </b-modal>
-      <modal-AddGame :game_id="game_id" :tituloModal="'Actualizar Juego'"/>
+    <div class="paginas">
+      <div class="nombrePagina">Páginas </div>
+      <nav class="paginate-bottom" aria-label="Page navigation example">
+        <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
+          <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
+        </ul>
+      </nav>
+
     </div>
-  </template>
-
-
-	<div class="paginas">
-    <div class="nombrePagina">Páginas </div>
-    <nav class="paginate-bottom" aria-label="Page navigation example">
-      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
-        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
-      </ul>
-    </nav>
 
   </div>
-
-</div>
 
 </template>
 
@@ -315,6 +317,8 @@ import Swal from 'sweetalert2'
 @import url(http://fonts.googleapis.com/css?family=Audiowide);
 .filtros {
   margin: 30px 120px 25px 0;
+  display:flex;
+  justify-content: center;
 }
 
 .contenedor{
@@ -325,6 +329,12 @@ import Swal from 'sweetalert2'
   width: 100%;
   align-items:center;
   margin: 0;
+}
+
+.barra{
+  display:flex;
+  justify-content: center;
+  width: 100%;
 }
 
 
@@ -510,12 +520,19 @@ import Swal from 'sweetalert2'
   .contenedor{
     align-self: center;
     margin: 0;
+    display:block;
   }
 
   .tarjeta {
     width: 100%;
     font-size: 14px;
   }
+
+  .filtros{
+    width: 100%;
+    display: block;
+  }
+
 
   .izquierda{
     width: 30%;
@@ -532,6 +549,7 @@ import Swal from 'sweetalert2'
 
   .filtros{
     width: 100%;
+    display: block;
   }
 
   .titulo {

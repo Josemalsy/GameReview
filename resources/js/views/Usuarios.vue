@@ -167,6 +167,13 @@ import moment from 'moment'
   width: 100%;
 }
 
+
+.barra{
+  display:flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .separacion{
 	width: 80%;
 	height: auto;
@@ -187,6 +194,7 @@ import moment from 'moment'
 
 .filtros {
   margin: 30px 120px 25px 0;
+  display:flex;
   justify-content: center;
 }
 
@@ -288,6 +296,7 @@ import moment from 'moment'
   font-size:35px;
 }
 
+
 .nombre {
   display:flex;
   text-align: left;
@@ -297,6 +306,7 @@ import moment from 'moment'
   font-family: "Share Tech", sans-serif;
   background: #074680;
   color: white;
+
 }
 
 .central {
@@ -313,6 +323,7 @@ import moment from 'moment'
 
 .central-text {
 /*  border-bottom: 1px solid white; */
+  flex: 1;
 }
 
 .respuesta {
@@ -322,6 +333,8 @@ import moment from 'moment'
 
 .central-respuesta {
 /*  border-bottom: 1px solid white; */
+  flex: 1;
+
 }
 
 .ver-perfil, .ver-perfil a {
@@ -359,10 +372,12 @@ import moment from 'moment'
   cursor: pointer;
 }
 
+
 @media (max-width: 1300px){
   .contenedor{
     align-self: center;
     margin: 0;
+    display:block;
   }
 
   .tarjeta {
@@ -370,28 +385,21 @@ import moment from 'moment'
     font-size: 14px;
   }
 
+
   .izquierda{
     width: 30%;
   }
 
-  .titulo{
+  .nombre{
     width: 70%;
     flex-flow: column wrap;
   }
 }
 
+
 @media (max-width: 650px){
-  .filtros{
-    width: 100%;
-    height: auto;
-    justify-content:center;
-  }
 
-  .boton{
-    justify-self: left;
-  }
-
-  .titulo {
+  .nombre {
     font-size:15px;
   }
 
@@ -399,11 +407,5 @@ import moment from 'moment'
     font-size: 13px;
   }
 
-  .busqueda {
-    width: 90%;
-  }
-  .duracion, .span {
-    padding: 0px;
-  }
 }
 </style>
