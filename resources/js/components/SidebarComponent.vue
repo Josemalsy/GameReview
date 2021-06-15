@@ -21,7 +21,7 @@
       <a href="/stats" class="nav-link"><i class="bi bi-graph-up" aria-hidden="true"></i><span>Stats </span></a>
     </div>
 
-    <div class="aviso-confirmacion" v-if="!current_user.email_verified_at && current_user != false">Un correo electrónico ha sido enviado a tu email para que lo confirmes. Si no ha llegado puedes solicitar otro <a href="/email/verify">en este enlace</a>  </div>
+    <div class="aviso-confirmacion" v-if="!current_user.email_verified_at && current_user != false"><div> Un correo electrónico ha sido enviado a tu email para que lo confirmes. Si no ha llegado puedes solicitar otro <a href="/email/verify">en este enlace</a> </div> </div>
 
 
     <div class="cabecera" v-if="avisoReviewsRechazados">Tienes {{cantidadReviewsRechazados}} nueva review rechazada. Una acumulación de reviews rechazadas puede provocar la EXPULSIÓN de la web</div>
@@ -173,17 +173,17 @@ export default {
 	height: auto;
 	margin-top: 10px;
 	flex-flow: column wrap;
-	margin: 5px;
-	width: auto ;
-
+  margin-top: 20px 5px 0 5px;
+	width: 80% ;
 	color: white;
   text-align: center;
+  align-self: center;
 }
 
 .cabecera {
 	background: #b21414;
 	padding: 10px;
-	font-size: 25px;
+	font-size: 20px;
 }
 
 .aviso-confirmacion {
