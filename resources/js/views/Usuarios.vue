@@ -121,7 +121,7 @@ import moment from 'moment'
     methods: {
       obtenerDatos(){
         this.loading = true
-        if(this.buscador != '' || this.orden != 1){
+        if(this.filters.buscador){
           this.page = 1
         }
         axios.post('http://gamereviewsproject.herokuapp.com/api/get_all_users/?page='+ this.page,this.filters, {
