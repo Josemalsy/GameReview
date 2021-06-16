@@ -134,7 +134,6 @@ export default {
       validationErrors: null,
       validationCurrentPasssword: null,
       imagenBorrada: false,
-
     }
   },
   methods: {
@@ -152,6 +151,7 @@ export default {
       this.form.current_password = null
       this.form.password = null
       this.form.password_confirmation = null
+      this.imagenCargada = this.current_user.avatar
     },
     onFileChange(e) {
       let file = e.target.files[0]
