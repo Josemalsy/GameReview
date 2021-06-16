@@ -128,7 +128,7 @@ class UserController extends Controller
     if($request->imagenBorrada == 'nueva foto'){
       $imagenEnlace = request()->file('avatar')->store('fotos', ['disk' => 's3', 'visibility' => 'public']);
       $user->avatar = $imagenEnlace;
-    }else if($request->imagenBorrada == false) {
+    }else if($request->imagenBorrada == true) {
       $imagenEnlace = 'fotos/indice.png';
       $user->avatar = $imagenEnlace;
     }
