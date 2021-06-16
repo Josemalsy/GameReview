@@ -195,6 +195,7 @@ export default {
       formData.append('password', this.form.password ? this.form.password : '')
       formData.append('password_confirmation', this.form.password_confirmation ? this.form.password : '')
       formData.append('current_password', this.form.current_password ? this.form.current_password : '')
+      formData.append('imagenBorrada', this.imagenBorrada)
       formData.append('_method', 'POST');
 
       axios.post('http://gamereviewsproject.herokuapp.com/api/actualizarUsuario', formData)
