@@ -159,7 +159,7 @@ import Swal from 'sweetalert2'
     methods: {
       obtenerDatos(){
         this.loading =  true
-        if(this.buscador != '' || this.orden != 1){
+        if(this.filters.buscador){
           this.page = 1
         }
         axios.get('http://gamereviewsproject.herokuapp.com/api/juegos/?page='+ this.page, {
