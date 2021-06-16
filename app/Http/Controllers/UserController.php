@@ -124,7 +124,15 @@ class UserController extends Controller
         ]
       );
     }
-    $imagenEnlace = ( !empty(request()->file('avatar')) ) ? request()->file('avatar')->store('fotos', ['disk' => 's3', 'visibility' => 'public']) : 'fotos/indice.png';
+
+    if($request->imagenBorrada == 'nueva foto'){
+      $imagenEnlace = request()->file('avatar')->store('fotos', ['disk' => 's3', 'visibility' => 'public']);
+      $user->avatar = $imagenEnlace;
+    }else if($request->imagenBorrada == false) {
+      dd("entre en else-if");
+      $imagenEnlace = 'fotos/indice.png';
+      $user->avatar = $imagenEnlace;
+    }
 
 
     $user->name = $request->name;
@@ -138,7 +146,6 @@ class UserController extends Controller
     $user->ubicacion = $request->ubicacion;
     $user->aficiones = $request->aficiones;
     $user->biografia = $request->biografia;
-    $user->avatar = $imagenEnlace;
     $user->save();
   }
 

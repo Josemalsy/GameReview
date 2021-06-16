@@ -19,10 +19,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/prueba', function () {
-	return 9;
-})->middleware(['auth','verified']);
-
 Route::get('/email/verify', function () {
 	return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');

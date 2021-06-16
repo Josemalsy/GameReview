@@ -133,23 +133,25 @@ export default {
       checkCurrentPassword: null,
       validationErrors: null,
       validationCurrentPasssword: null,
+      imagenBorrada: false,
+
     }
   },
   methods: {
     beforeOpen(){
-        this.form.id = this.current_user.id
-        this.form.name = this.current_user.name
-        this.form.email = this.current_user.email
-        this.form.FecNac = this.current_user.FecNac
-        this.form.sexo = this.current_user.sexo
-        this.form.ocupacion = this.current_user.ocupacion
-        this.form.ubicacion = this.current_user.ubicacion
-        this.form.aficiones = this.current_user.aficiones
-        this.form.biografia = this.current_user.biografia
-        this.form.avatar = this.current_user.avatar
-        this.form.current_password = null
-        this.form.password = null
-        this.form.password_confirmation = null
+      this.form.id = this.current_user.id
+      this.form.name = this.current_user.name
+      this.form.email = this.current_user.email
+      this.form.FecNac = this.current_user.FecNac
+      this.form.sexo = this.current_user.sexo
+      this.form.ocupacion = this.current_user.ocupacion
+      this.form.ubicacion = this.current_user.ubicacion
+      this.form.aficiones = this.current_user.aficiones
+      this.form.biografia = this.current_user.biografia
+      this.form.avatar = this.current_user.avatar
+      this.form.current_password = null
+      this.form.password = null
+      this.form.password_confirmation = null
     },
     onFileChange(e) {
       let file = e.target.files[0]
@@ -159,6 +161,7 @@ export default {
             this.imagenType = true
             this.imagenSyze = true
             this.cargarImagen(file)
+            this.imagenBorrada = "nueva foto"
           }else {
             this.imagenSyze = false
           }
@@ -186,6 +189,9 @@ export default {
       formData.append('aficiones', this.form.aficiones)
       formData.append('biografia', this.form.biografia)
       formData.append('avatar', this.form.avatar ? this.form.avatar : null)
+      if(this.imagenBorrada == false){
+        formData.append('avatar',  this.form.avatar = this.imagenCargada)
+      }
       formData.append('password', this.form.password ? this.form.password : '')
       formData.append('password_confirmation', this.form.password_confirmation ? this.form.password : '')
       formData.append('current_password', this.form.current_password ? this.form.current_password : '')
@@ -211,6 +217,7 @@ export default {
       this.imagenCargada = null
       this.imagenType = true
       this.imagenSyze = true
+      this.imagenBorrada = true
     },
     compruebaNombre(value){
       let espacios
