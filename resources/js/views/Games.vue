@@ -442,7 +442,7 @@ import Swal from 'sweetalert2'
 .titulo {
   display:flex;
   text-align: left;
-  font-size: 24px;
+  font-size: 22px;
   padding: 0px 20px;
   flex: 1;
   font-family: "Audiowide", sans-serif;
