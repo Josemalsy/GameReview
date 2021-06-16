@@ -69,7 +69,7 @@
                   <hr class="">
                 <div class="central-respuesta"> {{ item.juegoExtendido_media | roundValors}} H</div>
                   <hr class="">
-                <div class="central-respuesta">{{ item.completado_total_media | roundValors}} H</div>
+                <div class="central-respuesta">{{ item.completadoTotal_media | roundValors}} H</div>
               </div>
             </div>
             <div class="opciones">
