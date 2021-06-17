@@ -59,6 +59,7 @@ class GeneroController extends Controller {
     $genero->delete();
   }
 
+  //Devuelve cuantos juegos tiene cada género
   public function getCountJuegosPorGenero(){
 
     return DB::SELECT('SELECT generos.nombre, count(game_genero.id) as cantidad FROM `generos`, game_genero WHERE game_genero.genero_id = generos.id GROUP BY generos.nombre');

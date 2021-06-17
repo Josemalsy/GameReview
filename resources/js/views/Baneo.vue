@@ -11,6 +11,7 @@ import moment from 'moment'
 export default {
   props : ['current_user'],
   mounted() {
+		//Si no está el usuario expulsado se le devuelve a la portada
     !this.current_user.fin_expulsion ? window.location.replace('/') : null
   },
   filters: {

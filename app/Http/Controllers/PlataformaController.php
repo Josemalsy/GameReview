@@ -76,18 +76,22 @@ class PlataformaController extends Controller {
     $plataforma->delete();
   }
 
+  //Nos dice cuantos juegos tiene cada plataforma de un usuario en particular
   public function getPlataformasUsuarios(Request $request) {
     return DB::Select("SELECT count(plataformas.id) as cantidad, plataformas.nombre from game_user, plataformas where game_user.plataforma_id = plataformas.id AND game_user.user_id = $request->user_id GROUP BY plataformas.nombre");
   }
 
+  //Nos dice la cantidad de veces que un juego ha sido jugado en cada una de sus plataformas
   public function getStatsPlataformasGames(Request $request) {
     return DB::SELECT("SELECT count(game_user.game_id) AS cantidad, plataformas.nombre FROM `game_user`, plataformas WHERE game_user.game_id = $request->game_id AND game_user.plataforma_id = plataformas.id group by game_user.plataforma_id, plataformas.nombre");
   }
 
+  //Nos dice cuantos juegos tiene cada plataforma
   public function getCountJuegosPorPlataforma(){
     return DB::SELECT('SELECT plataformas.nombre, count(game_plataforma.id) as cantidad FROM `plataformas`, game_plataforma WHERE game_plataforma.plataforma_id = plataformas.id GROUP BY plataformas.nombre');
   }
 
+  //Nos dice cuantos juegoos tiene cada fabricante
   public function getCountJuegosPorFabricante(){
     return DB::SELECT('SELECT plataformas.fabricante, count(game_plataforma.id) as cantidad FROM `plataformas`, game_plataforma WHERE game_plataforma.plataforma_id = plataformas.id GROUP BY plataformas.fabricante ORDER BY plataformas.fabricante ');
   }

@@ -179,8 +179,6 @@ class GameController extends Controller
 
   public function getJuegoById($id,Request $request) {
 
-
-
     if(count(Game::where('id',$id)->get()) == 0){
       trigger_error('error');
     }else {

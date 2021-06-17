@@ -40,6 +40,7 @@ class Game_UserController extends Controller
 
 	}
 
+	//Devuelve las plataformas de los juegos que ha adquirido el usuario
 	public function getPlataformaGameUser(Request $request){
 		return DB::SELECT('SELECT plataformas.nombre FROM `game_user`, `plataformas` where user_id = ' . $request->user_id . ' AND game_id = ' . $request->game_id . ' and plataforma_id = plataformas.id ');
 	}

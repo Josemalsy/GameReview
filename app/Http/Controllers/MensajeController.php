@@ -42,6 +42,9 @@ class MensajeController extends Controller {
 
   public function borrarMensajes(Request $request) {
 
+    //Borramos en función de la opción (nos dice si quien borra es el emisor o receptor del mensaje) y si lo que llega es un array o no,
+    //si es un array comprobamos uno a uno la conversacion a la que pertenece y si esta tiene más mensajes, en caso negativo se elimina
+
     $opcion = $request->opcion;
 
     if(is_array(json_decode($request->mensajes))){
