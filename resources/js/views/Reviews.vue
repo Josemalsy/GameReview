@@ -34,16 +34,6 @@
       <div id="sin-datos" class="observaciones">No hay datos disponible</div>
     </template>
 
-	<div class="paginas">
-    <div class="nombrePagina">Páginas </div>
-    <nav class="paginate-bottom" aria-label="Page navigation example">
-      <ul class="pagination" v-for="(n,index) in ultima_pagina" :key="index">
-        <li class="page-item"><a class="page-link" :style="{background: fondoPaginas(n)}" @click="changePage( n )">{{ n }}</a></li>
-      </ul>
-    </nav>
-
-  </div>
-
   </div>
 </div>
 </template>
